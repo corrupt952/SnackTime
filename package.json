@@ -1,0 +1,29 @@
+{
+  "name": "snack_time",
+  "private": true,
+  "version": "1.0.0",
+  "description": "This extension is a timer to help you keep your break time.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rm -rf dist",
+    "prebuild": "npm run clean",
+    "build": "tsc && npm run clean && npm run build-popup && npm run build-content && npm run replace-version",
+    "build-popup": "tsc && BUILD_TARGET=src/popup.ts vite build",
+    "build-content": "tsc && BUILD_TARGET=src/content.ts vite build",
+    "replace-version": "cat public/manifest.json| jq \".version|=\\\"$(jq -r .version package.json)\\\"\" > dist/manifest.json"
+  },
+  "author": "K@zuki.",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chrome": "^0.0.279",
+    "@types/js-yaml": "^4.0.5",
+    "@types/node": "^22.7.9",
+    "autoprefixer": "^10.4.20",
+    "glob": "^10.2.3",
+    "typescript": "^5.0.4",
+    "vite": "^5.0.0"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  }
+}

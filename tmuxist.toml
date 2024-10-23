@@ -1,0 +1,6 @@
+name = "snack_time"
+root = "."
+attach = true
+
+[[windows]]
+[[windows.panes]]
