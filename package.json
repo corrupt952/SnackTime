@@ -7,9 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf dist",
     "prebuild": "npm run clean",
-    "build": "tsc && npm run clean && npm run build-popup && npm run build-content && npm run replace-version",
+    "build": "tsc && npm run clean && npm run build-popup && npm run replace-version",
     "build-popup": "tsc && BUILD_TARGET=src/popup.ts vite build",
-    "build-content": "tsc && BUILD_TARGET=src/content.ts vite build",
     "replace-version": "cat public/manifest.json| jq \".version|=\\\"$(jq -r .version package.json)\\\"\" > dist/manifest.json"
   },
   "author": "K@zuki.",
