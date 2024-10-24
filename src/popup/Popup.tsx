@@ -15,11 +15,16 @@ import {
 import EmojiFoodBeverageIcon from "@mui/icons-material/EmojiFoodBeverage";
 import SettingsIcon from "@mui/icons-material/Settings";
 
+// NOTE: Scripts executed by chrome.scripting.executeScript can only reference functions and values in this function scope
+//       Therefore, it is necessary to define the same functions as those defined outside.
 const addTimer = (initialTime: number) => {
   const formattedTime = (time: number) => {
     const h = String(Math.floor(time / 3600)).padStart(2, "0");
     const m = String(Math.floor(time / 60)).padStart(2, "0");
     const s = String(time % 60).padStart(2, "0");
+    if (h === "00") {
+      return `${m}:${s}`;
+    }
     return `${h}:${m}:${s}`;
   };
 
@@ -231,17 +236,17 @@ const addTimer = (initialTime: number) => {
   createTimerBoard();
 };
 
-const TimerListItem = ({ text, onClick }: { text: string; onClick: () => void }) => {
-  return (
-    <ListItem disablePadding>
-      <ListItemButton onClick={onClick}>
-        <ListItemText primary={text} style={{ textAlign: "right" }} />
-      </ListItemButton>
-    </ListItem>
-  );
-};
-
 const Popup = () => {
+  const formattedTime = (time: number) => {
+    const h = String(Math.floor(time / 3600)).padStart(2, "0");
+    const m = String(Math.floor(time / 60)).padStart(2, "0");
+    const s = String(time % 60).padStart(2, "0");
+    if (h === "00") {
+      return `${m}:${s}`;
+    }
+    return `${h}:${m}:${s}`;
+  };
+
   const getHistory = () => {
     return JSON.parse(localStorage.getItem("history") || "[]");
   };
@@ -278,6 +283,17 @@ const Popup = () => {
     window.close();
   };
 
+  const TimerListItem = ({ time }: { time: number }) => {
+    const text = formattedTime(time);
+    return (
+      <ListItem disablePadding>
+        <ListItemButton onClick={() => startTimer(time)}>
+          <ListItemText primary={text} style={{ textAlign: "right" }} />
+        </ListItemButton>
+      </ListItem>
+    );
+  };
+
   return (
     <>
       <AppBar position="static">
@@ -309,10 +325,10 @@ const Popup = () => {
               </ListSubheader>
             }
           >
-            <TimerListItem text="1:00" onClick={() => startTimer(60)} />
-            <TimerListItem text="3:00" onClick={() => startTimer(180)} />
-            <TimerListItem text="5:00" onClick={() => startTimer(300)} />
-            <TimerListItem text="10:00" onClick={() => startTimer(600)} />
+            <TimerListItem time={60} />
+            <TimerListItem time={180} />
+            <TimerListItem time={300} />
+            <TimerListItem time={600} />
             <ListItem disablePadding>
               <ListItemButton onClick={() => startTimer(null)}>
                 <ListItemText primary="⚡Custom" style={{ textAlign: "right" }} />
@@ -332,7 +348,7 @@ const Popup = () => {
             }
           >
             {getHistory().map((time: number, index: number) => (
-              <TimerListItem key={index} text={String(time)} onClick={() => startTimer(time)} />
+              <TimerListItem key={index} time={time} />
             ))}
           </List>
         </Box>
