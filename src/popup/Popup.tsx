@@ -2,7 +2,6 @@ import {
   AppBar,
   Box,
   Divider,
-  duration,
   IconButton,
   List,
   ListItem,
