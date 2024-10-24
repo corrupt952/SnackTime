@@ -277,8 +277,7 @@ const Popup = () => {
             color="inherit"
             aria-label="settings"
             onClick={() => {
-              alert("Coming soon...");
-              // TODO: chrome.runtime.openOptionsPage();
+              chrome.runtime.openOptionsPage();
             }}
           >
             <SettingsIcon />

@@ -17,6 +17,10 @@ const manifest = defineManifest(async (env) => ({
     default_icon: "images/icon.png",
     default_popup: "popup/index.html",
   },
+  options_ui: {
+    page: "options/index.html",
+    open_in_tab: true,
+  },
 }));
 
 export default defineConfig({
