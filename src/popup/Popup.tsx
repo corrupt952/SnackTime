@@ -284,7 +284,7 @@ const Popup = () => {
   }, []);
 
   return (
-    <>
+    <div style={{ width: 344 }}>
       <AppBar position="static">
         <Toolbar>
           <EmojiFoodBeverageIcon sx={{ mr: 1 }} />
@@ -341,7 +341,7 @@ const Popup = () => {
           </List>
         </Box>
       </Stack>
-    </>
+    </div>
   );
 };
 
