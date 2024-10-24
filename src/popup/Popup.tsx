@@ -1,3 +1,5 @@
+import { Box, List, ListItem, ListItemButton, ListItemText } from "@mui/material";
+
 const addTimer = (initialTime: number) => {
   const formattedTime = (time: number) => {
     const h = String(Math.floor(time / 3600)).padStart(2, "0");
@@ -233,23 +235,35 @@ const Popup = () => {
 
   return (
     <>
-      <div className="timer-grid">
-        <div className="timer-card" onClick={() => startTimer(60)}>
-          <div className="time-display">1:00</div>
-        </div>
-        <div className="timer-card" onClick={() => startTimer(180)}>
-          <div className="time-display">3:00</div>
-        </div>
-        <div className="timer-card" onClick={() => startTimer(300)}>
-          <div className="time-display">5:00</div>
-        </div>
-        <div className="timer-card" onClick={() => startTimer(600)}>
-          <div className="time-display">10:00</div>
-        </div>
-        <div className="timer-card" onClick={() => startTimer(null)}>
-          <div className="time-display">⚡Custom</div>
-        </div>
-      </div>
+      <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
+        <List>
+          <ListItem disablePadding>
+            <ListItemButton onClick={() => startTimer(60)}>
+              <ListItemText primary="1:00" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton onClick={() => startTimer(180)}>
+              <ListItemText primary="3:00" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton onClick={() => startTimer(300)}>
+              <ListItemText primary="5:00" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton onClick={() => startTimer(600)}>
+              <ListItemText primary="10:00" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton onClick={() => startTimer(null)}>
+              <ListItemText primary="⚡Custom" />
+            </ListItemButton>
+          </ListItem>
+        </List>
+      </Box>
     </>
   );
 };
