@@ -6,7 +6,54 @@ const addTimer = (initialTime: number) => {
     return `${h}:${m}:${s}`;
   };
 
+  // Alarm
+  // TODO: Define Alarm class and transpile, but it causes runtime error, so define as function
+  const Alarm = () => {
+    // Initialize audio context
+    let audioContext = new window.AudioContext();
+    audioContext.resume();
+
+    // Play beep
+    const play = () => {
+      const startTime = audioContext.currentTime;
+      const beepFrequency = 800; /* Frequency in Hz */
+
+      Array.from({ length: 3 }).forEach((_, index) => {
+        const beep = createBeep(beepFrequency, startTime + index * 0.2);
+        if (!beep) {
+          return;
+        }
+        beep.start(startTime + index * 0.2);
+        beep.stop(startTime + index * 0.2 + 0.1);
+      });
+    };
+
+    // Create beep sound
+    const createBeep = (frequency: number, startTime: number) => {
+      if (!audioContext.createOscillator) {
+        alert("Your browser does not support the Web Audio API");
+        return;
+      }
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      oscillator.frequency.value = frequency;
+      gainNode.gain.setValueAtTime(0, startTime);
+      gainNode.gain.linearRampToValueAtTime(0.1, startTime + 0.01);
+      gainNode.gain.linearRampToValueAtTime(0, startTime + 0.1);
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      return oscillator;
+    };
+
+    return {
+      play,
+    };
+  };
+
   const createTimerBoard = () => {
+    // Initialize
+    const alarm = Alarm();
+
     // Board
     const board = document.createElement("div");
     board.style.position = "fixed";
@@ -138,11 +185,20 @@ const addTimer = (initialTime: number) => {
       }
     };
 
+    const playAlarm = () => {
+      Array.from({ length: 3 }).forEach((_, index) => {
+        setTimeout(() => {
+          alarm.play();
+        }, index * 1200);
+      });
+    };
+
     const start = () => {
       timerId = window.setInterval(() => {
         remaining -= interval;
         if (remaining <= 0) {
           teardown();
+          playAlarm();
           updateText(0);
           return;
         }
