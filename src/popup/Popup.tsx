@@ -242,6 +242,19 @@ const TimerListItem = ({ text, onClick }: { text: string; onClick: () => void })
 };
 
 const Popup = () => {
+  const getHistory = () => {
+    return JSON.parse(localStorage.getItem("history") || "[]");
+  };
+
+  const storeHistory = (time: number) => {
+    const history = JSON.parse(localStorage.getItem("history") || "[]");
+    history.unshift(time);
+    if (history.length > 5) {
+      history.pop();
+    }
+    localStorage.setItem("history", JSON.stringify(history));
+  };
+
   const startTimer = async (time: number | null) => {
     if (!time) {
       time = Number(prompt("Enter timer seconds in seconds:", String(300)));
@@ -249,6 +262,8 @@ const Popup = () => {
     if (time === 0 || isNaN(time)) {
       return;
     }
+
+    storeHistory(time);
 
     const [tab] = await chrome.tabs.query({
       active: true,
@@ -316,9 +331,9 @@ const Popup = () => {
               </ListSubheader>
             }
           >
-            <ListItem>
-              <ListItemText primary="Coming soon..." color="textSecondary" />
-            </ListItem>
+            {getHistory().map((time: number, index: number) => (
+              <TimerListItem key={index} text={String(time)} onClick={() => startTimer(time)} />
+            ))}
           </List>
         </Box>
       </Stack>
