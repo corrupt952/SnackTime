@@ -1,4 +1,19 @@
-import { Box, List, ListItem, ListItemButton, ListItemText } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Divider,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  ListSubheader,
+  Stack,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import EmojiFoodBeverageIcon from "@mui/icons-material/EmojiFoodBeverage";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 const addTimer = (initialTime: number) => {
   const formattedTime = (time: number) => {
@@ -216,6 +231,16 @@ const addTimer = (initialTime: number) => {
   createTimerBoard();
 };
 
+const TimerListItem = ({ text, onClick }: { text: string; onClick: () => void }) => {
+  return (
+    <ListItem disablePadding>
+      <ListItemButton onClick={onClick}>
+        <ListItemText primary={text} style={{ textAlign: "right" }} />
+      </ListItemButton>
+    </ListItem>
+  );
+};
+
 const Popup = () => {
   const startTimer = async (time: number | null) => {
     if (!time) {
@@ -240,35 +265,64 @@ const Popup = () => {
 
   return (
     <>
-      <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
-        <List>
-          <ListItem disablePadding>
-            <ListItemButton onClick={() => startTimer(60)}>
-              <ListItemText primary="1:00" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton onClick={() => startTimer(180)}>
-              <ListItemText primary="3:00" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton onClick={() => startTimer(300)}>
-              <ListItemText primary="5:00" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton onClick={() => startTimer(600)}>
-              <ListItemText primary="10:00" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton onClick={() => startTimer(null)}>
-              <ListItemText primary="⚡Custom" />
-            </ListItemButton>
-          </ListItem>
-        </List>
-      </Box>
+      <AppBar position="static">
+        <Toolbar>
+          <EmojiFoodBeverageIcon sx={{ mr: 1 }} />
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+            Snack Time
+          </Typography>
+          <IconButton
+            size="large"
+            edge="end"
+            color="inherit"
+            aria-label="settings"
+            onClick={() => {
+              alert("Coming soon...");
+              // TODO: chrome.runtime.openOptionsPage();
+            }}
+          >
+            <SettingsIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+
+      <Stack direction={"row"} spacing={0}>
+        <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
+          <List
+            subheader={
+              <ListSubheader component="div" style={{ textAlign: "center" }}>
+                Presets
+              </ListSubheader>
+            }
+          >
+            <TimerListItem text="1:00" onClick={() => startTimer(60)} />
+            <TimerListItem text="3:00" onClick={() => startTimer(180)} />
+            <TimerListItem text="5:00" onClick={() => startTimer(300)} />
+            <TimerListItem text="10:00" onClick={() => startTimer(600)} />
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => startTimer(null)}>
+                <ListItemText primary="⚡Custom" style={{ textAlign: "right" }} />
+              </ListItemButton>
+            </ListItem>
+          </List>
+        </Box>
+
+        <Divider orientation="vertical" flexItem />
+
+        <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
+          <List
+            subheader={
+              <ListSubheader component="div" style={{ textAlign: "center" }}>
+                Recent
+              </ListSubheader>
+            }
+          >
+            <ListItem>
+              <ListItemText primary="Coming soon..." color="textSecondary" />
+            </ListItem>
+          </List>
+        </Box>
+      </Stack>
     </>
   );
 };
