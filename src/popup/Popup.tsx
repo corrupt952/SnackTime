@@ -231,6 +231,8 @@ const Popup = () => {
       func: addTimer,
       args: [time],
     });
+
+    window.close();
   };
 
   return (
