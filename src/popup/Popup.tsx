@@ -2,6 +2,7 @@ import {
   AppBar,
   Box,
   Divider,
+  duration,
   IconButton,
   List,
   ListItem,
@@ -14,6 +15,9 @@ import {
 } from "@mui/material";
 import EmojiFoodBeverageIcon from "@mui/icons-material/EmojiFoodBeverage";
 import SettingsIcon from "@mui/icons-material/Settings";
+import { History } from "@/domain/timer/model/history";
+import { Duration } from "@/domain/timer/value/duration";
+import { useEffect, useState } from "react";
 
 // NOTE: Scripts executed by chrome.scripting.executeScript can only reference functions and values in this function scope
 //       Therefore, it is necessary to define the same functions as those defined outside.
@@ -237,38 +241,16 @@ const addTimer = (initialTime: number) => {
 };
 
 const Popup = () => {
-  const formattedTime = (time: number) => {
-    const h = String(Math.floor(time / 3600)).padStart(2, "0");
-    const m = String(Math.floor(time / 60)).padStart(2, "0");
-    const s = String(time % 60).padStart(2, "0");
-    if (h === "00") {
-      return `${m}:${s}`;
-    }
-    return `${h}:${m}:${s}`;
-  };
-
-  const getHistory = () => {
-    return JSON.parse(localStorage.getItem("history") || "[]");
-  };
-
-  const storeHistory = (time: number) => {
-    const history = JSON.parse(localStorage.getItem("history") || "[]");
-    history.unshift(time);
-    if (history.length > 5) {
-      history.pop();
-    }
-    localStorage.setItem("history", JSON.stringify(history));
-  };
-
-  const startTimer = async (time: number | null) => {
-    if (!time) {
-      time = Number(prompt("Enter timer seconds in seconds:", String(300)));
-    }
-    if (time === 0 || isNaN(time)) {
-      return;
+  const startTimer = async (duration: Duration | null) => {
+    if (!duration) {
+      const time = Number(prompt("Enter timer seconds in seconds:", String(300)));
+      if (time === 0 || isNaN(time)) {
+        return;
+      }
+      duration = new Duration(time);
     }
 
-    storeHistory(time);
+    await History.add(duration);
 
     const [tab] = await chrome.tabs.query({
       active: true,
@@ -277,22 +259,29 @@ const Popup = () => {
     await chrome.scripting.executeScript({
       target: { tabId: tab.id! },
       func: addTimer,
-      args: [time],
+      args: [duration.toSeconds()],
     });
 
     window.close();
   };
 
-  const TimerListItem = ({ time }: { time: number }) => {
-    const text = formattedTime(time);
+  const TimerListItem = ({ duration }: { duration: Duration }) => {
+    const text = duration.toFormatted();
     return (
       <ListItem disablePadding>
-        <ListItemButton onClick={() => startTimer(time)}>
+        <ListItemButton onClick={() => startTimer(duration)}>
           <ListItemText primary={text} style={{ textAlign: "right" }} />
         </ListItemButton>
       </ListItem>
     );
   };
+
+  const presets = [new Duration(60), new Duration(180), new Duration(300), new Duration(600)];
+  const [histories, setHistories] = useState<History[]>([]);
+
+  useEffect(() => {
+    History.all().then((histories) => setHistories(histories));
+  }, []);
 
   return (
     <>
@@ -325,10 +314,9 @@ const Popup = () => {
               </ListSubheader>
             }
           >
-            <TimerListItem time={60} />
-            <TimerListItem time={180} />
-            <TimerListItem time={300} />
-            <TimerListItem time={600} />
+            {presets.map((duration, index) => (
+              <TimerListItem key={index} duration={duration} />
+            ))}
             <ListItem disablePadding>
               <ListItemButton onClick={() => startTimer(null)}>
                 <ListItemText primary="⚡Custom" style={{ textAlign: "right" }} />
@@ -347,8 +335,8 @@ const Popup = () => {
               </ListSubheader>
             }
           >
-            {getHistory().map((time: number, index: number) => (
-              <TimerListItem key={index} time={time} />
+            {histories.map((history: History, index: number) => (
+              <TimerListItem key={index} duration={history.duration} />
             ))}
           </List>
         </Box>
