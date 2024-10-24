@@ -32,52 +32,45 @@ const addTimer = (initialTime: number) => {
   };
 
   // Alarm
-  // TODO: Define Alarm class and transpile, but it causes runtime error, so define as function
-  const Alarm = () => {
-    // Initialize audio context
-    let audioContext = new window.AudioContext();
-    audioContext.resume();
+  class Alarm {
+    constructor(private readonly audioContext: AudioContext = new window.AudioContext()) {}
 
-    // Play beep
-    const play = () => {
-      const startTime = audioContext.currentTime;
+    play() {
+      this.audioContext.resume();
+      const startTime = this.audioContext.currentTime;
       const beepFrequency = 800; /* Frequency in Hz */
 
       Array.from({ length: 3 }).forEach((_, index) => {
-        const beep = createBeep(beepFrequency, startTime + index * 0.2);
+        const beep = this.createBeep(beepFrequency, startTime + index * 0.2);
         if (!beep) {
           return;
         }
         beep.start(startTime + index * 0.2);
         beep.stop(startTime + index * 0.2 + 0.1);
       });
-    };
+      console.log("Alarm2 played");
+    }
 
-    // Create beep sound
-    const createBeep = (frequency: number, startTime: number) => {
-      if (!audioContext.createOscillator) {
+    private createBeep(frequency: number, startTime: number) {
+      if (!this.audioContext.createOscillator) {
         alert("Your browser does not support the Web Audio API");
         return;
       }
-      const oscillator = audioContext.createOscillator();
-      const gainNode = audioContext.createGain();
+      const oscillator = this.audioContext.createOscillator();
+      const gainNode = this.audioContext.createGain();
       oscillator.frequency.value = frequency;
       gainNode.gain.setValueAtTime(0, startTime);
       gainNode.gain.linearRampToValueAtTime(0.1, startTime + 0.01);
       gainNode.gain.linearRampToValueAtTime(0, startTime + 0.1);
       oscillator.connect(gainNode);
-      gainNode.connect(audioContext.destination);
+      gainNode.connect(this.audioContext.destination);
       return oscillator;
-    };
-
-    return {
-      play,
-    };
-  };
+    }
+  }
 
   const createTimerBoard = () => {
     // Initialize
-    const alarm = Alarm();
+    const alarm = new Alarm();
 
     // Board
     const board = document.createElement("div");
@@ -239,42 +232,42 @@ const addTimer = (initialTime: number) => {
   createTimerBoard();
 };
 
-const Popup = () => {
-  const startTimer = async (duration: Duration | null) => {
-    if (!duration) {
-      const time = Number(prompt("Enter timer seconds in seconds:", String(300)));
-      if (time === 0 || isNaN(time)) {
-        return;
-      }
-      duration = new Duration(time);
+const startTimer = async (duration: Duration | null) => {
+  if (!duration) {
+    const time = Number(prompt("Enter timer seconds in seconds:", String(300)));
+    if (time === 0 || isNaN(time)) {
+      return;
     }
+    duration = new Duration(time);
+  }
 
-    await History.add(duration);
+  await History.add(duration);
 
-    const [tab] = await chrome.tabs.query({
-      active: true,
-      currentWindow: true,
-    });
-    await chrome.scripting.executeScript({
-      target: { tabId: tab.id! },
-      func: addTimer,
-      args: [duration.toSeconds()],
-    });
+  const [tab] = await chrome.tabs.query({
+    active: true,
+    currentWindow: true,
+  });
+  await chrome.scripting.executeScript({
+    target: { tabId: tab.id! },
+    func: addTimer,
+    args: [duration.toSeconds()],
+  });
 
-    window.close();
-  };
+  window.close();
+};
 
-  const TimerListItem = ({ duration }: { duration: Duration }) => {
-    const text = duration.toFormatted();
-    return (
-      <ListItem disablePadding>
-        <ListItemButton onClick={() => startTimer(duration)}>
-          <ListItemText primary={text} style={{ textAlign: "right" }} />
-        </ListItemButton>
-      </ListItem>
-    );
-  };
+const TimerListItem = ({ duration }: { duration: Duration }) => {
+  const text = duration.toFormatted();
+  return (
+    <ListItem disablePadding>
+      <ListItemButton onClick={() => startTimer(duration)}>
+        <ListItemText primary={text} style={{ textAlign: "right" }} />
+      </ListItemButton>
+    </ListItem>
+  );
+};
 
+const Popup = () => {
   const presets = [new Duration(60), new Duration(180), new Duration(300), new Duration(600)];
   const [histories, setHistories] = useState<History[]>([]);
 
