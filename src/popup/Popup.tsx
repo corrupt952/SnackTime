@@ -221,11 +221,14 @@ const Popup = () => {
     if (!time) {
       time = Number(prompt("Enter timer seconds in seconds:", String(300)));
     }
+    if (time === 0 || isNaN(time)) {
+      return;
+    }
+
     const [tab] = await chrome.tabs.query({
       active: true,
       currentWindow: true,
     });
-
     await chrome.scripting.executeScript({
       target: { tabId: tab.id! },
       func: addTimer,
