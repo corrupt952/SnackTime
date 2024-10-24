@@ -1,28 +1,46 @@
-import { defineConfig, loadEnv } from "vite";
+import { defineConfig } from "vite";
 import { resolve } from "path";
+import { crx, defineManifest } from "@crxjs/vite-plugin";
+import react from "@vitejs/plugin-react";
+import { version } from "./package.json";
 
-// Don't working 'inlineDynamicImports' when multiple input files
-// So we need to specify a target file
-const target = process.env.BUILD_TARGET;
-if (!target) {
-  throw new Error("BUILD_TARGET is not defined");
-}
+const manifest = defineManifest(async (env) => ({
+  manifest_version: 3,
+  name: `${env.mode === "development" ? "[DEV] " : ""}Snack Time`,
+  version: version,
+  description: "This extension is a timer to help you keep your break time.",
+  permissions: ["activeTab", "scripting"],
+  icons: {
+    128: "images/icon.png",
+  },
+  action: {
+    default_icon: "images/icon.png",
+    default_popup: "popup/index.html",
+  },
+}));
 
 export default defineConfig({
+  plugins: [react(), crx({ manifest })],
+  // @see https://github.com/crxjs/chrome-extension-tools/issues/696
+  server: {
+    port: 5173,
+    strictPort: true,
+    hmr: {
+      port: 5173,
+    },
+  },
   resolve: {
     alias: {
       "@": resolve(__dirname, "src"),
     },
   },
+  root: resolve(__dirname, "src"),
+  publicDir: resolve(__dirname, "public"),
   build: {
-    emptyOutDir: false,
-    outDir: "dist",
+    outDir: resolve(__dirname, "dist"),
     rollupOptions: {
-      input: resolve(__dirname, target),
       output: {
-        entryFileNames: "[name].js",
-        inlineDynamicImports: true,
-        format: "iife",
+        chunkFileNames: "assets/chunk-[hash].js",
       },
     },
   },

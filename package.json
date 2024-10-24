@@ -1,22 +1,23 @@
 {
   "name": "snack_time",
   "private": true,
+  "type": "module",
   "version": "1.1.1",
   "description": "This extension is a timer to help you keep your break time.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf dist",
-    "prebuild": "npm run clean",
-    "build": "tsc && npm run clean && npm run build-popup && npm run replace-version",
-    "build-popup": "tsc && BUILD_TARGET=src/popup.ts vite build",
-    "replace-version": "cat public/manifest.json| jq \".version|=\\\"$(jq -r .version package.json)\\\"\" > dist/manifest.json"
+    "dev": "npm run clean && vite",
+    "build": "npm run clean && tsc && vite build"
   },
   "author": "K@zuki.",
   "license": "MIT",
   "devDependencies": {
+    "@crxjs/vite-plugin": "^2.0.0-beta.26",
     "@types/chrome": "^0.0.279",
     "@types/js-yaml": "^4.0.5",
     "@types/node": "^22.7.9",
+    "@vitejs/plugin-react": "^4.3.3",
     "autoprefixer": "^10.4.20",
     "glob": "^10.2.3",
     "prettier": "^3.3.3",
@@ -24,6 +25,10 @@
     "vite": "^5.0.0"
   },
   "dependencies": {
-    "js-yaml": "^4.1.0"
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "js-yaml": "^4.1.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   }
 }

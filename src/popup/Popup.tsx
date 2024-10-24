@@ -156,9 +156,7 @@ const addTimer = (initialTime: number) => {
         timerX = event.clientX - offsetX;
         timerY = event.clientY - offsetY;
         board.style.top = `${timerY}px`;
-        board.style.right = `${
-          window.innerWidth - timerX - board.offsetWidth
-        }px`;
+        board.style.right = `${window.innerWidth - timerX - board.offsetWidth}px`;
       }
     });
     document.addEventListener("mouseup", (event) => {
@@ -216,45 +214,44 @@ const addTimer = (initialTime: number) => {
   createTimerBoard();
 };
 
-const startTimer = async (time: number) => {
-  const [tab] = await chrome.tabs.query({
-    active: true,
-    currentWindow: true,
-  });
+const Popup = () => {
+  const startTimer = async (time: number | null) => {
+    if (!time) {
+      time = Number(prompt("Enter timer seconds in seconds:", String(300)));
+    }
+    const [tab] = await chrome.tabs.query({
+      active: true,
+      currentWindow: true,
+    });
 
-  await chrome.scripting.executeScript({
-    target: { tabId: tab.id! },
-    func: addTimer,
-    args: [time],
-  });
+    await chrome.scripting.executeScript({
+      target: { tabId: tab.id! },
+      func: addTimer,
+      args: [time],
+    });
+  };
+
+  return (
+    <>
+      <div className="timer-grid">
+        <div className="timer-card" onClick={() => startTimer(60)}>
+          <div className="time-display">1:00</div>
+        </div>
+        <div className="timer-card" onClick={() => startTimer(180)}>
+          <div className="time-display">3:00</div>
+        </div>
+        <div className="timer-card" onClick={() => startTimer(300)}>
+          <div className="time-display">5:00</div>
+        </div>
+        <div className="timer-card" onClick={() => startTimer(600)}>
+          <div className="time-display">10:00</div>
+        </div>
+        <div className="timer-card" onClick={() => startTimer(null)}>
+          <div className="time-display">⚡Custom</div>
+        </div>
+      </div>
+    </>
+  );
 };
 
-// Initialize popup.html
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("one-minute")?.addEventListener("click", async () => {
-    await startTimer(60);
-  });
-  document
-    .getElementById("three-minutes")
-    ?.addEventListener("click", async () => {
-      await startTimer(180);
-    });
-  document
-    .getElementById("five-minutes")
-    ?.addEventListener("click", async () => {
-      await startTimer(300);
-    });
-  document
-    .getElementById("ten-minutes")
-    ?.addEventListener("click", async () => {
-      await startTimer(600);
-    });
-  document
-    .getElementById("custom-time")
-    ?.addEventListener("click", async () => {
-      const time = Number(
-        prompt("Enter timer seconds in seconds:", String(300))
-      );
-      await startTimer(time);
-    });
-});
+export default Popup;
