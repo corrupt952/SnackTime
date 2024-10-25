@@ -1,6 +1,12 @@
 // NOTE: Scripts executed by chrome.scripting.executeScript can only reference functions and values in this function scope
 //       Therefore, it is necessary to define the same functions as those defined outside.
 export const addTimer = (initialTime: number) => {
+  const createElement = (tag: string, styles: Partial<CSSStyleDeclaration> = {}) => {
+    const element = document.createElement(tag);
+    Object.assign(element.style, styles);
+    return element;
+  };
+
   const formattedTime = (time: number) => {
     const h = String(Math.floor(time / 3600)).padStart(2, "0");
     const m = String(Math.floor(time / 60)).padStart(2, "0");
@@ -52,26 +58,30 @@ export const addTimer = (initialTime: number) => {
     const alarm = new Alarm();
 
     // Board
-    const board = document.createElement("div");
-    board.style.position = "fixed";
-    board.style.top = "10px";
-    board.style.right = "10px";
-    board.style.zIndex = "10000";
-    board.style.backgroundColor = "white";
-    board.style.borderRadius = "10px";
-    board.style.boxShadow = "0 0 5px rgba(0, 0, 0, 0.8)";
-    board.style.fontSize = "2rem";
-    board.style.display = "grid";
-    board.style.gridTemplateRows = "1fr auto";
+    const board = createElement("div", {
+      position: "fixed",
+      top: "10px",
+      right: "10px",
+      zIndex: "10000",
+      backgroundColor: "white",
+      borderRadius: "10px",
+      boxShadow: "0 0 5px rgba(0, 0, 0, 0.8)",
+      fontSize: "2rem",
+      display: "grid",
+      gridTemplateRows: "1fr auto",
+      color: "black",
+      fontFamily: "Arial, sans-serif",
+    });
     document.body.appendChild(board);
 
     let timerText: HTMLSpanElement;
     {
       // Body
-      const body = document.createElement("div");
-      body.style.display = "grid";
-      body.style.placeItems = "center";
-      body.style.padding = "0.5rem 1rem";
+      const body = createElement("div", {
+        display: "grid",
+        placeItems: "center",
+        padding: "0.5rem 1rem",
+      });
       board.appendChild(body);
       {
         // Timer
@@ -83,46 +93,51 @@ export const addTimer = (initialTime: number) => {
 
     {
       // Controls
-      const controls = document.createElement("div");
-      controls.style.display = "grid";
-      controls.style.gridTemplateColumns = "repeat(3, 1fr)";
-      controls.style.gap = "0.5rem";
-      controls.style.padding = "0.5rem 1rem";
-      const baseButton = document.createElement("button");
-      baseButton.style.fontSize = "1rem";
-      baseButton.style.padding = "0.5rem 1rem";
-      baseButton.style.border = "none";
-      baseButton.style.borderRadius = "0.5rem";
-      baseButton.style.cursor = "pointer";
+      const controls = createElement("div", {
+        display: "grid",
+        gridTemplateColumns: "repeat(3, 1fr)",
+        gap: "0.5rem",
+        padding: "0.5rem 1rem",
+      });
       board.appendChild(controls);
+      // Base Button
+      const buttonStyles = {
+        fontSize: "1rem",
+        padding: "0.5rem 1rem",
+        border: "none",
+        borderRadius: "0.5rem",
+        cursor: "pointer",
+      };
       {
         // Start
-        const startButton = baseButton.cloneNode() as HTMLButtonElement;
-        startButton.style.backgroundColor = "#4CAF50";
-        startButton.style.color = "white";
-        startButton.textContent = "Start";
-        startButton.addEventListener("click", () => {
-          start();
+        const startButton = createElement("button", {
+          ...buttonStyles,
+          backgroundColor: "#4CAF50",
+          color: "white",
         });
+        startButton.textContent = "Start";
+        startButton.addEventListener("click", () => start());
         controls.appendChild(startButton);
       }
       {
         // Stop
-        const stopButton = baseButton.cloneNode() as HTMLButtonElement;
-        stopButton.textContent = "Stop";
-        stopButton.style.backgroundColor = "#f44336";
-        stopButton.style.color = "white";
-        stopButton.addEventListener("click", () => {
-          teardown();
+        const stopButton = createElement("button", {
+          ...buttonStyles,
+          backgroundColor: "#f44336",
+          color: "white",
         });
+        stopButton.textContent = "Stop";
+        stopButton.addEventListener("click", () => teardown());
         controls.appendChild(stopButton);
       }
       {
         // Close
-        const closeButton = baseButton.cloneNode() as HTMLButtonElement;
+        const closeButton = createElement("button", {
+          ...buttonStyles,
+          backgroundColor: "gray",
+          color: "white",
+        });
         closeButton.textContent = "Close";
-        closeButton.style.backgroundColor = "gray";
-        closeButton.style.color = "white";
         closeButton.addEventListener("click", () => {
           teardown();
           board.remove();
