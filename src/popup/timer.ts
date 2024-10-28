@@ -22,17 +22,21 @@ export const addTimer = (initialTime: number) => {
     constructor(private readonly audioContext: AudioContext = new window.AudioContext()) {}
 
     play() {
-      this.audioContext.resume();
-      const startTime = this.audioContext.currentTime;
-      const beepFrequency = 800; /* Frequency in Hz */
-
       Array.from({ length: 3 }).forEach((_, index) => {
-        const beep = this.createBeep(beepFrequency, startTime + index * 0.2);
-        if (!beep) {
-          return;
-        }
-        beep.start(startTime + index * 0.2);
-        beep.stop(startTime + index * 0.2 + 0.1);
+        setTimeout(() => {
+          this.audioContext.resume();
+          const startTime = this.audioContext.currentTime;
+          const beepFrequency = 800; /* Frequency in Hz */
+
+          Array.from({ length: 3 }).forEach((_, index) => {
+            const beep = this.createBeep(beepFrequency, startTime + index * 0.2);
+            if (!beep) {
+              return;
+            }
+            beep.start(startTime + index * 0.2);
+            beep.stop(startTime + index * 0.2 + 0.1);
+          });
+        }, index * 1200);
       });
     }
 
@@ -195,20 +199,12 @@ export const addTimer = (initialTime: number) => {
       }
     };
 
-    const playAlarm = () => {
-      Array.from({ length: 3 }).forEach((_, index) => {
-        setTimeout(() => {
-          alarm.play();
-        }, index * 1200);
-      });
-    };
-
     const start = () => {
       timerId = window.setInterval(() => {
         remaining -= interval;
         if (remaining <= 0) {
           teardown();
-          playAlarm();
+          alarm.play();
           updateText(0);
           return;
         }
