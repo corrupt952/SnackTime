@@ -18,6 +18,8 @@ import { History } from "@/domain/timer/model/history";
 import { Duration } from "@/domain/timer/value/duration";
 import { useEffect, useState } from "react";
 import { addTimer } from "./timer";
+import { Settings } from "@/domain/settings/models/settings";
+import { NotificationType } from "@/types/enums/NotificationType";
 
 const startTimer = async (duration: Duration | null) => {
   if (!duration) {
@@ -30,6 +32,8 @@ const startTimer = async (duration: Duration | null) => {
 
   await History.add(duration);
 
+  const settings = await Settings.get();
+
   const [tab] = await chrome.tabs.query({
     active: true,
     currentWindow: true,
@@ -37,7 +41,7 @@ const startTimer = async (duration: Duration | null) => {
   await chrome.scripting.executeScript({
     target: { tabId: tab.id! },
     func: addTimer,
-    args: [duration.toSeconds()],
+    args: [duration.toSeconds(), settings.notificationType ?? NotificationType.Alarm],
   });
 
   window.close();

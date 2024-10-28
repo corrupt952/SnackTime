@@ -1,6 +1,9 @@
 // NOTE: Scripts executed by chrome.scripting.executeScript can only reference functions and values in this function scope
+
+import { NotificationType } from "@/types/enums/NotificationType";
+
 //       Therefore, it is necessary to define the same functions as those defined outside.
-export const addTimer = (initialTime: number) => {
+export const addTimer = (initialTime: number, notificationType: NotificationType) => {
   const createElement = (tag: string, styles: Partial<CSSStyleDeclaration> = {}) => {
     const element = document.createElement(tag);
     Object.assign(element.style, styles);
@@ -204,7 +207,12 @@ export const addTimer = (initialTime: number) => {
         remaining -= interval;
         if (remaining <= 0) {
           teardown();
-          alarm.play();
+          console.log(notificationType);
+          switch (notificationType) {
+            case "alarm":
+              alarm.play();
+              break;
+          }
           updateText(0);
           return;
         }
