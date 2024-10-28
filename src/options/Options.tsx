@@ -1,4 +1,15 @@
-import { AppBar, Box, Container, FormControlLabel, Radio, RadioGroup, Stack, Toolbar, Typography } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Container,
+  Divider,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  Stack,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import EmojiFoodBeverageIcon from "@mui/icons-material/EmojiFoodBeverage";
 import { useEffect, useState } from "react";
 import { NotificationType } from "@/types/enums/NotificationType";
@@ -31,23 +42,56 @@ const Options = () => {
       </AppBar>
 
       <Container>
-        <Stack spacing={2} sx={{ mt: 2 }}>
+        <Stack spacing={6} sx={{ mt: 4 }}>
           <Box>
-            <Typography variant="h6">NotificationType</Typography>
-            <RadioGroup
-              row
-              value={notificationType}
-              onChange={(event) => setNotificationType(event.target.value as NotificationType)}
-            >
-              {Object.values(NotificationType).map((value) => (
-                <FormControlLabel
-                  key={value}
-                  value={value}
-                  control={<Radio />}
-                  label={Object.keys(NotificationType)[Object.values(NotificationType).indexOf(value)]}
-                />
-              ))}
-            </RadioGroup>
+            <Typography variant="h4">General</Typography>
+
+            <Divider sx={{ mt: 1, mb: 2 }} />
+
+            <Box>
+              <Typography variant="h6">Coming soon...</Typography>
+            </Box>
+          </Box>
+
+          <Box>
+            <Typography variant="h4">Appearance</Typography>
+
+            <Divider sx={{ mt: 1, mb: 2 }} />
+
+            <Box>
+              <Typography variant="h6">Coming soon...</Typography>
+            </Box>
+          </Box>
+
+          <Box>
+            <Typography variant="h4">Notification</Typography>
+
+            <Divider sx={{ mt: 1, mb: 2 }} />
+
+            <Stack spacing={2}>
+              <Box>
+                <Typography variant="h6">Notification Type</Typography>
+                <RadioGroup
+                  row
+                  value={notificationType}
+                  onChange={(event) => setNotificationType(event.target.value as NotificationType)}
+                >
+                  {Object.values(NotificationType).map((value) => (
+                    <FormControlLabel
+                      key={value}
+                      value={value}
+                      control={<Radio />}
+                      label={Object.keys(NotificationType)[Object.values(NotificationType).indexOf(value)]}
+                    />
+                  ))}
+                </RadioGroup>
+              </Box>
+
+              <Box>
+                <Typography variant="h6">Alarm Sound</Typography>
+                Coming soon...
+              </Box>
+            </Stack>
           </Box>
         </Stack>
       </Container>
