@@ -17,9 +17,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { History } from "@/domain/timer/model/history";
 import { Duration } from "@/domain/timer/value/duration";
 import { useEffect, useState } from "react";
-import { addTimer } from "./timer";
 import { Settings } from "@/domain/settings/models/settings";
-import { NotificationType } from "@/types/enums/NotificationType";
 
 const startTimer = async (duration: Duration | null) => {
   if (!duration) {
@@ -38,10 +36,10 @@ const startTimer = async (duration: Duration | null) => {
     active: true,
     currentWindow: true,
   });
-  await chrome.scripting.executeScript({
-    target: { tabId: tab.id! },
-    func: addTimer,
-    args: [duration.toSeconds(), settings.notificationType ?? NotificationType.Alarm],
+  chrome.tabs.sendMessage(tab.id!, {
+    type: "timer-started",
+    duration: duration.toSeconds(),
+    notificationType: settings.notificationType,
   });
 
   window.close();

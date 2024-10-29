@@ -21,6 +21,12 @@ const manifest = defineManifest(async (env) => ({
     page: "options/index.html",
     open_in_tab: true,
   },
+  content_scripts: [
+    {
+      matches: ["<all_urls>"],
+      js: ["content/index.tsx"],
+    },
+  ],
 }));
 
 export default defineConfig({
