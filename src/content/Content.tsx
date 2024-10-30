@@ -74,6 +74,7 @@ const Timer = ({
 
   useEffect(() => {
     alarmRef.current = new Alarm();
+    setIsRunning(true);
     return () => {
       if (timerRef.current) {
         window.clearInterval(timerRef.current);
