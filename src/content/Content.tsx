@@ -129,6 +129,11 @@ const Timer = ({
     return `${h}:${m}:${s}`;
   };
 
+  const closeTimer = () => {
+    window.clearInterval(timerRef.current!);
+    close();
+  };
+
   const TimerFace = () => (
     <Stack spacing={2} justifyContent="center" sx={{ width: "100%" }}>
       <Typography
@@ -182,7 +187,7 @@ const Timer = ({
           sx={{
             color: "error.main",
           }}
-          onClick={close}
+          onClick={closeTimer}
           color="primary"
         >
           <Close />
@@ -213,7 +218,7 @@ const Timer = ({
               }
             />
           }
-          label="Enable sound"
+          label="Sound"
         />
       </Stack>
     </Box>
