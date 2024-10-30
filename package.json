@@ -2,7 +2,7 @@
   "name": "snack_time",
   "private": true,
   "type": "module",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "This extension is a timer to help you keep your break time.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
