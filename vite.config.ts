@@ -9,7 +9,7 @@ const manifest = defineManifest(async (env) => ({
   name: `${env.mode === "development" ? "[DEV] " : ""}Snack Time`,
   version: version,
   description: "This extension is a timer to help you keep your break time.",
-  permissions: ["activeTab", "scripting", "storage"],
+  permissions: ["activeTab", "storage"],
   icons: {
     128: "images/icon.png",
   },
