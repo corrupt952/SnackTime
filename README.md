@@ -4,4 +4,5 @@ The repository for chrome extension to remind you to take a break and have a sna
 
 ## Installation
 
-Coming soon...
+Install this extension from the [Chrome Web Store](https://chromewebstore.google.com/detail/snack-time/okaijbdacnkekgchlligfkjccijcghfn).
+
