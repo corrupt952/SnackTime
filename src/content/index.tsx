@@ -4,10 +4,11 @@ import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { createRoot } from "react-dom/client";
 import createCache from "@emotion/cache";
 import { CacheProvider } from "@emotion/react";
+import { ColorScheme } from "@/types/enums/ColorScheme";
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   sendResponse("Received");
-  const { duration, notificationType } = message;
+  const { duration, notificationType, colorScheme } = message;
   const soundEnabled = notificationType === "alarm";
 
   const contentRoot = document.createElement("div");
@@ -66,9 +67,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   shadowRoot.appendChild(shadowContainer);
 
   const cache = createCache({ key: "snack-time", prepend: true, container: shadowRoot });
+  const isDarkMode =
+    colorScheme === ColorScheme.Dark ||
+    (colorScheme === ColorScheme.System && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  console.log(`darkMode: ${isDarkMode}`);
   const theme = createTheme({
-    colorSchemes: {
-      dark: true,
+    palette: {
+      mode: isDarkMode ? "dark" : "light",
     },
   });
 

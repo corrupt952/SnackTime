@@ -39,6 +39,7 @@ const startTimer = async (duration: Duration | null) => {
   chrome.tabs.sendMessage(tab.id!, {
     type: "timer-started",
     duration: duration.toSeconds(),
+    colorScheme: settings.colorScheme,
     notificationType: settings.notificationType,
   });
 

@@ -14,21 +14,31 @@ import EmojiFoodBeverageIcon from "@mui/icons-material/EmojiFoodBeverage";
 import { useEffect, useState } from "react";
 import { NotificationType } from "@/types/enums/NotificationType";
 import { ExtensionSettings, Settings } from "@/domain/settings/models/settings";
+import { ColorScheme } from "@/types/enums/ColorScheme";
 
 const Options = () => {
   const [notificationType, setNotificationType] = useState<NotificationType>(NotificationType.Alarm);
-  const [settings, setSettings] = useState<ExtensionSettings>({ notificationType: NotificationType.Alarm });
+  const [colorScheme, setColorScheme] = useState<ColorScheme>(ColorScheme.System);
+  const [settings, setSettings] = useState<ExtensionSettings>({
+    colorScheme: ColorScheme.System,
+    notificationType: NotificationType.Alarm,
+  });
 
   useEffect(() => {
     Settings.get().then((settings) => {
       setSettings(settings);
       setNotificationType(settings.notificationType);
+      setColorScheme(settings.colorScheme);
     });
   }, []);
 
   useEffect(() => {
     Settings.set({ notificationType });
   }, [notificationType]);
+
+  useEffect(() => {
+    Settings.set({ colorScheme });
+  }, [colorScheme]);
 
   return (
     <>
@@ -59,7 +69,21 @@ const Options = () => {
             <Divider sx={{ mt: 1, mb: 2 }} />
 
             <Box>
-              <Typography variant="h6">Coming soon...</Typography>
+              <Typography variant="h6">Color Scheme</Typography>
+              <RadioGroup
+                row
+                value={colorScheme}
+                onChange={(event) => setColorScheme(event.target.value as ColorScheme)}
+              >
+                {Object.values(ColorScheme).map((value) => (
+                  <FormControlLabel
+                    key={value}
+                    value={value}
+                    control={<Radio />}
+                    label={Object.keys(ColorScheme)[Object.values(ColorScheme).indexOf(value)]}
+                  />
+                ))}
+              </RadioGroup>
             </Box>
           </Box>
 
