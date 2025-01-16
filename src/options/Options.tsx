@@ -25,12 +25,6 @@ const Options = () => {
       setSettings(settings);
       setNotificationType(settings.notificationType);
       setColorScheme(settings.colorScheme);
-
-      if (settings.colorScheme === ColorScheme.Dark) {
-        document.documentElement.classList.add("dark");
-      } else if (settings.colorScheme === ColorScheme.Light) {
-        document.documentElement.classList.remove("dark");
-      }
     });
   }, []);
 
@@ -41,22 +35,24 @@ const Options = () => {
   useEffect(() => {
     Settings.set({ colorScheme });
 
-    if (colorScheme === ColorScheme.Dark) {
-      document.documentElement.classList.add("dark");
-    } else if (colorScheme === ColorScheme.Light) {
-      document.documentElement.classList.remove("dark");
+    // 全てのカラースキームのクラスを一旦削除
+    Object.values(ColorScheme).forEach((scheme) => {
+      document.documentElement.classList.remove(scheme);
+    });
+
+    if (colorScheme === ColorScheme.System) {
+      // システムの設定に従う
+      const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.classList.add(isDarkMode ? ColorScheme.Dark : ColorScheme.Light);
     } else {
-      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
+      // 選択されたカラースキームを適用
+      document.documentElement.classList.add(colorScheme);
     }
   }, [colorScheme]);
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="w-full h-14 bg-neutral-900 text-neutral-50 px-3 flex items-center">
+      <div className="w-full h-14 bg-primary/80 text-primary-foreground px-3 flex items-center">
         <div className="flex items-center gap-2">
           <Coffee className="h-8 w-8" />
           <span className="text-lg font-semibold">Snack Time</span>

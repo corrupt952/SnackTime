@@ -3,10 +3,11 @@ import { History } from "@/domain/timer/model/history";
 import { Duration } from "@/domain/timer/value/duration";
 import { useEffect, useState } from "react";
 import { Settings as SettingsModel } from "@/domain/settings/models/settings";
-import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import "@/styles/globals.css";
+import { Settings } from "@/domain/settings/models/settings";
+import { ColorScheme } from "@/types/enums/ColorScheme";
 
 const startTimer = async (duration: Duration | null) => {
   if (!duration) {
@@ -47,10 +48,24 @@ const TimerListItem = ({ duration }: { duration: Duration }) => {
 const Popup = () => {
   const presets = [new Duration(60), new Duration(180), new Duration(300), new Duration(600)];
   const [histories, setHistories] = useState<History[]>([]);
+  const [colorScheme, setColorScheme] = useState<ColorScheme | null>(null);
 
   useEffect(() => {
     History.all().then((histories) => setHistories(histories));
+
+    Settings.get().then((settings) => {
+      setColorScheme(settings.colorScheme);
+    });
   }, []);
+
+  useEffect(() => {
+    if (colorScheme === ColorScheme.System || !colorScheme) {
+      const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.classList.add(isDarkMode ? "dark" : "light");
+    } else {
+      document.documentElement.classList.add(colorScheme);
+    }
+  }, [colorScheme]);
 
   return (
     <div className="w-[344px]">

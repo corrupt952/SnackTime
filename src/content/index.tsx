@@ -64,10 +64,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   shadowContainer.style.display = "contents";
   shadowRoot.appendChild(shadowContainer);
 
-  const isDarkMode =
-    colorScheme === ColorScheme.Dark ||
-    (colorScheme === ColorScheme.System && window.matchMedia("(prefers-color-scheme: dark)").matches);
-  shadowContainer.classList.add(isDarkMode ? "dark" : "light");
+  if (colorScheme === ColorScheme.System || !colorScheme) {
+    const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    shadowContainer.classList.add(isDarkMode ? "dark" : "light");
+  } else {
+    shadowContainer.classList.add(colorScheme);
+  }
 
   const deleteRoot = () => {
     if (contentRoot) {
