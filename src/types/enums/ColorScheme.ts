@@ -3,4 +3,6 @@ export enum ColorScheme {
   Light = "light",
   Dark = "dark",
   Lemon = "lemon",
+  Mint = "mint",
+  Rose = "rose",
 }
