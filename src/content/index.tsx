@@ -1,10 +1,8 @@
 import React from "react";
 import Content from "./Content";
-import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { createRoot } from "react-dom/client";
-import createCache from "@emotion/cache";
-import { CacheProvider } from "@emotion/react";
 import { ColorScheme } from "@/types/enums/ColorScheme";
+import styles from "@/styles/globals.css?inline";
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   sendResponse("Received");
@@ -66,16 +64,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   shadowContainer.style.display = "contents";
   shadowRoot.appendChild(shadowContainer);
 
-  const cache = createCache({ key: "snack-time", prepend: true, container: shadowRoot });
   const isDarkMode =
     colorScheme === ColorScheme.Dark ||
     (colorScheme === ColorScheme.System && window.matchMedia("(prefers-color-scheme: dark)").matches);
   console.log(`darkMode: ${isDarkMode}`);
-  const theme = createTheme({
-    palette: {
-      mode: isDarkMode ? "dark" : "light",
-    },
-  });
 
   const deleteRoot = () => {
     if (contentRoot) {
@@ -85,12 +77,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   createRoot(shadowContainer).render(
     <React.StrictMode>
-      <CacheProvider value={cache}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Content initialTime={duration} close={deleteRoot} soundEnabled={soundEnabled} />
-        </ThemeProvider>
-      </CacheProvider>
+      <style>{styles}</style>
+      <Content initialTime={duration} close={deleteRoot} soundEnabled={soundEnabled} />
     </React.StrictMode>,
   );
 });
