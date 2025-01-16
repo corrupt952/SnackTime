@@ -4,21 +4,24 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
-import { Play, Pause, RotateCw, Settings, ArrowLeft, Volume2, VolumeX, X } from "lucide-react";
+import { Play, Pause, RotateCw, Settings as SettingsIcon, ArrowLeft, Volume2, VolumeX, X } from "lucide-react";
+import type { AlarmSound } from "@/domain/settings/models/settings";
 
 class Alarm {
   private readonly audioContext: AudioContext;
   private audioBuffer: AudioBuffer | null = null;
   private currentSource: AudioBufferSourceNode | null = null;
+  private readonly sound: string;
 
-  constructor() {
+  constructor(sound: string) {
     this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    this.sound = sound;
     this.loadSound();
   }
 
   private async loadSound() {
     try {
-      const response = await fetch(chrome.runtime.getURL("sounds/Simple.wav"));
+      const response = await fetch(chrome.runtime.getURL(`sounds/${this.sound}.wav`));
       const arrayBuffer = await response.arrayBuffer();
       this.audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
     } catch (error) {
@@ -62,10 +65,12 @@ class Alarm {
 const Timer = ({
   initialTime,
   soundEnabled,
+  alarmSound,
   close,
 }: {
   initialTime: number;
   soundEnabled: boolean;
+  alarmSound: AlarmSound;
   close: () => void;
 }) => {
   const [totalSeconds, setTotalSeconds] = useState(initialTime);
@@ -80,7 +85,7 @@ const Timer = ({
   const alarmRef = useRef<Alarm | null>(null);
 
   useEffect(() => {
-    alarmRef.current = new Alarm();
+    alarmRef.current = new Alarm(alarmSound);
     setIsRunning(true);
     return () => {
       if (timerRef.current) {
@@ -90,7 +95,7 @@ const Timer = ({
         alarmRef.current.stop();
       }
     };
-  }, []);
+  }, [alarmSound]);
 
   useEffect(() => {
     if (isRunning) {
@@ -178,7 +183,7 @@ const Timer = ({
           {settings.soundEnabled ? <Volume2 className="h-12 w-12" /> : <VolumeX className="h-12 w-12" />}
         </Button>
         <Button variant="ghost" size="icon" onClick={() => setShowSettings(true)} className="rounded-full">
-          <Settings className="h-12 w-12" />
+          <SettingsIcon className="h-12 w-12" />
         </Button>
         <Button variant="ghost" size="icon" onClick={closeTimer} className="text-red-500 rounded-full">
           <X size={64} />

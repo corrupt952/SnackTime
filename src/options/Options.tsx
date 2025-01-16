@@ -1,20 +1,53 @@
-import { Coffee } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Coffee, Volume2 } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
 import { NotificationType } from "@/types/enums/NotificationType";
-import { ExtensionSettings, Settings } from "@/domain/settings/models/settings";
+import { ExtensionSettings, Settings, AlarmSound } from "@/domain/settings/models/settings";
 import { ColorScheme } from "@/types/enums/ColorScheme";
 import "@/styles/globals.css";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 
 const Options = () => {
   const [notificationType, setNotificationType] = useState<NotificationType>(NotificationType.Alarm);
   const [colorScheme, setColorScheme] = useState<ColorScheme>(ColorScheme.System);
+  const [alarmSound, setAlarmSound] = useState<AlarmSound>("Simple");
   const [settings, setSettings] = useState<ExtensionSettings>({
     colorScheme: ColorScheme.System,
     notificationType: NotificationType.Alarm,
+    alarmSound: "Simple",
   });
+
+  const audioContext = useRef<AudioContext | null>(null);
+  const audioBuffer = useRef<AudioBuffer | null>(null);
+
+  const playSound = async () => {
+    try {
+      if (!audioContext.current) {
+        audioContext.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+      }
+
+      if (!audioBuffer.current) {
+        const response = await fetch(chrome.runtime.getURL(`sounds/${alarmSound}.wav`));
+        const arrayBuffer = await response.arrayBuffer();
+        audioBuffer.current = await audioContext.current.decodeAudioData(arrayBuffer);
+      }
+
+      await audioContext.current.resume();
+      const source = audioContext.current.createBufferSource();
+      source.buffer = audioBuffer.current;
+      source.connect(audioContext.current.destination);
+      source.start();
+    } catch (error) {
+      console.error("Error playing sound:", error);
+    }
+  };
+
+  // Reset audio buffer when alarm sound changes
+  useEffect(() => {
+    audioBuffer.current = null;
+  }, [alarmSound]);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
@@ -25,12 +58,17 @@ const Options = () => {
       setSettings(settings);
       setNotificationType(settings.notificationType);
       setColorScheme(settings.colorScheme);
+      setAlarmSound(settings.alarmSound);
     });
   }, []);
 
   useEffect(() => {
     Settings.set({ notificationType });
   }, [notificationType]);
+
+  useEffect(() => {
+    Settings.set({ alarmSound });
+  }, [alarmSound]);
 
   useEffect(() => {
     Settings.set({ colorScheme });
@@ -114,8 +152,32 @@ const Options = () => {
               </div>
 
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-foreground">Alarm Sound</h3>
-                <p className="text-foreground">Coming soon...</p>
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-foreground">Alarm Sound</h3>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={playSound}
+                    className="rounded-full"
+                    title="Play selected sound"
+                  >
+                    <Volume2 className="h-4 w-4" />
+                  </Button>
+                </div>
+                <RadioGroup
+                  value={alarmSound}
+                  onValueChange={(value) => setAlarmSound(value as AlarmSound)}
+                  className="flex gap-8"
+                >
+                  {["Simple", "Piano", "Vibraphone", "SteelDrums"].map((value) => (
+                    <div key={value} className="flex items-center space-x-2">
+                      <RadioGroupItem value={value} id={`alarm-sound-${value}`} />
+                      <Label htmlFor={`alarm-sound-${value}`} className="text-foreground">
+                        {value}
+                      </Label>
+                    </div>
+                  ))}
+                </RadioGroup>
               </div>
             </div>
           </section>

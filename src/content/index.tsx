@@ -2,12 +2,15 @@ import React from "react";
 import Content from "./Content";
 import { createRoot } from "react-dom/client";
 import { ColorScheme } from "@/types/enums/ColorScheme";
+import { Settings } from "@/domain/settings/models/settings";
 import styles from "@/styles/globals.css?inline";
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   sendResponse("Received");
   const { duration, notificationType, colorScheme } = message;
   const soundEnabled = notificationType === "alarm";
+  const settings = await Settings.get();
+  const alarmSound = settings.alarmSound;
 
   const contentRoot = document.createElement("div");
   contentRoot.id = "snack-time-root";
@@ -80,7 +83,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   createRoot(shadowContainer).render(
     <React.StrictMode>
       <style>{styles}</style>
-      <Content initialTime={duration} close={deleteRoot} soundEnabled={soundEnabled} />
+      <Content initialTime={duration} close={deleteRoot} soundEnabled={soundEnabled} alarmSound={alarmSound} />
     </React.StrictMode>,
   );
 });
