@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Paper, Typography, IconButton, Stack, Switch, FormControlLabel, Grow, Box } from "@mui/material";
-import { PlayArrow, Pause, Refresh, Settings, ArrowBack, VolumeUp, VolumeOff, Close } from "@mui/icons-material";
+import { Play, Pause, RotateCw, Settings, ArrowLeft, Volume2, VolumeX, X } from "lucide-react";
 
 class Alarm {
   private readonly audioContext: AudioContext;
@@ -161,7 +161,7 @@ const Timer = ({
             },
           }}
         >
-          {isRunning ? <Pause /> : <PlayArrow />}
+          {isRunning ? <Pause /> : <Play />}
         </IconButton>
         <IconButton
           onClick={resetTimer}
@@ -171,7 +171,7 @@ const Timer = ({
             borderColor: "primary.main",
           }}
         >
-          <Refresh />
+          <RotateCw />
         </IconButton>
         <IconButton
           onClick={() => setSettings((prev) => ({ ...prev, soundEnabled: !prev.soundEnabled }))}
@@ -179,7 +179,7 @@ const Timer = ({
             color: settings.soundEnabled ? "inherit" : "error.main",
           }}
         >
-          {settings.soundEnabled ? <VolumeUp /> : <VolumeOff />}
+          {settings.soundEnabled ? <Volume2 /> : <VolumeX />}
         </IconButton>
         <IconButton onClick={() => setShowSettings(true)}>
           <Settings />
@@ -191,7 +191,7 @@ const Timer = ({
           onClick={closeTimer}
           color="primary"
         >
-          <Close />
+          <X />
         </IconButton>
       </Stack>
     </Stack>
@@ -201,7 +201,7 @@ const Timer = ({
     <Box sx={{ width: "100%" }}>
       <Stack direction="row" alignItems="center" sx={{ mb: 3 }}>
         <IconButton onClick={() => setShowSettings(false)} edge="start" sx={{ mr: 2 }}>
-          <ArrowBack />
+          <ArrowLeft />
         </IconButton>
         <Typography variant="h6">Settings</Typography>
       </Stack>
