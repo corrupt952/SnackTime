@@ -9,6 +9,7 @@ import { Play, Pause, RotateCw, Settings, ArrowLeft, Volume2, VolumeX, X } from 
 class Alarm {
   private readonly audioContext: AudioContext;
   private audioBuffer: AudioBuffer | null = null;
+  private currentSource: AudioBufferSourceNode | null = null;
 
   constructor() {
     this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -34,13 +35,26 @@ class Alarm {
       await this.audioContext.resume();
 
       if (this.audioBuffer) {
+        this.stop();
         const source = this.audioContext.createBufferSource();
         source.buffer = this.audioBuffer;
         source.connect(this.audioContext.destination);
+        this.currentSource = source;
         source.start();
       }
     } catch (error) {
       console.error("Error playing alarm:", error);
+    }
+  }
+
+  stop() {
+    if (this.currentSource) {
+      try {
+        this.currentSource.stop();
+      } catch (error) {
+        console.error("Error stopping sound:", error);
+      }
+      this.currentSource = null;
     }
   }
 }
@@ -71,6 +85,9 @@ const Timer = ({
     return () => {
       if (timerRef.current) {
         window.clearInterval(timerRef.current);
+      }
+      if (alarmRef.current) {
+        alarmRef.current.stop();
       }
     };
   }, []);
@@ -125,6 +142,9 @@ const Timer = ({
 
   const closeTimer = () => {
     window.clearInterval(timerRef.current!);
+    if (alarmRef.current) {
+      alarmRef.current.stop();
+    }
     close();
   };
 
