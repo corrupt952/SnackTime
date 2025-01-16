@@ -141,38 +141,38 @@ const Timer = ({
 
   const TimerFace = () => (
     <div className="flex flex-col items-center justify-center w-full space-y-4">
-      <div className="text-4xl font-bold font-mono text-center">
+      <div className="text-6xl font-bold font-mono text-center">
         {totalSeconds <= 0 ? "Time's up!" : formatTime(totalSeconds)}
       </div>
 
-      <div className="flex space-x-2 justify-center">
+      <div className="flex space-x-6 justify-center">
         <Button
           variant="ghost"
           size="icon"
           onClick={isRunning ? pauseTimer : startTimer}
           className={cn(
-            "text-white",
+            "text-white rounded-full",
             isRunning ? "bg-yellow-500 hover:bg-yellow-600" : "bg-green-500 hover:bg-green-600",
           )}
         >
-          {isRunning ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+          {isRunning ? <Pause className="h-12 w-12" /> : <Play className="h-12 w-12" />}
         </Button>
-        <Button variant="outline" size="icon" onClick={resetTimer}>
-          <RotateCw className="h-4 w-4" />
+        <Button variant="outline" size="icon" onClick={resetTimer} className="rounded-full">
+          <RotateCw className="h-12 w-12" />
         </Button>
         <Button
           variant="ghost"
           size="icon"
           onClick={() => setSettings((prev) => ({ ...prev, soundEnabled: !prev.soundEnabled }))}
-          className={cn(settings.soundEnabled ? "" : "text-red-500")}
+          className={cn("rounded-full", settings.soundEnabled ? "" : "text-red-500")}
         >
-          {settings.soundEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+          {settings.soundEnabled ? <Volume2 className="h-12 w-12" /> : <VolumeX className="h-12 w-12" />}
         </Button>
-        <Button variant="ghost" size="icon" onClick={() => setShowSettings(true)}>
-          <Settings className="h-4 w-4" />
+        <Button variant="ghost" size="icon" onClick={() => setShowSettings(true)} className="rounded-full">
+          <Settings className="h-12 w-12" />
         </Button>
-        <Button variant="ghost" size="icon" onClick={closeTimer} className="text-red-500">
-          <X className="h-4 w-4" />
+        <Button variant="ghost" size="icon" onClick={closeTimer} className="text-red-500 rounded-full">
+          <X size={64} />
         </Button>
       </div>
     </div>
@@ -206,12 +206,12 @@ const Timer = ({
   );
 
   return (
-    <Card className="flex items-center relative overflow-hidden">
-      <div className={cn("p-4 px-8", !showSettings ? "block" : "hidden", "transition-all duration-500 ease-in-out")}>
+    <Card className="flex items-center relative overflow-hidden px-8 py-6 rounded-none">
+      <div className={cn(!showSettings ? "block" : "hidden", "transition-all duration-500 ease-in-out")}>
         <TimerFace />
       </div>
 
-      <div className={cn("p-8 px-16", showSettings ? "block" : "hidden", "transition-all duration-500 ease-in-out")}>
+      <div className={cn(showSettings ? "block" : "hidden", "transition-all duration-500 ease-in-out")}>
         <SettingsFace />
       </div>
     </Card>

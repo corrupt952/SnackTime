@@ -67,7 +67,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   const isDarkMode =
     colorScheme === ColorScheme.Dark ||
     (colorScheme === ColorScheme.System && window.matchMedia("(prefers-color-scheme: dark)").matches);
-  console.log(`darkMode: ${isDarkMode}`);
+  shadowContainer.classList.add(isDarkMode ? "dark" : "light");
 
   const deleteRoot = () => {
     if (contentRoot) {
