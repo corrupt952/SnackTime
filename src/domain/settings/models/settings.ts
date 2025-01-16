@@ -7,6 +7,7 @@ export interface ExtensionSettings {
   colorScheme: ColorScheme;
   notificationType: NotificationType;
   alarmSound: AlarmSound;
+  volume: number;
 }
 
 export class Settings {
@@ -17,6 +18,7 @@ export class Settings {
         notificationType: NotificationType.Alarm,
         colorScheme: ColorScheme.Dark,
         alarmSound: "Simple",
+        volume: 0.1,
       }
     );
   }

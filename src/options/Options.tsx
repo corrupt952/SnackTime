@@ -8,24 +8,30 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
 
 const Options = () => {
   const [notificationType, setNotificationType] = useState<NotificationType>(NotificationType.Alarm);
   const [colorScheme, setColorScheme] = useState<ColorScheme>(ColorScheme.System);
   const [alarmSound, setAlarmSound] = useState<AlarmSound>("Simple");
+  const [volume, setVolume] = useState<number>(0.1);
   const [settings, setSettings] = useState<ExtensionSettings>({
     colorScheme: ColorScheme.System,
     notificationType: NotificationType.Alarm,
     alarmSound: "Simple",
+    volume: 0.1,
   });
 
   const audioContext = useRef<AudioContext | null>(null);
   const audioBuffer = useRef<AudioBuffer | null>(null);
+  const gainNode = useRef<GainNode | null>(null);
 
   const playSound = async () => {
     try {
       if (!audioContext.current) {
         audioContext.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+        gainNode.current = audioContext.current.createGain();
+        gainNode.current.connect(audioContext.current.destination);
       }
 
       if (!audioBuffer.current) {
@@ -37,7 +43,10 @@ const Options = () => {
       await audioContext.current.resume();
       const source = audioContext.current.createBufferSource();
       source.buffer = audioBuffer.current;
-      source.connect(audioContext.current.destination);
+      if (gainNode.current) {
+        gainNode.current.gain.value = volume;
+        source.connect(gainNode.current);
+      }
       source.start();
     } catch (error) {
       console.error("Error playing sound:", error);
@@ -59,6 +68,7 @@ const Options = () => {
       setNotificationType(settings.notificationType);
       setColorScheme(settings.colorScheme);
       setAlarmSound(settings.alarmSound);
+      setVolume(settings.volume);
     });
   }, []);
 
@@ -87,6 +97,10 @@ const Options = () => {
       document.documentElement.classList.add(colorScheme);
     }
   }, [colorScheme]);
+
+  useEffect(() => {
+    Settings.set({ volume });
+  }, [volume]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -178,6 +192,21 @@ const Options = () => {
                     </div>
                   ))}
                 </RadioGroup>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-foreground">Volume</h3>
+                <div className="flex items-center gap-8">
+                  <div className="flex-1">
+                    <Slider
+                      value={[volume * 100]}
+                      onValueChange={(value) => setVolume(value[0] / 100)}
+                      max={100}
+                      step={1}
+                    />
+                  </div>
+                  <div className="w-12 text-right">{Math.round(volume * 100)}%</div>
+                </div>
               </div>
             </div>
           </section>

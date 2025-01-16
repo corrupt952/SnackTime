@@ -22,11 +22,16 @@ class Alarm {
   private readonly audioContext: AudioContext;
   private audioBuffer: AudioBuffer | null = null;
   private currentSource: AudioBufferSourceNode | null = null;
+  private readonly gainNode: GainNode;
   private readonly sound: string;
+  private readonly volume: number;
 
-  constructor(sound: string) {
+  constructor(sound: string, volume: number) {
     this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    this.gainNode = this.audioContext.createGain();
+    this.gainNode.connect(this.audioContext.destination);
     this.sound = sound;
+    this.volume = volume;
     this.loadSound();
   }
 
@@ -52,7 +57,8 @@ class Alarm {
         this.stop();
         const source = this.audioContext.createBufferSource();
         source.buffer = this.audioBuffer;
-        source.connect(this.audioContext.destination);
+        this.gainNode.gain.value = this.volume;
+        source.connect(this.gainNode);
         this.currentSource = source;
         source.start();
       }
@@ -77,11 +83,13 @@ const Timer = ({
   initialTime,
   soundEnabled,
   alarmSound,
+  volume,
   close,
 }: {
   initialTime: number;
   soundEnabled: boolean;
   alarmSound: AlarmSound;
+  volume: number;
   close: () => void;
 }) => {
   const [totalSeconds, setTotalSeconds] = useState(initialTime);
@@ -98,7 +106,7 @@ const Timer = ({
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    alarmRef.current = new Alarm(alarmSound);
+    alarmRef.current = new Alarm(alarmSound, volume);
     setIsRunning(true);
     return () => {
       if (timerRef.current) {
@@ -108,7 +116,7 @@ const Timer = ({
         alarmRef.current.stop();
       }
     };
-  }, [alarmSound]);
+  }, [alarmSound, volume]);
 
   useEffect(() => {
     if (isRunning) {

@@ -11,6 +11,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   const soundEnabled = notificationType === "alarm";
   const settings = await Settings.get();
   const alarmSound = settings.alarmSound;
+  const volume = settings.volume;
 
   const contentRoot = document.createElement("div");
   contentRoot.id = "snack-time-root";
@@ -83,7 +84,13 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   createRoot(shadowContainer).render(
     <React.StrictMode>
       <style>{styles}</style>
-      <Content initialTime={duration} close={deleteRoot} soundEnabled={soundEnabled} alarmSound={alarmSound} />
+      <Content
+        initialTime={duration}
+        close={deleteRoot}
+        soundEnabled={soundEnabled}
+        alarmSound={alarmSound}
+        volume={volume || 0.1}
+      />
     </React.StrictMode>,
   );
 });
