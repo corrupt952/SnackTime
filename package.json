@@ -8,8 +8,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf dist",
-    "dev": "npm run clean && vite",
-    "build": "npm run clean && tsc && vite build"
+    "dev": "pnpm run clean && vite",
+    "build": "pnpm run clean && tsc && vite build"
   },
   "author": "K@zuki.",
   "license": "MIT",
