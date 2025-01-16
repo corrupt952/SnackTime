@@ -4,7 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
-import { Play, Pause, RotateCw, Settings as SettingsIcon, ArrowLeft, Volume2, VolumeX, X } from "lucide-react";
+import {
+  Play,
+  Pause,
+  RotateCw,
+  Settings as SettingsIcon,
+  ArrowLeft,
+  Volume2,
+  VolumeX,
+  X,
+  Maximize,
+  Minimize,
+} from "lucide-react";
 import type { AlarmSound } from "@/domain/settings/models/settings";
 
 class Alarm {
@@ -76,6 +87,7 @@ const Timer = ({
   const [totalSeconds, setTotalSeconds] = useState(initialTime);
   const [isRunning, setIsRunning] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const [settings, setSettings] = useState({
     soundEnabled: soundEnabled,
   });
@@ -83,6 +95,7 @@ const Timer = ({
   const timerRef = useRef<number | null>(null);
   const startTimeRef = useRef<number | null>(null);
   const alarmRef = useRef<Alarm | null>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     alarmRef.current = new Alarm(alarmSound);
@@ -153,13 +166,34 @@ const Timer = ({
     close();
   };
 
+  const toggleFullscreen = async () => {
+    if (!document.fullscreenElement) {
+      await cardRef.current?.requestFullscreen();
+      setIsFullscreen(true);
+    } else {
+      await document.exitFullscreen();
+      setIsFullscreen(false);
+    }
+  };
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
+  }, []);
+
   const TimerFace = () => (
     <div className="flex flex-col items-center justify-center w-full space-y-4">
-      <div className="text-6xl font-bold font-mono text-center">
+      <div className={cn("font-bold font-mono text-center", isFullscreen ? "text-[12rem]" : "text-6xl")}>
         {totalSeconds <= 0 ? "Time's up!" : formatTime(totalSeconds)}
       </div>
 
-      <div className="flex space-x-6 justify-center">
+      <div className={cn("flex space-x-6 justify-center", isFullscreen && "mt-12")}>
         <Button
           variant="ghost"
           size="icon"
@@ -167,25 +201,49 @@ const Timer = ({
           className={cn(
             "text-white rounded-full",
             isRunning ? "bg-yellow-500 hover:bg-yellow-600" : "bg-green-500 hover:bg-green-600",
+            isFullscreen && "scale-150",
           )}
         >
           {isRunning ? <Pause className="h-12 w-12" /> : <Play className="h-12 w-12" />}
         </Button>
-        <Button variant="outline" size="icon" onClick={resetTimer} className="rounded-full">
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={resetTimer}
+          className={cn("rounded-full", isFullscreen && "scale-150")}
+        >
           <RotateCw className="h-12 w-12" />
         </Button>
         <Button
           variant="ghost"
           size="icon"
           onClick={() => setSettings((prev) => ({ ...prev, soundEnabled: !prev.soundEnabled }))}
-          className={cn("rounded-full", settings.soundEnabled ? "" : "text-red-500")}
+          className={cn("rounded-full", settings.soundEnabled ? "" : "text-red-500", isFullscreen && "scale-150")}
         >
           {settings.soundEnabled ? <Volume2 className="h-12 w-12" /> : <VolumeX className="h-12 w-12" />}
         </Button>
-        <Button variant="ghost" size="icon" onClick={() => setShowSettings(true)} className="rounded-full">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setShowSettings(true)}
+          className={cn("rounded-full", isFullscreen && "scale-150")}
+        >
           <SettingsIcon className="h-12 w-12" />
         </Button>
-        <Button variant="ghost" size="icon" onClick={closeTimer} className="text-red-500 rounded-full">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleFullscreen}
+          className={cn("rounded-full", isFullscreen && "scale-150")}
+        >
+          {isFullscreen ? <Minimize className="h-12 w-12" /> : <Maximize className="h-12 w-12" />}
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={closeTimer}
+          className={cn("text-red-500 rounded-full", isFullscreen && "scale-150")}
+        >
           <X size={64} />
         </Button>
       </div>
@@ -220,7 +278,13 @@ const Timer = ({
   );
 
   return (
-    <Card className="flex items-center relative overflow-hidden px-8 py-6 rounded-none">
+    <Card
+      ref={cardRef}
+      className={cn(
+        "flex items-center relative overflow-hidden px-8 py-6 rounded-none",
+        isFullscreen && "w-screen h-screen justify-center",
+      )}
+    >
       <div className={cn(!showSettings ? "block" : "hidden", "transition-all duration-500 ease-in-out")}>
         <TimerFace />
       </div>
