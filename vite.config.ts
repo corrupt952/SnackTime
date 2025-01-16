@@ -29,6 +29,12 @@ const manifest = defineManifest(async (env) => ({
       js: ["content/index.tsx"],
     },
   ],
+  web_accessible_resources: [
+    {
+      resources: ["sounds/*.wav"],
+      matches: ["<all_urls>"],
+    },
+  ],
 }));
 
 export default defineConfig({

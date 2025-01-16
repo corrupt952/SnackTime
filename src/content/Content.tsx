@@ -8,50 +8,39 @@ import { Play, Pause, RotateCw, Settings, ArrowLeft, Volume2, VolumeX, X } from 
 
 class Alarm {
   private readonly audioContext: AudioContext;
+  private audioBuffer: AudioBuffer | null = null;
 
   constructor() {
     this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    this.loadSound();
+  }
+
+  private async loadSound() {
+    try {
+      const response = await fetch(chrome.runtime.getURL("sounds/Simple.wav"));
+      const arrayBuffer = await response.arrayBuffer();
+      this.audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
+    } catch (error) {
+      console.error("Error loading sound:", error);
+    }
   }
 
   async play() {
     try {
+      if (!this.audioBuffer) {
+        await this.loadSound();
+      }
+
       await this.audioContext.resume();
 
-      Array.from({ length: 3 }).forEach((_, index) => {
-        setTimeout(() => {
-          const startTime = this.audioContext.currentTime;
-          const beepFrequency = 800;
-
-          Array.from({ length: 3 }).forEach((_, beepIndex) => {
-            const beep = this.createBeep(beepFrequency, startTime + beepIndex * 0.2);
-            if (!beep) return;
-            beep.start(startTime + beepIndex * 0.2);
-            beep.stop(startTime + beepIndex * 0.2 + 0.1);
-          });
-        }, index * 1200);
-      });
+      if (this.audioBuffer) {
+        const source = this.audioContext.createBufferSource();
+        source.buffer = this.audioBuffer;
+        source.connect(this.audioContext.destination);
+        source.start();
+      }
     } catch (error) {
       console.error("Error playing alarm:", error);
-    }
-  }
-
-  private createBeep(frequency: number, startTime: number) {
-    try {
-      const oscillator = this.audioContext.createOscillator();
-      const gainNode = this.audioContext.createGain();
-
-      oscillator.frequency.value = frequency;
-      gainNode.gain.setValueAtTime(0, startTime);
-      gainNode.gain.linearRampToValueAtTime(0.1, startTime + 0.01);
-      gainNode.gain.linearRampToValueAtTime(0, startTime + 0.1);
-
-      oscillator.connect(gainNode);
-      gainNode.connect(this.audioContext.destination);
-
-      return oscillator;
-    } catch (error) {
-      console.error("Error creating beep:", error);
-      return null;
     }
   }
 }
