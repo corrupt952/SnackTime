@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "packageManager": "pnpm@9.15.2",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "This extension is a timer to help you keep your break time.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
