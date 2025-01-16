@@ -1,20 +1,12 @@
-import {
-  AppBar,
-  Box,
-  Container,
-  Divider,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  Stack,
-  Toolbar,
-  Typography,
-} from "@mui/material";
-import EmojiFoodBeverageIcon from "@mui/icons-material/EmojiFoodBeverage";
+import { Coffee } from "lucide-react";
 import { useEffect, useState } from "react";
 import { NotificationType } from "@/types/enums/NotificationType";
 import { ExtensionSettings, Settings } from "@/domain/settings/models/settings";
 import { ColorScheme } from "@/types/enums/ColorScheme";
+import "@/styles/globals.css";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 
 const Options = () => {
   const [notificationType, setNotificationType] = useState<NotificationType>(NotificationType.Alarm);
@@ -25,10 +17,20 @@ const Options = () => {
   });
 
   useEffect(() => {
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      document.documentElement.classList.add("dark");
+    }
+
     Settings.get().then((settings) => {
       setSettings(settings);
       setNotificationType(settings.notificationType);
       setColorScheme(settings.colorScheme);
+
+      if (settings.colorScheme === ColorScheme.Dark) {
+        document.documentElement.classList.add("dark");
+      } else if (settings.colorScheme === ColorScheme.Light) {
+        document.documentElement.classList.remove("dark");
+      }
     });
   }, []);
 
@@ -38,88 +40,92 @@ const Options = () => {
 
   useEffect(() => {
     Settings.set({ colorScheme });
+
+    if (colorScheme === ColorScheme.Dark) {
+      document.documentElement.classList.add("dark");
+    } else if (colorScheme === ColorScheme.Light) {
+      document.documentElement.classList.remove("dark");
+    } else {
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    }
   }, [colorScheme]);
 
   return (
-    <>
-      <AppBar position="static">
-        <Toolbar>
-          <EmojiFoodBeverageIcon sx={{ mr: 1 }} />
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            Snack Time
-          </Typography>
-        </Toolbar>
-      </AppBar>
+    <div className="min-h-screen bg-background">
+      <div className="w-full h-14 bg-neutral-900 text-neutral-50 px-3 flex items-center">
+        <div className="flex items-center gap-2">
+          <Coffee className="h-8 w-8" />
+          <span className="text-lg font-semibold">Snack Time</span>
+        </div>
+      </div>
 
-      <Container>
-        <Stack spacing={6} sx={{ mt: 4 }}>
-          <Box>
-            <Typography variant="h4">General</Typography>
+      <div className="container mx-auto mt-8">
+        <div className="space-y-12">
+          <section>
+            <h2 className="text-2xl font-bold text-foreground">General</h2>
+            <Separator className="my-4" />
+            <div>
+              <h3 className="text-lg font-semibold text-foreground">Coming soon...</h3>
+            </div>
+          </section>
 
-            <Divider sx={{ mt: 1, mb: 2 }} />
-
-            <Box>
-              <Typography variant="h6">Coming soon...</Typography>
-            </Box>
-          </Box>
-
-          <Box>
-            <Typography variant="h4">Appearance</Typography>
-
-            <Divider sx={{ mt: 1, mb: 2 }} />
-
-            <Box>
-              <Typography variant="h6">Color Scheme</Typography>
+          <section>
+            <h2 className="text-2xl font-bold text-foreground">Appearance</h2>
+            <Separator className="my-4" />
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-foreground">Color Scheme</h3>
               <RadioGroup
-                row
                 value={colorScheme}
-                onChange={(event) => setColorScheme(event.target.value as ColorScheme)}
+                onValueChange={(value) => setColorScheme(value as ColorScheme)}
+                className="flex gap-8"
               >
                 {Object.values(ColorScheme).map((value) => (
-                  <FormControlLabel
-                    key={value}
-                    value={value}
-                    control={<Radio />}
-                    label={Object.keys(ColorScheme)[Object.values(ColorScheme).indexOf(value)]}
-                  />
+                  <div key={value} className="flex items-center space-x-2">
+                    <RadioGroupItem value={value} id={`color-scheme-${value}`} />
+                    <Label htmlFor={`color-scheme-${value}`} className="text-foreground">
+                      {Object.keys(ColorScheme)[Object.values(ColorScheme).indexOf(value)]}
+                    </Label>
+                  </div>
                 ))}
               </RadioGroup>
-            </Box>
-          </Box>
+            </div>
+          </section>
 
-          <Box>
-            <Typography variant="h4">Notification</Typography>
-
-            <Divider sx={{ mt: 1, mb: 2 }} />
-
-            <Stack spacing={2}>
-              <Box>
-                <Typography variant="h6">Notification Type</Typography>
+          <section>
+            <h2 className="text-2xl font-bold text-foreground">Notification</h2>
+            <Separator className="my-4" />
+            <div className="space-y-8">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-foreground">Notification Type</h3>
                 <RadioGroup
-                  row
                   value={notificationType}
-                  onChange={(event) => setNotificationType(event.target.value as NotificationType)}
+                  onValueChange={(value) => setNotificationType(value as NotificationType)}
+                  className="flex gap-8"
                 >
                   {Object.values(NotificationType).map((value) => (
-                    <FormControlLabel
-                      key={value}
-                      value={value}
-                      control={<Radio />}
-                      label={Object.keys(NotificationType)[Object.values(NotificationType).indexOf(value)]}
-                    />
+                    <div key={value} className="flex items-center space-x-2">
+                      <RadioGroupItem value={value} id={`notification-type-${value}`} />
+                      <Label htmlFor={`notification-type-${value}`} className="text-foreground">
+                        {Object.keys(NotificationType)[Object.values(NotificationType).indexOf(value)]}
+                      </Label>
+                    </div>
                   ))}
                 </RadioGroup>
-              </Box>
+              </div>
 
-              <Box>
-                <Typography variant="h6">Alarm Sound</Typography>
-                Coming soon...
-              </Box>
-            </Stack>
-          </Box>
-        </Stack>
-      </Container>
-    </>
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-foreground">Alarm Sound</h3>
+                <p className="text-foreground">Coming soon...</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
   );
 };
 

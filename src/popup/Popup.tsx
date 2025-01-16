@@ -1,23 +1,12 @@
-import {
-  AppBar,
-  Box,
-  Divider,
-  IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  ListSubheader,
-  Stack,
-  Toolbar,
-  Typography,
-} from "@mui/material";
-import EmojiFoodBeverageIcon from "@mui/icons-material/EmojiFoodBeverage";
-import SettingsIcon from "@mui/icons-material/Settings";
+import { Coffee, SettingsIcon } from "lucide-react";
 import { History } from "@/domain/timer/model/history";
 import { Duration } from "@/domain/timer/value/duration";
 import { useEffect, useState } from "react";
-import { Settings } from "@/domain/settings/models/settings";
+import { Settings as SettingsModel } from "@/domain/settings/models/settings";
+import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from "@/components/ui/navigation-menu";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import "@/styles/globals.css";
 
 const startTimer = async (duration: Duration | null) => {
   if (!duration) {
@@ -30,7 +19,7 @@ const startTimer = async (duration: Duration | null) => {
 
   await History.add(duration);
 
-  const settings = await Settings.get();
+  const settings = await SettingsModel.get();
 
   const [tab] = await chrome.tabs.query({
     active: true,
@@ -49,11 +38,9 @@ const startTimer = async (duration: Duration | null) => {
 const TimerListItem = ({ duration }: { duration: Duration }) => {
   const text = duration.toFormatted();
   return (
-    <ListItem disablePadding>
-      <ListItemButton onClick={() => startTimer(duration)}>
-        <ListItemText primary={text} style={{ textAlign: "right" }} />
-      </ListItemButton>
-    </ListItem>
+    <Button variant="ghost" className="w-full justify-end" onClick={() => startTimer(duration)}>
+      {text}
+    </Button>
   );
 };
 
@@ -66,63 +53,46 @@ const Popup = () => {
   }, []);
 
   return (
-    <div style={{ width: 344 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <EmojiFoodBeverageIcon sx={{ mr: 1 }} />
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            Snack Time
-          </Typography>
-          <IconButton
-            size="large"
-            edge="end"
-            color="inherit"
-            aria-label="settings"
-            onClick={() => {
-              chrome.runtime.openOptionsPage();
-            }}
-          >
-            <SettingsIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
+    <div className="w-[344px]">
+      <div className="w-full h-14 bg-primary text-primary-foreground px-3 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Coffee className="h-8 w-8" />
+          <span className="text-lg font-semibold">Snack Time</span>
+        </div>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="text-primary-foreground hover:text-primary-foreground/50 hover:bg-transparent"
+          onClick={() => chrome.runtime.openOptionsPage()}
+        >
+          <SettingsIcon className="h-8 w-8" />
+        </Button>
+      </div>
 
-      <Stack direction={"row"} spacing={0}>
-        <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
-          <List
-            subheader={
-              <ListSubheader component="div" style={{ textAlign: "center" }}>
-                Presets
-              </ListSubheader>
-            }
-          >
+      <div className="flex">
+        <Card className="flex-1 rounded-none border-0">
+          <div className="text-center py-2 font-medium text-sm text-muted-foreground">Presets</div>
+          <div className="space-y-1">
             {presets.map((duration, index) => (
               <TimerListItem key={index} duration={duration} />
             ))}
-            <ListItem disablePadding>
-              <ListItemButton onClick={() => startTimer(null)}>
-                <ListItemText primary="⚡Custom" style={{ textAlign: "right" }} />
-              </ListItemButton>
-            </ListItem>
-          </List>
-        </Box>
+            <Button variant="ghost" className="w-full justify-end" onClick={() => startTimer(null)}>
+              ⚡Custom
+            </Button>
+          </div>
+        </Card>
 
-        <Divider orientation="vertical" flexItem />
+        <div className="w-px bg-border" />
 
-        <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
-          <List
-            subheader={
-              <ListSubheader component="div" style={{ textAlign: "center" }}>
-                Recent
-              </ListSubheader>
-            }
-          >
+        <Card className="flex-1 rounded-none border-0">
+          <div className="text-center py-2 font-medium text-sm text-muted-foreground">Recent</div>
+          <div className="space-y-1">
             {histories.map((history: History, index: number) => (
               <TimerListItem key={index} duration={history.duration} />
             ))}
-          </List>
-        </Box>
-      </Stack>
+          </div>
+        </Card>
+      </div>
     </div>
   );
 };

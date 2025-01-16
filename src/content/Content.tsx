@@ -1,6 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import { Paper, Typography, IconButton, Stack, Switch, FormControlLabel, Grow, Box } from "@mui/material";
-import { PlayArrow, Pause, Refresh, Settings, ArrowBack, VolumeUp, VolumeOff, Close } from "@mui/icons-material";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
+import { Play, Pause, RotateCw, Settings, ArrowLeft, Volume2, VolumeX, X } from "lucide-react";
 
 class Alarm {
   private readonly audioContext: AudioContext;
@@ -136,129 +140,81 @@ const Timer = ({
   };
 
   const TimerFace = () => (
-    <Stack spacing={2} justifyContent="center" sx={{ width: "100%" }}>
-      <Typography
-        variant="h2"
-        component="div"
-        align="center"
-        sx={{
-          fontWeight: "bold",
-          fontFamily: "monospace",
-        }}
-      >
+    <div className="flex flex-col items-center justify-center w-full space-y-4">
+      <div className="text-6xl font-bold font-mono text-center">
         {totalSeconds <= 0 ? "Time's up!" : formatTime(totalSeconds)}
-      </Typography>
+      </div>
 
-      <Stack direction="row" spacing={2} justifyContent="center">
-        <IconButton
+      <div className="flex space-x-6 justify-center">
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={isRunning ? pauseTimer : startTimer}
-          color="primary"
-          sx={{
-            backgroundColor: isRunning ? "warning.main" : "success.main",
-            color: "white",
-            "&:hover": {
-              backgroundColor: isRunning ? "warning.dark" : "success.dark",
-            },
-          }}
+          className={cn(
+            "text-white rounded-full",
+            isRunning ? "bg-yellow-500 hover:bg-yellow-600" : "bg-green-500 hover:bg-green-600",
+          )}
         >
-          {isRunning ? <Pause /> : <PlayArrow />}
-        </IconButton>
-        <IconButton
-          onClick={resetTimer}
-          color="primary"
-          sx={{
-            border: "1px solid",
-            borderColor: "primary.main",
-          }}
-        >
-          <Refresh />
-        </IconButton>
-        <IconButton
+          {isRunning ? <Pause className="h-12 w-12" /> : <Play className="h-12 w-12" />}
+        </Button>
+        <Button variant="outline" size="icon" onClick={resetTimer} className="rounded-full">
+          <RotateCw className="h-12 w-12" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={() => setSettings((prev) => ({ ...prev, soundEnabled: !prev.soundEnabled }))}
-          sx={{
-            color: settings.soundEnabled ? "inherit" : "error.main",
-          }}
+          className={cn("rounded-full", settings.soundEnabled ? "" : "text-red-500")}
         >
-          {settings.soundEnabled ? <VolumeUp /> : <VolumeOff />}
-        </IconButton>
-        <IconButton onClick={() => setShowSettings(true)}>
-          <Settings />
-        </IconButton>
-        <IconButton
-          sx={{
-            color: "error.main",
-          }}
-          onClick={closeTimer}
-          color="primary"
-        >
-          <Close />
-        </IconButton>
-      </Stack>
-    </Stack>
+          {settings.soundEnabled ? <Volume2 className="h-12 w-12" /> : <VolumeX className="h-12 w-12" />}
+        </Button>
+        <Button variant="ghost" size="icon" onClick={() => setShowSettings(true)} className="rounded-full">
+          <Settings className="h-12 w-12" />
+        </Button>
+        <Button variant="ghost" size="icon" onClick={closeTimer} className="text-red-500 rounded-full">
+          <X size={64} />
+        </Button>
+      </div>
+    </div>
   );
 
   const SettingsFace = () => (
-    <Box sx={{ width: "100%" }}>
-      <Stack direction="row" alignItems="center" sx={{ mb: 3 }}>
-        <IconButton onClick={() => setShowSettings(false)} edge="start" sx={{ mr: 2 }}>
-          <ArrowBack />
-        </IconButton>
-        <Typography variant="h6">Settings</Typography>
-      </Stack>
+    <div className="w-full">
+      <div className="flex items-center mb-6">
+        <Button variant="ghost" size="icon" onClick={() => setShowSettings(false)} className="mr-2">
+          <ArrowLeft className="h-4 w-4" />
+        </Button>
+        <h2 className="text-xl font-semibold">Settings</h2>
+      </div>
 
-      <Stack spacing={3}>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={settings.soundEnabled}
-              onChange={(e) =>
-                setSettings((prev) => ({
-                  ...prev,
-                  soundEnabled: e.target.checked,
-                }))
-              }
-            />
-          }
-          label="Sound"
-        />
-      </Stack>
-    </Box>
+      <div className="space-y-6">
+        <div className="flex items-center space-x-2">
+          <Switch
+            id="sound"
+            checked={settings.soundEnabled}
+            onCheckedChange={(checked) =>
+              setSettings((prev) => ({
+                ...prev,
+                soundEnabled: checked,
+              }))
+            }
+          />
+          <Label htmlFor="sound">Sound</Label>
+        </div>
+      </div>
+    </div>
   );
 
   return (
-    <Paper
-      elevation={3}
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
-      <Grow in={!showSettings} timeout={500} style={{ transformOrigin: "0 0 0" }}>
-        <Box
-          sx={{
-            p: 2,
-            px: 4,
-            display: !showSettings ? "block" : "none",
-          }}
-        >
-          <TimerFace />
-        </Box>
-      </Grow>
+    <Card className="flex items-center relative overflow-hidden px-8 py-6 rounded-none">
+      <div className={cn(!showSettings ? "block" : "hidden", "transition-all duration-500 ease-in-out")}>
+        <TimerFace />
+      </div>
 
-      <Grow in={showSettings} timeout={500} style={{ transformOrigin: "0 0 0" }}>
-        <Box
-          sx={{
-            p: 4,
-            px: 8,
-            display: showSettings ? "block" : "none",
-          }}
-        >
-          <SettingsFace />
-        </Box>
-      </Grow>
-    </Paper>
+      <div className={cn(showSettings ? "block" : "hidden", "transition-all duration-500 ease-in-out")}>
+        <SettingsFace />
+      </div>
+    </Card>
   );
 };
 
