@@ -88,7 +88,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
         initialTime={duration}
         close={deleteRoot}
         soundEnabled={soundEnabled}
-        alarmSound={alarmSound}
+        alarmSound={alarmSound || "Simple"}
         volume={volume || 0.1}
       />
     </React.StrictMode>,
