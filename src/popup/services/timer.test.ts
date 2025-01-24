@@ -9,6 +9,22 @@ import { NotificationType } from "@/types/enums/NotificationType";
 vi.mock("@/domain/timer/model/history");
 vi.mock("@/domain/settings/models/settings");
 
+const mockTab = {
+  id: 1,
+  index: 0,
+  pinned: false,
+  highlighted: false,
+  windowId: 1,
+  active: false,
+  incognito: false,
+  selected: false,
+  discarded: false,
+  autoDiscardable: true,
+  groupId: -1,
+  url: "about:blank",
+  title: "Test Tab",
+};
+
 describe("timerService", () => {
   beforeEach(() => {
     vi.resetAllMocks();
@@ -21,7 +37,7 @@ describe("timerService", () => {
     });
 
     // Mock Chrome API
-    chrome.tabs.query.mockResolvedValue([{ id: 1 }]);
+    vi.mocked(chrome.tabs.query).mockResolvedValue([mockTab]);
   });
 
   describe("start", () => {
@@ -66,7 +82,7 @@ describe("timerService", () => {
     });
 
     it("should not start timer when no tab is found", async () => {
-      chrome.tabs.query.mockResolvedValueOnce([]);
+      vi.mocked(chrome.tabs.query).mockResolvedValueOnce([]);
       const duration = new Duration(300);
 
       await timerService.start(duration);
