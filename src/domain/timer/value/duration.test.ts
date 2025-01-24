@@ -29,7 +29,7 @@ describe("Duration", () => {
 
     it("1時間以上の場合は時:分:秒のフォーマットで返す", () => {
       expect(new Duration(3600).toFormatted()).toBe("01:00:00");
-      expect(new Duration(3665).toFormatted()).toBe("01:01:05");
+      expect(new Duration(3900).toFormatted()).toBe("01:05:00");
     });
   });
 });

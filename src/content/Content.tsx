@@ -1,22 +1,23 @@
-import { useState, useEffect, useRef } from "react";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import type { AlarmSound } from "@/domain/settings/models/settings";
+import { Duration } from "@/domain/timer/value/duration";
 import { cn } from "@/lib/utils";
 import {
-  Play,
+  ArrowLeft,
+  Maximize,
+  Minimize,
   Pause,
+  Play,
   RotateCw,
   Settings as SettingsIcon,
-  ArrowLeft,
   Volume2,
   VolumeX,
   X,
-  Maximize,
-  Minimize,
 } from "lucide-react";
-import type { AlarmSound } from "@/domain/settings/models/settings";
+import { useEffect, useRef, useState } from "react";
 
 class Alarm {
   private readonly audioContext: AudioContext;
@@ -157,13 +158,8 @@ const Timer = ({
   };
 
   const formatTime = (time: number) => {
-    const h = String(Math.floor(time / 3600)).padStart(2, "0");
-    const m = String(Math.floor(time / 60)).padStart(2, "0");
-    const s = String(time % 60).padStart(2, "0");
-    if (h === "00") {
-      return `${m}:${s}`;
-    }
-    return `${h}:${m}:${s}`;
+    const duration = new Duration(time);
+    return duration.toFormatted();
   };
 
   const closeTimer = () => {

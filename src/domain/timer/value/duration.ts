@@ -10,9 +10,9 @@ export class Duration {
   }
 
   // TODO: Move this method to the view layer.
-  toFormatted() {
-    const h = String(Math.floor(this.value / 3600)).padStart(2, "0");
-    const m = String(Math.floor((this.value % 3600) / 60)).padStart(2, "0");
+  toFormatted(): string {
+    const h = String(Math.floor(this.value / (60 * 60))).padStart(2, "0");
+    const m = String(Math.floor((this.value % (60 * 60)) / 60)).padStart(2, "0");
     const s = String(this.value % 60).padStart(2, "0");
     if (h === "00") {
       return `${m}:${s}`;
