@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "packageManager": "pnpm@9.15.2",
-  "version": "2.5.3",
+  "version": "2.5.4",
   "description": "This extension is a timer to help you keep your break time.",
   "scripts": {
     "test": "vitest",
