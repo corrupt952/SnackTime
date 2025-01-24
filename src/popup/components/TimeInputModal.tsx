@@ -2,7 +2,7 @@ import { Clock, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { TimeInput } from "./time-input";
+import { TimeInput } from "./TimeInput";
 
 interface TimeInputModalProps {
   onClose: () => void;
