@@ -6,7 +6,7 @@
     "noEmitOnError": true,
     "esModuleInterop": true,
     "removeComments": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "noEmit": true,
     "isolatedModules": true,
     "sourceMap": true,
