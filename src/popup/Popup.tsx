@@ -1,157 +1,16 @@
 import { Coffee, Clock, SettingsIcon, X } from "lucide-react";
 import { History } from "@/domain/timer/model/history";
 import { Duration } from "@/domain/timer/value/duration";
-import { TargetTime } from "@/domain/timer/value/target-time";
 import { useEffect, useState } from "react";
-import { Settings as SettingsModel } from "@/domain/settings/models/settings";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { TimeInput } from "./time-input";
 import "@/styles/globals.css";
 import { Settings } from "@/domain/settings/models/settings";
 import { ColorScheme } from "@/types/enums/ColorScheme";
-
-const startTimer = async (duration: Duration | null, targetTime: string | null = null) => {
-  if (!duration && !targetTime) {
-    const time = Number(prompt("Enter timer seconds in seconds:", String(300)));
-    if (time === 0 || isNaN(time)) {
-      return;
-    }
-    duration = new Duration(time);
-  }
-
-  if (targetTime) {
-    try {
-      const target = TargetTime.fromString(targetTime);
-      duration = new Duration(target.toDuration());
-    } catch (error) {
-      console.error("Error parsing target time:", error);
-      return;
-    }
-  }
-
-  if (!duration) return;
-
-  await History.add(duration);
-
-  const settings = await SettingsModel.get();
-
-  const [tab] = await chrome.tabs.query({
-    active: true,
-    currentWindow: true,
-  });
-  chrome.tabs.sendMessage(tab.id!, {
-    type: "timer-started",
-    duration: duration.toSeconds(),
-    colorScheme: settings.colorScheme,
-    notificationType: settings.notificationType,
-  });
-
-  window.close();
-};
-
-const TimerListItem = ({ duration }: { duration: Duration }) => {
-  const text = duration.toFormatted();
-  return (
-    <Button variant="ghost" className="w-full justify-end" onClick={() => startTimer(duration)}>
-      {text}
-    </Button>
-  );
-};
-
-const TimeInputModal = ({ onClose, onSubmit }: { onClose: () => void; onSubmit: (time: string) => void }) => {
-  const getDefaultTime = () => {
-    const now = new Date();
-    now.setMinutes(now.getMinutes() + 30);
-    return now.toLocaleTimeString("ja-JP", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-  };
-
-  const [time, setTime] = useState<string>(getDefaultTime());
-
-  return (
-    <div className="absolute inset-0 bg-background/80 backdrop-blur-sm">
-      <div className="flex items-center justify-center h-full">
-        <Card className="w-[280px] p-4">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4 text-muted-foreground" />
-              <span className="font-medium">Set end time</span>
-            </div>
-            <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8">
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
-          <div className="space-y-4">
-            <div className="text-sm text-muted-foreground">
-              Enter the time you want the timer to end at.
-              <br />
-              If the time is earlier than now, it will be set for tomorrow.
-            </div>
-            <TimeInput value={time} onTimeChange={setTime} placeholder="14:30" />
-            <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={onClose}>
-                Cancel
-              </Button>
-              <Button onClick={() => onSubmit(time)} disabled={!time}>
-                Set
-              </Button>
-            </div>
-          </div>
-        </Card>
-      </div>
-    </div>
-  );
-};
-
-const CustomDurationModal = ({
-  onClose,
-  onSubmit,
-}: {
-  onClose: () => void;
-  onSubmit: (duration: Duration) => void;
-}) => {
-  const [time, setTime] = useState<string>("00:05:00");
-
-  const handleSubmit = () => {
-    const [hours, minutes, seconds] = time.split(":").map(Number);
-    const totalSeconds = hours * 3600 + minutes * 60 + seconds;
-    onSubmit(new Duration(totalSeconds));
-  };
-
-  return (
-    <div className="absolute inset-0 bg-background/80 backdrop-blur-sm">
-      <div className="flex items-center justify-center h-full">
-        <Card className="w-[280px] p-4">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4 text-muted-foreground" />
-              <span className="font-medium">Set custom duration</span>
-            </div>
-            <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8">
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
-          <div className="space-y-4">
-            <div className="text-sm text-muted-foreground">Enter the duration in HH:mm:ss format.</div>
-            <TimeInput value={time} onTimeChange={setTime} showSeconds />
-            <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={onClose}>
-                Cancel
-              </Button>
-              <Button onClick={handleSubmit} disabled={!time}>
-                Set
-              </Button>
-            </div>
-          </div>
-        </Card>
-      </div>
-    </div>
-  );
-};
+import { timerService } from "./services/timer";
+import { TimeInputModal } from "./components/TimeInputModal";
+import { CustomDurationModal } from "./components/CustomDurationModal";
+import { TimerListItem } from "./components/TimerListItem";
 
 const Popup = () => {
   const presets = [new Duration(60), new Duration(180), new Duration(300), new Duration(600)];
@@ -206,7 +65,7 @@ const Popup = () => {
           <div className="text-center py-2 font-medium text-sm text-muted-foreground">Presets</div>
           <div className="space-y-1">
             {presets.map((duration, index) => (
-              <TimerListItem key={index} duration={duration} />
+              <TimerListItem key={index} duration={duration} onStart={() => timerService.start(duration)} />
             ))}
             <Button variant="ghost" className="w-full justify-end" onClick={() => setShowCustomDuration(true)}>
               ⚡Custom
@@ -220,7 +79,11 @@ const Popup = () => {
           <div className="text-center py-2 font-medium text-sm text-muted-foreground">Recent</div>
           <div className="space-y-1">
             {histories.map((history: History, index: number) => (
-              <TimerListItem key={index} duration={history.duration} />
+              <TimerListItem
+                key={index}
+                duration={history.duration}
+                onStart={() => timerService.start(history.duration)}
+              />
             ))}
           </div>
         </Card>
@@ -230,7 +93,7 @@ const Popup = () => {
         <TimeInputModal
           onClose={() => setShowTimeInput(false)}
           onSubmit={(time) => {
-            startTimer(null, time);
+            timerService.start(null, time);
             setShowTimeInput(false);
           }}
         />
@@ -240,7 +103,7 @@ const Popup = () => {
         <CustomDurationModal
           onClose={() => setShowCustomDuration(false)}
           onSubmit={(duration) => {
-            startTimer(duration);
+            timerService.start(duration);
             setShowCustomDuration(false);
           }}
         />
