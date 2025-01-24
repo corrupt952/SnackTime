@@ -12,7 +12,7 @@ vi.mock("@/domain/settings/models/settings");
 describe("timerService", () => {
   beforeEach(() => {
     vi.resetAllMocks();
-    // Settingsのモック
+    // Mock Settings
     vi.mocked(Settings.get).mockResolvedValue({
       colorScheme: ColorScheme.Light,
       notificationType: NotificationType.Alarm,
@@ -20,12 +20,12 @@ describe("timerService", () => {
       volume: 0.1,
     });
 
-    // Chrome APIのモック
+    // Mock Chrome API
     chrome.tabs.query.mockResolvedValue([{ id: 1 }]);
   });
 
   describe("start", () => {
-    it("指定された時間でタイマーを開始できる", async () => {
+    it("should start timer with specified duration", async () => {
       const duration = new Duration(300);
       await timerService.start(duration);
 
@@ -39,17 +39,17 @@ describe("timerService", () => {
       expect(window.close).toHaveBeenCalled();
     });
 
-    it("目標時刻からタイマーを開始できる", async () => {
+    it("should start timer with target time", async () => {
       vi.useFakeTimers();
       const now = new Date("2024-01-24T10:00:00");
       vi.setSystemTime(now);
 
-      await timerService.start(null, "10:05"); // 5分後
+      await timerService.start(null, "10:05"); // 5 minutes later
 
       expect(History.add).toHaveBeenCalledWith(expect.any(Duration));
       expect(chrome.tabs.sendMessage).toHaveBeenCalledWith(1, {
         type: "timer-started",
-        duration: 300, // 5分 = 300秒
+        duration: 300, // 5 minutes = 300 seconds
         colorScheme: ColorScheme.Light,
         notificationType: NotificationType.Alarm,
       });
@@ -57,7 +57,7 @@ describe("timerService", () => {
       vi.useRealTimers();
     });
 
-    it("不正な目標時刻の場合はタイマーを開始しない", async () => {
+    it("should not start timer with invalid target time", async () => {
       await timerService.start(null, "invalid");
 
       expect(History.add).not.toHaveBeenCalled();
@@ -65,7 +65,7 @@ describe("timerService", () => {
       expect(window.close).not.toHaveBeenCalled();
     });
 
-    it("タブが見つからない場合はタイマーを開始しない", async () => {
+    it("should not start timer when no tab is found", async () => {
       chrome.tabs.query.mockResolvedValueOnce([]);
       const duration = new Duration(300);
 
