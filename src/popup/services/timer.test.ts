@@ -12,14 +12,6 @@ vi.mock("@/domain/settings/models/settings");
 describe("timerService", () => {
   beforeEach(() => {
     vi.resetAllMocks();
-    // Chrome APIのモック
-    global.chrome = {
-      tabs: {
-        query: vi.fn().mockResolvedValue([{ id: 1 }]),
-        sendMessage: vi.fn(),
-      },
-    } as any;
-
     // Settingsのモック
     vi.mocked(Settings.get).mockResolvedValue({
       colorScheme: ColorScheme.Light,
@@ -27,6 +19,9 @@ describe("timerService", () => {
       alarmSound: "Simple",
       volume: 0.1,
     });
+
+    // Chrome APIのモック
+    chrome.tabs.query.mockResolvedValue([{ id: 1 }]);
   });
 
   describe("start", () => {
@@ -41,15 +36,43 @@ describe("timerService", () => {
         colorScheme: ColorScheme.Light,
         notificationType: NotificationType.Alarm,
       });
+      expect(window.close).toHaveBeenCalled();
     });
 
     it("目標時刻からタイマーを開始できる", async () => {
-      const now = new Date();
-      const targetTime = new Date(now.getTime() + 300000).toTimeString().slice(0, 5);
-      await timerService.start(null, targetTime);
+      vi.useFakeTimers();
+      const now = new Date("2024-01-24T10:00:00");
+      vi.setSystemTime(now);
 
-      expect(History.add).toHaveBeenCalled();
-      expect(chrome.tabs.sendMessage).toHaveBeenCalled();
+      await timerService.start(null, "10:05"); // 5分後
+
+      expect(History.add).toHaveBeenCalledWith(expect.any(Duration));
+      expect(chrome.tabs.sendMessage).toHaveBeenCalledWith(1, {
+        type: "timer-started",
+        duration: 300, // 5分 = 300秒
+        colorScheme: ColorScheme.Light,
+        notificationType: NotificationType.Alarm,
+      });
+
+      vi.useRealTimers();
+    });
+
+    it("不正な目標時刻の場合はタイマーを開始しない", async () => {
+      await timerService.start(null, "invalid");
+
+      expect(History.add).not.toHaveBeenCalled();
+      expect(chrome.tabs.sendMessage).not.toHaveBeenCalled();
+      expect(window.close).not.toHaveBeenCalled();
+    });
+
+    it("タブが見つからない場合はタイマーを開始しない", async () => {
+      chrome.tabs.query.mockResolvedValueOnce([]);
+      const duration = new Duration(300);
+
+      await timerService.start(duration);
+
+      expect(chrome.tabs.sendMessage).not.toHaveBeenCalled();
+      expect(window.close).not.toHaveBeenCalled();
     });
   });
 });

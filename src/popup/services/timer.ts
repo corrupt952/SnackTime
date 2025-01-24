@@ -33,7 +33,10 @@ export const timerService = {
       active: true,
       currentWindow: true,
     });
-    chrome.tabs.sendMessage(tab.id!, {
+
+    if (!tab?.id) return;
+
+    chrome.tabs.sendMessage(tab.id, {
       type: "timer-started",
       duration: duration.toSeconds(),
       colorScheme: settings.colorScheme,
