@@ -49,8 +49,6 @@ describe("timerService", () => {
       expect(chrome.tabs.sendMessage).toHaveBeenCalledWith(1, {
         type: "timer-started",
         duration: 300,
-        colorScheme: ColorScheme.Light,
-        notificationType: NotificationType.Alarm,
       });
       expect(window.close).toHaveBeenCalled();
     });
@@ -66,8 +64,6 @@ describe("timerService", () => {
       expect(chrome.tabs.sendMessage).toHaveBeenCalledWith(1, {
         type: "timer-started",
         duration: 300, // 5 minutes = 300 seconds
-        colorScheme: ColorScheme.Light,
-        notificationType: NotificationType.Alarm,
       });
 
       vi.useRealTimers();

@@ -1,17 +1,15 @@
-import React from "react";
-import Content from "./Content";
-import { createRoot } from "react-dom/client";
-import { ColorScheme } from "@/types/enums/ColorScheme";
 import { Settings } from "@/domain/settings/models/settings";
 import styles from "@/styles/globals.css?inline";
+import { ColorScheme } from "@/types/enums/ColorScheme";
+import { NotificationType } from "@/types/enums/NotificationType";
+import React from "react";
+import { createRoot } from "react-dom/client";
+import Content from "./Content";
 
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   sendResponse("Received");
-  const { duration, notificationType, colorScheme } = message;
-  const soundEnabled = notificationType === "alarm";
+  const { duration } = message;
   const settings = await Settings.get();
-  const alarmSound = settings.alarmSound;
-  const volume = settings.volume;
 
   const contentRoot = document.createElement("div");
   contentRoot.id = "snack-time-root";
@@ -68,11 +66,11 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   shadowContainer.style.display = "contents";
   shadowRoot.appendChild(shadowContainer);
 
-  if (colorScheme === ColorScheme.System || !colorScheme) {
+  if (settings.colorScheme === ColorScheme.System || !settings.colorScheme) {
     const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
     shadowContainer.classList.add(isDarkMode ? "dark" : "light");
   } else {
-    shadowContainer.classList.add(colorScheme);
+    shadowContainer.classList.add(settings.colorScheme);
   }
 
   const deleteRoot = () => {
@@ -87,9 +85,9 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
       <Content
         initialTime={duration}
         close={deleteRoot}
-        soundEnabled={soundEnabled}
-        alarmSound={alarmSound || "Simple"}
-        volume={volume || 0.1}
+        soundEnabled={settings.notificationType === NotificationType.Alarm}
+        alarmSound={settings.alarmSound}
+        volume={settings.volume}
       />
     </React.StrictMode>,
   );
