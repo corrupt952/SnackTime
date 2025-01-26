@@ -11,7 +11,7 @@ global.chrome = {
   storage: {
     sync: {
       get: vi.fn().mockImplementation(() => Promise.resolve({} as StorageValue)),
-      set: vi.fn().mockImplementation(() => Promise.resolve()),
+      set: vi.fn().mockImplementation((value: StorageValue) => Promise.resolve()),
     },
   },
 } as any;
