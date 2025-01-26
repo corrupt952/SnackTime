@@ -1,23 +1,10 @@
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import type { AlarmSound } from "@/domain/settings/models/settings";
-import { Duration } from "@/domain/timer/value/duration";
 import { cn } from "@/lib/utils";
-import {
-  ArrowLeft,
-  Maximize,
-  Minimize,
-  Pause,
-  Play,
-  RotateCw,
-  Settings as SettingsIcon,
-  Volume2,
-  VolumeX,
-  X,
-} from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import TimerControls from "./components/TimerControls";
+import TimerDisplay from "./components/TimerDisplay";
+import TimerSettings from "./components/TimerSettings";
 
 class Alarm {
   private readonly audioContext: AudioContext;
@@ -82,7 +69,7 @@ class Alarm {
 
 const Timer = ({
   initialTime,
-  soundEnabled,
+  soundEnabled: initialSoundEnabled,
   alarmSound,
   volume,
   close,
@@ -97,12 +84,11 @@ const Timer = ({
   const [isRunning, setIsRunning] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [settings, setSettings] = useState({
-    soundEnabled: soundEnabled,
-  });
+  const [soundEnabled, setSoundEnabled] = useState(initialSoundEnabled);
 
   const timerRef = useRef<number | null>(null);
   const startTimeRef = useRef<number | null>(null);
+  const lastUpdateTimeRef = useRef<number | null>(null);
   const alarmRef = useRef<Alarm | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -121,22 +107,39 @@ const Timer = ({
 
   useEffect(() => {
     if (isRunning) {
-      startTimeRef.current = Date.now() - (initialTime - totalSeconds) * 1000;
+      if (startTimeRef.current === null) {
+        startTimeRef.current = Date.now();
+        lastUpdateTimeRef.current = startTimeRef.current;
+      } else if (lastUpdateTimeRef.current !== null) {
+        const pausedDuration = Date.now() - lastUpdateTimeRef.current;
+        startTimeRef.current += pausedDuration;
+      }
+
       timerRef.current = window.setInterval(() => {
-        const elapsedSeconds = Math.floor((Date.now() - startTimeRef.current!) / 1000);
+        const now = Date.now();
+        lastUpdateTimeRef.current = now;
+
+        const elapsedSeconds = Math.floor((now - startTimeRef.current!) / 1000);
         const newTotalSeconds = initialTime - elapsedSeconds;
 
-        setTotalSeconds(newTotalSeconds);
         if (newTotalSeconds <= 0) {
-          if (settings.soundEnabled && alarmRef.current) {
+          setTotalSeconds(0);
+          setIsRunning(false);
+          if (soundEnabled && alarmRef.current) {
             alarmRef.current.play();
           }
-          setIsRunning(false);
+          if (timerRef.current) {
+            window.clearInterval(timerRef.current);
+          }
           return;
         }
-      }, 100);
-    } else if (timerRef.current) {
-      window.clearInterval(timerRef.current);
+
+        setTotalSeconds(newTotalSeconds);
+      }, 50);
+    } else {
+      if (timerRef.current) {
+        window.clearInterval(timerRef.current);
+      }
     }
 
     return () => {
@@ -144,33 +147,40 @@ const Timer = ({
         window.clearInterval(timerRef.current);
       }
     };
-  }, [isRunning, settings.soundEnabled, initialTime]);
+  }, [isRunning, soundEnabled, initialTime]);
 
-  const startTimer = () => setIsRunning(true);
-  const pauseTimer = () => setIsRunning(false);
+  const startTimer = useCallback(() => {
+    if (!isRunning) {
+      if (totalSeconds === initialTime) {
+        startTimeRef.current = null;
+      }
+      setIsRunning(true);
+    }
+  }, [isRunning, totalSeconds, initialTime]);
 
-  const resetTimer = () => {
+  const pauseTimer = useCallback(() => {
+    setIsRunning(false);
+  }, []);
+
+  const resetTimer = useCallback(() => {
     setIsRunning(false);
     setTotalSeconds(initialTime);
+    startTimeRef.current = null;
+    lastUpdateTimeRef.current = null;
     if (timerRef.current) {
       window.clearInterval(timerRef.current);
     }
-  };
+  }, [initialTime]);
 
-  const formatTime = (time: number) => {
-    const duration = new Duration(time);
-    return duration.toFormatted();
-  };
-
-  const closeTimer = () => {
+  const closeTimer = useCallback(() => {
     window.clearInterval(timerRef.current!);
     if (alarmRef.current) {
       alarmRef.current.stop();
     }
     close();
-  };
+  }, [close]);
 
-  const toggleFullscreen = async () => {
+  const toggleFullscreen = useCallback(async () => {
     if (!document.fullscreenElement) {
       await cardRef.current?.requestFullscreen();
       setIsFullscreen(true);
@@ -178,7 +188,7 @@ const Timer = ({
       await document.exitFullscreen();
       setIsFullscreen(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -191,96 +201,6 @@ const Timer = ({
     };
   }, []);
 
-  const TimerFace = () => (
-    <div className="flex flex-col items-center justify-center w-full space-y-4">
-      <div className={cn("font-bold font-mono text-center", isFullscreen ? "text-[12rem]" : "text-6xl")}>
-        {totalSeconds <= 0 ? "Time's up!" : formatTime(totalSeconds)}
-      </div>
-
-      <div className={cn("flex space-x-6 justify-center", isFullscreen && "mt-12")}>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={isRunning ? pauseTimer : startTimer}
-          className={cn(
-            "text-white rounded-full",
-            isRunning ? "bg-yellow-500 hover:bg-yellow-600" : "bg-green-500 hover:bg-green-600",
-            isFullscreen && "scale-150",
-          )}
-        >
-          {isRunning ? <Pause className="h-12 w-12" /> : <Play className="h-12 w-12" />}
-        </Button>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={resetTimer}
-          className={cn("rounded-full", isFullscreen && "scale-150")}
-        >
-          <RotateCw className="h-12 w-12" />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setSettings((prev) => ({ ...prev, soundEnabled: !prev.soundEnabled }))}
-          className={cn("rounded-full", settings.soundEnabled ? "" : "text-red-500", isFullscreen && "scale-150")}
-        >
-          {settings.soundEnabled ? <Volume2 className="h-12 w-12" /> : <VolumeX className="h-12 w-12" />}
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setShowSettings(true)}
-          className={cn("rounded-full", isFullscreen && "scale-150")}
-        >
-          <SettingsIcon className="h-12 w-12" />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={toggleFullscreen}
-          className={cn("rounded-full", isFullscreen && "scale-150")}
-        >
-          {isFullscreen ? <Minimize className="h-12 w-12" /> : <Maximize className="h-12 w-12" />}
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={closeTimer}
-          className={cn("text-red-500 rounded-full", isFullscreen && "scale-150")}
-        >
-          <X size={64} />
-        </Button>
-      </div>
-    </div>
-  );
-
-  const SettingsFace = () => (
-    <div className="w-full">
-      <div className="flex items-center mb-6">
-        <Button variant="ghost" size="icon" onClick={() => setShowSettings(false)} className="mr-2">
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
-        <h2 className="text-xl font-semibold">Settings</h2>
-      </div>
-
-      <div className="space-y-6">
-        <div className="flex items-center space-x-2">
-          <Switch
-            id="sound"
-            checked={settings.soundEnabled}
-            onCheckedChange={(checked) =>
-              setSettings((prev) => ({
-                ...prev,
-                soundEnabled: checked,
-              }))
-            }
-          />
-          <Label htmlFor="sound">Sound</Label>
-        </div>
-      </div>
-    </div>
-  );
-
   return (
     <Card
       ref={cardRef}
@@ -290,11 +210,29 @@ const Timer = ({
       )}
     >
       <div className={cn(!showSettings ? "block" : "hidden", "transition-all duration-500 ease-in-out")}>
-        <TimerFace />
+        <div className="flex flex-col items-center justify-center w-full space-y-4">
+          <TimerDisplay totalSeconds={totalSeconds} isFullscreen={isFullscreen} />
+          <TimerControls
+            isRunning={isRunning}
+            isFullscreen={isFullscreen}
+            soundEnabled={soundEnabled}
+            onStart={startTimer}
+            onPause={pauseTimer}
+            onReset={resetTimer}
+            onToggleSound={() => setSoundEnabled((prev) => !prev)}
+            onShowSettings={() => setShowSettings(true)}
+            onToggleFullscreen={toggleFullscreen}
+            onClose={closeTimer}
+          />
+        </div>
       </div>
 
       <div className={cn(showSettings ? "block" : "hidden", "transition-all duration-500 ease-in-out")}>
-        <SettingsFace />
+        <TimerSettings
+          soundEnabled={soundEnabled}
+          onToggleSound={setSoundEnabled}
+          onBack={() => setShowSettings(false)}
+        />
       </div>
     </Card>
   );
