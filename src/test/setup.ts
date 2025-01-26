@@ -1,5 +1,7 @@
 import { vi } from "vitest";
 
+type StorageValue = Record<string, any>;
+
 // Chrome APIのモック
 global.chrome = {
   tabs: {
@@ -8,8 +10,8 @@ global.chrome = {
   },
   storage: {
     sync: {
-      get: vi.fn(),
-      set: vi.fn(),
+      get: vi.fn().mockImplementation(() => Promise.resolve({} as StorageValue)),
+      set: vi.fn().mockImplementation(() => Promise.resolve()),
     },
   },
 } as any;
