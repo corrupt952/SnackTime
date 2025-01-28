@@ -8,9 +8,9 @@ const OUTPUT_DIR = process.env.OUTPUT_DIR || "dist";
 
 const manifest = defineManifest(async (env) => ({
   manifest_version: 3,
-  name: `${env.mode === "development" ? "[DEV] " : ""}Snack Time`,
+  name: `${env.mode === "development" ? "[DEV] " : ""}Snack Time - Online Timer`,
   version: version,
-  description: "This extension is a timer to help you keep your break time.",
+  description: "This extension is a timer on the website to help with timekeeping for meetings",
   permissions: ["activeTab", "scripting", "storage"],
   icons: {
     128: "images/icon.png",
