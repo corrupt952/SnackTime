@@ -3,8 +3,8 @@
   "private": true,
   "type": "module",
   "packageManager": "pnpm@9.15.2",
-  "version": "2.5.8",
-  "description": "This extension is a timer to help you keep your break time.",
+  "version": "2.5.9",
+  "description": "This extension is a timer on the website to help with timekeeping for meetings",
   "scripts": {
     "test": "vitest",
     "clean": "rm -rf dist",
