@@ -17,8 +17,8 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   contentRoot.style.position = "fixed";
   contentRoot.style.top = "10px";
   contentRoot.style.right = "10px";
-  contentRoot.style.zIndex = "10000";
-  contentRoot.style.backgroundColor = "white";
+  contentRoot.style.zIndex = "calc(infinity)";
+  contentRoot.style.backgroundColor = "transparent";
   contentRoot.style.borderRadius = "10px";
   contentRoot.style.boxShadow = "0 0 5px rgba(0, 0, 0, 0.8)";
   contentRoot.style.fontSize = "2rem";
@@ -26,6 +26,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   contentRoot.style.gridTemplateRows = "1fr auto";
   contentRoot.style.color = "black";
   contentRoot.style.fontFamily = "Arial, sans-serif";
+  contentRoot.style.pointerEvents = "auto";
   document.body.append(contentRoot);
 
   // Dragging
