@@ -36,18 +36,18 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   let timerX = 0;
   let timerY = 0;
   contentRoot.addEventListener("mousedown", (event) => {
-    event.stopPropagation();
-    event.preventDefault();
-
-    isDragging = true;
-    offsetX = event.offsetX;
-    offsetY = event.offsetY;
+    if (event.target === contentRoot || event.target === shadowContainer) {
+      event.stopPropagation();
+      event.preventDefault();
+      isDragging = true;
+      offsetX = event.offsetX;
+      offsetY = event.offsetY;
+    }
   });
   document.addEventListener("mousemove", (event) => {
-    event.stopPropagation();
-    event.preventDefault();
-
     if (isDragging) {
+      event.stopPropagation();
+      event.preventDefault();
       timerX = event.clientX - offsetX;
       timerY = event.clientY - offsetY;
       contentRoot.style.top = `${timerY}px`;
