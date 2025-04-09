@@ -55,15 +55,16 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     }
   });
   document.addEventListener("mouseup", (event) => {
-    event.stopPropagation();
-    event.preventDefault();
-
-    isDragging = false;
+    if (isDragging) {
+      event.stopPropagation();
+      event.preventDefault();
+      isDragging = false;
+    }
   });
 
-  const shadowRoot = contentRoot.attachShadow({ mode: "open" });
+  const shadowRoot = contentRoot.attachShadow({ mode: "closed" });
   const shadowContainer = document.createElement("div");
-  shadowContainer.id = "root";
+  shadowContainer.id = "snack-time-container";
   shadowContainer.style.display = "contents";
   shadowRoot.appendChild(shadowContainer);
 
