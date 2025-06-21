@@ -20,7 +20,7 @@
     "@types/node": "^22.7.9",
     "@vitejs/plugin-react": "^4.3.3",
     "autoprefixer": "^10.4.20",
-    "glob": "^10.2.3",
+    "glob": "^11.0.0",
     "lucide-react": "^0.522.0",
     "postcss": "^8.5.1",
     "prettier": "^3.3.3",
