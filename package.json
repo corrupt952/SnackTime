@@ -7,6 +7,9 @@
   "description": "This extension is a timer on the website to help with timekeeping for meetings",
   "scripts": {
     "test": "vitest",
+    "pretest:e2e": "pnpm build",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
     "clean": "rm -rf dist",
     "dev": "pnpm run clean && vite",
     "build": "pnpm run clean && tsc && vite build",
@@ -17,6 +20,7 @@
   "license": "MIT",
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.0.2",
+    "@playwright/test": "^1.53.1",
     "@storybook/addon-docs": "^9.0.12",
     "@storybook/addon-onboarding": "^9.0.12",
     "@storybook/react-vite": "^9.0.12",
@@ -27,6 +31,7 @@
     "autoprefixer": "^10.4.21",
     "glob": "^10.4.5",
     "lucide-react": "^0.471.2",
+    "playwright": "^1.53.1",
     "postcss": "^8.5.6",
     "prettier": "^3.5.3",
     "storybook": "^9.0.12",

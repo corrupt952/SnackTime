@@ -14,10 +14,11 @@
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "rootDir": "./src",
     "jsx": "react-jsx",
+    "skipLibCheck": true,
     "paths": {
       "@/*": ["./src/*"]
     }
   },
   "include": ["src"],
-  "exclude": ["node_modules", "./tsconfig.json"]
+  "exclude": ["node_modules", "./tsconfig.json", "**/*.stories.tsx", "**/*.stories.ts"]
 }
