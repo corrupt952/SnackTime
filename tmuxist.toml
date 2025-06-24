@@ -4,3 +4,12 @@ attach = true
 
 [[windows]]
 [[windows.panes]]
+command="""
+claude
+"""
+
+[[windows]]
+[[windows.panes]]
+
+[[windows]]
+[[windows.panes]]
