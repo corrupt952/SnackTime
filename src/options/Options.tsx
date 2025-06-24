@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
+import TimerCardPreview from "./components/TimerCardPreview";
 
 const Options = () => {
   const [notificationType, setNotificationType] = useState<NotificationType>(NotificationType.Alarm);
@@ -140,6 +141,9 @@ const Options = () => {
                   </div>
                 ))}
               </RadioGroup>
+            </div>
+            <div className="mt-8">
+              <TimerCardPreview />
             </div>
           </section>
 
