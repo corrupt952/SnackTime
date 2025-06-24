@@ -27,9 +27,6 @@ jobs:
     - name: Install dependencies
       run: pnpm install
       
-    - name: Build extension for E2E
-      run: pnpm vite build --mode development
-      
     - name: Install Playwright browsers and dependencies
       run: |
         pnpm exec playwright install chromium

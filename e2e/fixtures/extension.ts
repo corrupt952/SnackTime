@@ -21,12 +21,16 @@ export const test = base.extend<{
     await context.close();
   },
   extensionId: async ({ context }, use) => {
-    let [background] = context.serviceWorkers();
-    if (!background) {
-      background = await context.waitForEvent('serviceworker');
-    }
-
-    const extensionId = background.url().split('/')[2];
+    // Get extension ID from a loaded extension page instead of service worker
+    const page = await context.newPage();
+    await page.goto('chrome://extensions/');
+    await page.click('cr-toggle#devMode');
+    
+    // Find the extension card and get its ID
+    const extensionCard = await page.locator('extensions-item').first();
+    const extensionId = await extensionCard.getAttribute('id');
+    
+    await page.close();
     await use(extensionId);
   },
 });
