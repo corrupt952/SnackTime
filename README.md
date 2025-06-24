@@ -57,18 +57,4 @@ So, if you run `pnpm dev` and load the output directory as an extension, the fil
 
 ## Production
 
-1. Tagging the version
-
-    ```bash
-    git tag vX.Y.Z
-    ```
-
-1. Push the tag
-
-    ```bash
-    git push origin vX.Y.Z
-    ```
-
-1. Waiting for the build to complete
-1. Download the extension from GitHub Releases
-1. Upload the extension to the Chrome Web Store
+See [.claude/commands/release.md](.claude/commands/release.md) for release procedures.
