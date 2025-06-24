@@ -9,6 +9,7 @@ export default defineConfig({
   reporter: 'list',
   use: {
     trace: 'on-first-retry',
+    timeout: 5000,
   },
 
   projects: [

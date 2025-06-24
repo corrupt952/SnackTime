@@ -27,5 +27,5 @@ test('timer should inject into web page', async ({ page, context, extensionId })
   await popupPage.locator('button:has-text("5:00")').click();
   
   // 6. Verify timer appears on target page
-  await expect(targetPage.locator('#snack-time-root')).toBeVisible({ timeout: 5000 });
+  await expect(targetPage.locator('#snack-time-root')).toBeVisible();
 });

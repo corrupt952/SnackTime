@@ -19,7 +19,7 @@ test.describe('Multi-tab Timer Independence', () => {
     const preset5min = popup1.locator('button:has-text("1:00")')
     await preset5min.click()
     
-    await page1.waitForSelector('#snack-time-root', { timeout: 5000 })
+    await page1.waitForSelector('#snack-time-root')
     const timer1 = page1.locator('#snack-time-root')
     await expect(timer1).toBeVisible()
     
@@ -36,7 +36,7 @@ test.describe('Multi-tab Timer Independence', () => {
     const preset10min = popup2.locator('button:has-text("3:00")')
     await preset10min.click()
     
-    await page2.waitForSelector('#snack-time-root', { timeout: 5000 })
+    await page2.waitForSelector('#snack-time-root')
     const timer2 = page2.locator('#snack-time-root')
     await expect(timer2).toBeVisible()
     
@@ -64,7 +64,7 @@ test.describe('Multi-tab Timer Independence', () => {
     const preset5min = popup.locator('button:has-text("1:00")')
     await preset5min.click()
     
-    await page.waitForSelector('#snack-time-root', { timeout: 5000 })
+    await page.waitForSelector('#snack-time-root')
     const timer = page.locator('#snack-time-root')
     await expect(timer).toBeVisible()
     

@@ -17,7 +17,7 @@ test.describe('Popup Preset Buttons', () => {
     await expect(preset5min).toBeVisible()
     await preset5min.click()
     
-    await page.waitForSelector('#snack-time-root', { timeout: 5000 })
+    await page.waitForSelector('#snack-time-root')
     const timerRoot = page.locator('#snack-time-root')
     await expect(timerRoot).toBeVisible()
     
