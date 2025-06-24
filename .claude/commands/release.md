@@ -32,9 +32,10 @@ Update the version field in `package.json` to the new CalVer format.
 
 ### 2. Commit version update
 
+Have the user run the following command (required for GPG signing):
+
 ```bash
-git add package.json
-git commit -m "chore: bump version to 2025.01.1"
+git add package.json && git commit -m "chore: bump version to 2025.01.1"
 ```
 
 ### 3. Create and push tag
