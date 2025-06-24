@@ -30,7 +30,7 @@
     "@types/node": "^22.15.32",
     "@vitejs/plugin-react": "^4.5.2",
     "glob": "^11.0.0",
-    "lucide-react": "^0.522.0",
+    "lucide-react": "^0.523.0",
     "playwright": "^1.53.1",
     "postcss": "^8.5.6",
     "prettier": "^3.5.3",
