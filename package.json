@@ -29,7 +29,7 @@
     "@types/node": "^22.15.32",
     "@vitejs/plugin-react": "^4.5.2",
     "autoprefixer": "^10.4.21",
-    "glob": "^10.4.5",
+    "glob": "^11.0.0",
     "lucide-react": "^0.471.2",
     "playwright": "^1.53.1",
     "postcss": "^8.5.6",
