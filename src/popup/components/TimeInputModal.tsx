@@ -23,7 +23,7 @@ export const TimeInputModal = ({ onClose, onSubmit }: TimeInputModalProps) => {
   const [time, setTime] = useState<string>(getDefaultTime());
 
   return (
-    <div className="absolute inset-0 bg-background/80 backdrop-blur-sm">
+    <div className="absolute inset-0 bg-background/80 backdrop-blur-xs">
       <div className="flex items-center justify-center h-full">
         <Card className="w-[280px] p-4">
           <div className="flex items-center justify-between mb-4">

@@ -46,7 +46,7 @@ export const ModalStyle: Story = {
       </CardHeader>
       <CardContent>
         <div className="grid gap-4">
-          <input type="text" placeholder="5:00" className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm" />
+          <input type="text" placeholder="5:00" className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs" />
         </div>
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
