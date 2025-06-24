@@ -37,8 +37,14 @@ const manifest = defineManifest(async (env) => ({
   ],
 }));
 
+// Storybook builds require different configuration:
+// - CRX plugin must be disabled as it conflicts with Storybook's build process
+// - root/publicDir settings must be undefined to use Vite's defaults
+// This is controlled by the STORYBOOK_BUILD environment variable set in package.json
+const isStorybook = process.env.STORYBOOK_BUILD === 'true';
+
 export default defineConfig({
-  plugins: [react(), crx({ manifest })],
+  plugins: isStorybook ? [react()] : [react(), crx({ manifest })],
   // @see https://github.com/crxjs/chrome-extension-tools/issues/696
   server: {
     port: 5173,
@@ -52,8 +58,9 @@ export default defineConfig({
       "@": resolve(__dirname, "src"),
     },
   },
-  root: resolve(__dirname, "src"),
-  publicDir: resolve(__dirname, "public"),
+  // Chrome extension needs custom root/publicDir, but Storybook requires defaults
+  root: isStorybook ? undefined : resolve(__dirname, "src"),
+  publicDir: isStorybook ? undefined : resolve(__dirname, "public"),
   build: {
     outDir: resolve(__dirname, OUTPUT_DIR),
     rollupOptions: {
