@@ -12,7 +12,7 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: { type: 'select' },
-      options: ['default', 'destructive', 'outline-solid', 'secondary', 'ghost', 'link'],
+      options: ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link'],
     },
     size: {
       control: { type: 'select' },
@@ -41,7 +41,7 @@ export const Ghost: Story = {
 
 export const Outline: Story = {
   args: {
-    variant: 'outline-solid',
+    variant: 'outline',
     children: 'Cancel',
   },
 };
