@@ -85,6 +85,44 @@ test.describe("Options Page - Appearance", () => {
     const applyThemeToggleAfterReload = page.locator('#apply-theme-to-settings');
     await expect(applyThemeToggleAfterReload).toHaveAttribute("data-state", "checked");
   });
+
+  test("should apply each theme to settings page when toggle is on", async ({ extensionId, page }) => {
+    await page.goto(`chrome-extension://${extensionId}/options/index.html`);
+    await page.waitForLoadState("networkidle");
+
+    const applyThemeToggle = page.locator('#apply-theme-to-settings');
+    await applyThemeToggle.click();
+    await expect(applyThemeToggle).toHaveAttribute("data-state", "checked");
+
+    const htmlElement = page.locator("html");
+
+    const themes = [
+      { id: "light", expectedClass: "light" },
+      { id: "dark", expectedClass: "dark" },
+      { id: "lemon", expectedClass: "lemon" },
+      { id: "mint", expectedClass: "mint" },
+      { id: "rose", expectedClass: "rose" }
+    ];
+
+    for (const theme of themes) {
+      const themeLabel = page.locator(`label[for="color-scheme-${theme.id}"]`);
+      await themeLabel.click();
+      await expect(page.locator(`#color-scheme-${theme.id}`)).toBeChecked();
+
+      await expect(htmlElement).toHaveClass(new RegExp(theme.expectedClass));
+    }
+
+    const systemLabel = page.locator('label[for="color-scheme-system"]');
+    await systemLabel.click();
+    await expect(page.locator('#color-scheme-system')).toBeChecked();
+
+    const isDarkMode = await page.evaluate(() => window.matchMedia("(prefers-color-scheme: dark)").matches);
+    if (isDarkMode) {
+      await expect(htmlElement).toHaveClass(/dark/);
+    } else {
+      await expect(htmlElement).toHaveClass(/light/);
+    }
+  });
 });
 
 test.describe("Options Page - Notification", () => {
