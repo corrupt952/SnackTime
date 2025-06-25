@@ -92,11 +92,7 @@ export const MultiColumnLayout: Story = {
       <div className="space-y-8 w-full max-w-2xl">
         <div>
           <h3 className="text-base font-semibold mb-4">Color Scheme</h3>
-          <RadioGroup
-            value={colorScheme}
-            onValueChange={setColorScheme}
-            className="grid grid-cols-3 gap-3"
-          >
+          <RadioGroup value={colorScheme} onValueChange={setColorScheme} className="grid grid-cols-3 gap-3">
             <RadioCard
               value="light"
               title="Light"
@@ -123,11 +119,7 @@ export const MultiColumnLayout: Story = {
 
         <div>
           <h3 className="text-base font-semibold mb-4">Notification Type</h3>
-          <RadioGroup
-            value={notification}
-            onValueChange={setNotification}
-            className="grid grid-cols-2 gap-3"
-          >
+          <RadioGroup value={notification} onValueChange={setNotification} className="grid grid-cols-2 gap-3">
             <RadioCard
               value="alarm"
               title="Alarm"

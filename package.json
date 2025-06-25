@@ -14,7 +14,8 @@
     "dev": "pnpm run clean && vite",
     "build": "pnpm run clean && tsc && vite build",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "STORYBOOK_BUILD=true storybook build"
+    "build-storybook": "STORYBOOK_BUILD=true storybook build",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json}\""
   },
   "author": "K@zuki.",
   "license": "MIT",

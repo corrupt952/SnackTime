@@ -14,14 +14,14 @@ export interface RadioCardProps extends React.HTMLAttributes<HTMLLabelElement> {
 const RadioCard = React.forwardRef<HTMLLabelElement, RadioCardProps>(
   ({ className, value, title, description, icon: Icon, isSelected, id, ...props }, ref) => {
     const radioId = id || `radio-card-${value}`;
-    
+
     return (
       <label
         ref={ref}
         htmlFor={radioId}
         className={cn(
           "relative flex cursor-pointer rounded-lg border bg-background p-4 transition-all duration-200 hover:bg-accent/50 hover:shadow-md",
-          className
+          className,
         )}
         {...props}
       >
@@ -34,17 +34,13 @@ const RadioCard = React.forwardRef<HTMLLabelElement, RadioCardProps>(
           )}
           <div className="flex-1">
             <p className="font-medium">{title}</p>
-            {description && (
-              <p className="text-xs text-muted-foreground">{description}</p>
-            )}
+            {description && <p className="text-xs text-muted-foreground">{description}</p>}
           </div>
-          {isSelected && (
-            <div className="absolute right-2 top-2 h-2 w-2 rounded-full bg-primary" />
-          )}
+          {isSelected && <div className="absolute right-2 top-2 h-2 w-2 rounded-full bg-primary" />}
         </div>
       </label>
     );
-  }
+  },
 );
 RadioCard.displayName = "RadioCard";
 

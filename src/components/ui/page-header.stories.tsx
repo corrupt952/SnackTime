@@ -55,28 +55,13 @@ export const WithPulse: Story = {
 export const Examples: Story = {
   render: () => (
     <div className="space-y-8">
-      <PageHeader
-        icon={Coffee}
-        title="Snack Time"
-        subtitle="Timer Extension Settings"
-        showPulse={true}
-      />
-      
-      <PageHeader
-        icon={User}
-        title="Profile"
-        subtitle="Your account information"
-      />
-      
-      <PageHeader
-        icon={Home}
-        title="Dashboard"
-      />
-      
-      <PageHeader
-        title="Simple Header"
-        subtitle="No icon, just text"
-      />
+      <PageHeader icon={Coffee} title="Snack Time" subtitle="Timer Extension Settings" showPulse={true} />
+
+      <PageHeader icon={User} title="Profile" subtitle="Your account information" />
+
+      <PageHeader icon={Home} title="Dashboard" />
+
+      <PageHeader title="Simple Header" subtitle="No icon, just text" />
     </div>
   ),
 };

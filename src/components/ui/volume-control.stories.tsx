@@ -77,12 +77,7 @@ export const Minimal: Story = {
     const [volume, setVolume] = useState(0.6);
     return (
       <div className="w-96">
-        <VolumeControl
-          value={volume}
-          onValueChange={setVolume}
-          showIcon={false}
-          showPercentage={false}
-        />
+        <VolumeControl value={volume} onValueChange={setVolume} showIcon={false} showPercentage={false} />
       </div>
     );
   },
@@ -104,14 +99,10 @@ export const InContext: Story = {
             className="rounded"
           />
         </div>
-        
+
         <div className={`space-y-2 transition-opacity duration-300 ${!isEnabled ? "opacity-50" : ""}`}>
           <h3 className="text-base font-semibold">Volume</h3>
-          <VolumeControl
-            value={volume}
-            onValueChange={setVolume}
-            disabled={!isEnabled}
-          />
+          <VolumeControl value={volume} onValueChange={setVolume} disabled={!isEnabled} />
         </div>
       </div>
     );

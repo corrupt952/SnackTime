@@ -16,7 +16,7 @@ const PageHeader = React.forwardRef<HTMLDivElement, PageHeaderProps>(
         ref={ref}
         className={cn(
           "flex h-16 w-full items-center bg-gradient-to-r from-primary to-primary/80 px-6 text-primary-foreground shadow-lg",
-          className
+          className,
         )}
         {...props}
       >
@@ -36,7 +36,7 @@ const PageHeader = React.forwardRef<HTMLDivElement, PageHeaderProps>(
         </div>
       </div>
     );
-  }
+  },
 );
 PageHeader.displayName = "PageHeader";
 

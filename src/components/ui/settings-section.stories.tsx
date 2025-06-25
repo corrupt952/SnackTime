@@ -28,9 +28,7 @@ export const Default: Story = {
     title: "General Settings",
     children: (
       <div className="space-y-4">
-        <p className="text-sm text-muted-foreground">
-          Configure your general application settings here.
-        </p>
+        <p className="text-sm text-muted-foreground">Configure your general application settings here.</p>
         <div className="flex gap-2">
           <Button>Save Changes</Button>
           <Button variant="outline">Cancel</Button>
@@ -46,9 +44,7 @@ export const WithIcon: Story = {
     title: "General Settings",
     children: (
       <div className="space-y-4">
-        <p className="text-sm text-muted-foreground">
-          Configure your general application settings here.
-        </p>
+        <p className="text-sm text-muted-foreground">Configure your general application settings here.</p>
       </div>
     ),
   },
@@ -65,9 +61,7 @@ export const MultipleExamples: Story = {
 
       <SettingsSection icon={Palette} title="Appearance">
         <div className="space-y-4">
-          <p className="text-sm text-muted-foreground">
-            Customize the appearance of your application.
-          </p>
+          <p className="text-sm text-muted-foreground">Customize the appearance of your application.</p>
           <div className="grid grid-cols-3 gap-2">
             <div className="h-20 rounded bg-primary/20" />
             <div className="h-20 rounded bg-secondary/20" />
@@ -78,9 +72,7 @@ export const MultipleExamples: Story = {
 
       <SettingsSection icon={Bell} title="Notifications">
         <div className="space-y-4">
-          <p className="text-sm text-muted-foreground">
-            Manage your notification preferences.
-          </p>
+          <p className="text-sm text-muted-foreground">Manage your notification preferences.</p>
           <div className="space-y-2">
             <label className="flex items-center gap-2">
               <input type="checkbox" className="rounded" />

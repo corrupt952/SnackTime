@@ -1,19 +1,19 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import TimerDisplay from './TimerDisplay';
+import type { Meta, StoryObj } from "@storybook/react";
+import TimerDisplay from "./TimerDisplay";
 
 const meta: Meta<typeof TimerDisplay> = {
-  title: 'Timer/TimerDisplay',
+  title: "Timer/TimerDisplay",
   component: TimerDisplay,
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
     totalSeconds: {
-      control: { type: 'number', min: 0, max: 3600 },
+      control: { type: "number", min: 0, max: 3600 },
     },
     isFullscreen: {
-      control: { type: 'boolean' },
+      control: { type: "boolean" },
     },
   },
 };
@@ -55,7 +55,7 @@ export const Fullscreen: Story = {
     isFullscreen: true,
   },
   parameters: {
-    layout: 'fullscreen',
+    layout: "fullscreen",
   },
 };
 
@@ -65,7 +65,7 @@ export const FullscreenTimeUp: Story = {
     isFullscreen: true,
   },
   parameters: {
-    layout: 'fullscreen',
+    layout: "fullscreen",
   },
 };
 

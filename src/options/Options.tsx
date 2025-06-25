@@ -99,12 +99,7 @@ const Options = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/20">
-      <PageHeader
-        icon={Coffee}
-        title="Snack Time"
-        subtitle="Timer Extension Settings"
-        showPulse
-      />
+      <PageHeader icon={Coffee} title="Snack Time" subtitle="Timer Extension Settings" showPulse />
 
       <div className="container mx-auto mt-8 pb-12">
         <div className="grid gap-6 lg:grid-cols-4">
@@ -120,7 +115,6 @@ const Options = () => {
             </SettingsSection>
 
             <SettingsSection id="appearance" icon={Palette} title="Appearance">
-
               <div className="space-y-6">
                 <div>
                   <h3 className="text-base font-semibold text-foreground mb-4">Color Scheme</h3>
@@ -135,12 +129,19 @@ const Options = () => {
                         value={value}
                         title={key}
                         description={
-                          value === ColorScheme.System ? "Match system preference" :
-                          value === ColorScheme.Light ? "Always light theme" :
-                          value === ColorScheme.Dark ? "Always dark theme" :
-                          value === ColorScheme.Lemon ? "Bright yellow theme" :
-                          value === ColorScheme.Mint ? "Fresh mint theme" :
-                          value === ColorScheme.Rose ? "Soft rose theme" : ""
+                          value === ColorScheme.System
+                            ? "Match system preference"
+                            : value === ColorScheme.Light
+                              ? "Always light theme"
+                              : value === ColorScheme.Dark
+                                ? "Always dark theme"
+                                : value === ColorScheme.Lemon
+                                  ? "Bright yellow theme"
+                                  : value === ColorScheme.Mint
+                                    ? "Fresh mint theme"
+                                    : value === ColorScheme.Rose
+                                      ? "Soft rose theme"
+                                      : ""
                         }
                         icon={getColorSchemeIcon(value)}
                         isSelected={colorScheme === value}
@@ -170,7 +171,6 @@ const Options = () => {
             </SettingsSection>
 
             <SettingsSection id="notification" icon={Bell} title="Notification">
-
               <div className="space-y-6">
                 <div>
                   <h3 className="text-base font-semibold text-foreground mb-4">Notification Type</h3>
@@ -185,8 +185,11 @@ const Options = () => {
                         value={value}
                         title={key}
                         description={
-                          value === NotificationType.Alarm ? "Play sound notification" :
-                          value === NotificationType.None ? "Silent mode" : ""
+                          value === NotificationType.Alarm
+                            ? "Play sound notification"
+                            : value === NotificationType.None
+                              ? "Silent mode"
+                              : ""
                         }
                         icon={Bell}
                         isSelected={notificationType === value}

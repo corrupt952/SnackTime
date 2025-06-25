@@ -10,15 +10,18 @@ interface TimerCardPreviewProps {
 }
 
 const TimerCardPreview = memo(({ className, colorScheme }: TimerCardPreviewProps) => {
-  const effectiveTheme = colorScheme === ColorScheme.System 
-    ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? ColorScheme.Dark : ColorScheme.Light)
-    : colorScheme;
+  const effectiveTheme =
+    colorScheme === ColorScheme.System
+      ? window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? ColorScheme.Dark
+        : ColorScheme.Light
+      : colorScheme;
 
   return (
     <div className={cn("w-full max-w-md mx-auto", className)}>
       <div className="relative rounded-lg overflow-hidden">
         <div className="text-center text-muted-foreground text-sm mb-4">Timer Card Preview</div>
-        
+
         {/* Background layer simulating a webpage */}
         <div className="relative bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 p-8 rounded-lg">
           {/* Simulated webpage content */}
@@ -30,15 +33,13 @@ const TimerCardPreview = memo(({ className, colorScheme }: TimerCardPreviewProps
               <div className="h-4 bg-current rounded w-2/3"></div>
             </div>
           </div>
-          
+
           {/* Timer card with shadow to simulate floating */}
           <div className={cn("relative z-10", effectiveTheme)}>
             <Card className="flex items-center relative overflow-hidden px-8 py-6 rounded-none shadow-2xl border-2">
               <div className="flex flex-col items-center justify-center w-full space-y-4">
-                <div className="font-bold font-mono text-center text-6xl">
-                  15:00
-                </div>
-                
+                <div className="font-bold font-mono text-center text-6xl">15:00</div>
+
                 <div className="pointer-events-none">
                   <TimerControls
                     isRunning={false}
@@ -57,7 +58,7 @@ const TimerCardPreview = memo(({ className, colorScheme }: TimerCardPreviewProps
             </Card>
           </div>
         </div>
-        
+
         <div className="text-center text-muted-foreground text-xs mt-4">
           This preview shows how the timer will appear on web pages
         </div>

@@ -28,12 +28,12 @@ export function useAudioPlayback(alarmSound: AlarmSound, volume: number) {
       await audioContextRef.current.resume();
       const source = audioContextRef.current.createBufferSource();
       source.buffer = audioBufferRef.current;
-      
+
       if (gainNodeRef.current) {
         gainNodeRef.current.gain.value = volume;
         source.connect(gainNodeRef.current);
       }
-      
+
       source.start();
     } catch (error) {
       console.error("Error playing sound:", error);
