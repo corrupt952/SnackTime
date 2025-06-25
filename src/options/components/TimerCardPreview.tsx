@@ -1,14 +1,19 @@
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Play, RotateCw, Volume2, Settings, Maximize, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { memo } from "react";
+import { ColorScheme } from "@/types/enums/ColorScheme";
+import TimerControls from "@/content/components/TimerControls";
 
 interface TimerCardPreviewProps {
   className?: string;
+  colorScheme?: ColorScheme;
 }
 
-const TimerCardPreview = memo(({ className }: TimerCardPreviewProps) => {
+const TimerCardPreview = memo(({ className, colorScheme }: TimerCardPreviewProps) => {
+  const effectiveTheme = colorScheme === ColorScheme.System 
+    ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? ColorScheme.Dark : ColorScheme.Light)
+    : colorScheme;
+
   return (
     <div className={cn("w-full max-w-md mx-auto", className)}>
       <div className="relative rounded-lg overflow-hidden">
@@ -27,56 +32,26 @@ const TimerCardPreview = memo(({ className }: TimerCardPreviewProps) => {
           </div>
           
           {/* Timer card with shadow to simulate floating */}
-          <div className="relative z-10">
+          <div className={cn("relative z-10", effectiveTheme)}>
             <Card className="flex items-center relative overflow-hidden px-8 py-6 rounded-none shadow-2xl border-2">
               <div className="flex flex-col items-center justify-center w-full space-y-4">
                 <div className="font-bold font-mono text-center text-6xl">
                   15:00
                 </div>
                 
-                <div className="flex space-x-6 justify-center">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-white rounded-full bg-green-500 hover:bg-green-600 pointer-events-none"
-                  >
-                    <Play className="h-12 w-12" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="rounded-full pointer-events-none"
-                  >
-                    <RotateCw className="h-12 w-12" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="rounded-full pointer-events-none"
-                  >
-                    <Volume2 className="h-12 w-12" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="rounded-full pointer-events-none"
-                  >
-                    <Settings className="h-12 w-12" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="rounded-full pointer-events-none"
-                  >
-                    <Maximize className="h-12 w-12" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-red-500 rounded-full pointer-events-none"
-                  >
-                    <X size={64} />
-                  </Button>
+                <div className="pointer-events-none">
+                  <TimerControls
+                    isRunning={false}
+                    isFullscreen={false}
+                    soundEnabled={true}
+                    onStart={() => {}}
+                    onPause={() => {}}
+                    onReset={() => {}}
+                    onToggleSound={() => {}}
+                    onShowSettings={() => {}}
+                    onToggleFullscreen={() => {}}
+                    onClose={() => {}}
+                  />
                 </div>
               </div>
             </Card>

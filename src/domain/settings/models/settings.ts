@@ -8,6 +8,7 @@ export interface ExtensionSettings {
   notificationType: NotificationType;
   alarmSound: AlarmSound;
   volume: number;
+  applyThemeToSettings: boolean;
 }
 
 export class Settings {
@@ -16,6 +17,7 @@ export class Settings {
     colorScheme: ColorScheme.Dark,
     alarmSound: "Simple",
     volume: 0.1,
+    applyThemeToSettings: false,
   };
 
   private static readonly validAlarmSounds: AlarmSound[] = ["Simple", "Piano", "Vibraphone", "SteelDrums"];

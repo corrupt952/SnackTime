@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
 import TimerCardPreview from "./components/TimerCardPreview";
 
 const Options = () => {
@@ -16,11 +17,13 @@ const Options = () => {
   const [colorScheme, setColorScheme] = useState<ColorScheme>(ColorScheme.System);
   const [alarmSound, setAlarmSound] = useState<AlarmSound>("Simple");
   const [volume, setVolume] = useState<number>(0.1);
+  const [applyThemeToSettings, setApplyThemeToSettings] = useState<boolean>(false);
   const [settings, setSettings] = useState<ExtensionSettings>({
     colorScheme: ColorScheme.System,
     notificationType: NotificationType.Alarm,
     alarmSound: "Simple",
     volume: 0.1,
+    applyThemeToSettings: false,
   });
 
   const audioContext = useRef<AudioContext | null>(null);
@@ -60,9 +63,11 @@ const Options = () => {
   }, [alarmSound]);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      document.documentElement.classList.add("dark");
-    }
+    document.documentElement.classList.remove("dark");
+    Object.values(ColorScheme).forEach((scheme) => {
+      document.documentElement.classList.remove(scheme);
+    });
+    document.documentElement.classList.add("light");
 
     Settings.get().then((settings) => {
       setSettings(settings);
@@ -70,6 +75,7 @@ const Options = () => {
       setColorScheme(settings.colorScheme);
       setAlarmSound(settings.alarmSound);
       setVolume(settings.volume);
+      setApplyThemeToSettings(settings.applyThemeToSettings);
     });
   }, []);
 
@@ -84,24 +90,28 @@ const Options = () => {
   useEffect(() => {
     Settings.set({ colorScheme });
 
-    // 全てのカラースキームのクラスを一旦削除
-    Object.values(ColorScheme).forEach((scheme) => {
-      document.documentElement.classList.remove(scheme);
-    });
+    if (applyThemeToSettings) {
+      Object.values(ColorScheme).forEach((scheme) => {
+        document.documentElement.classList.remove(scheme);
+      });
 
-    if (colorScheme === ColorScheme.System) {
-      // システムの設定に従う
-      const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      document.documentElement.classList.add(isDarkMode ? ColorScheme.Dark : ColorScheme.Light);
-    } else {
-      // 選択されたカラースキームを適用
-      document.documentElement.classList.add(colorScheme);
+      if (colorScheme === ColorScheme.System) {
+        const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.classList.add(isDarkMode ? ColorScheme.Dark : ColorScheme.Light);
+      } else {
+        document.documentElement.classList.add(colorScheme);
+      }
     }
-  }, [colorScheme]);
+  }, [colorScheme, applyThemeToSettings]);
 
   useEffect(() => {
     Settings.set({ volume });
   }, [volume]);
+
+  useEffect(() => {
+    Settings.set({ applyThemeToSettings });
+  }, [applyThemeToSettings]);
+
 
   return (
     <div className="min-h-screen bg-background">
@@ -143,7 +153,17 @@ const Options = () => {
               </RadioGroup>
             </div>
             <div className="mt-8">
-              <TimerCardPreview />
+              <TimerCardPreview colorScheme={colorScheme} />
+            </div>
+            <div className="mt-6 flex items-center justify-between">
+              <Label htmlFor="apply-theme-to-settings" className="text-foreground cursor-pointer">
+                Apply theme to settings page
+              </Label>
+              <Switch
+                id="apply-theme-to-settings"
+                checked={applyThemeToSettings}
+                onCheckedChange={setApplyThemeToSettings}
+              />
             </div>
           </section>
 
