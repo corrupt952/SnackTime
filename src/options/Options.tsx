@@ -126,6 +126,7 @@ const Options = () => {
                     {Object.entries(ColorScheme).map(([key, value]) => (
                       <RadioCard
                         key={value}
+                        id={`color-scheme-${value}`}
                         value={value}
                         title={key}
                         description={
@@ -182,6 +183,7 @@ const Options = () => {
                     {Object.entries(NotificationType).map(([key, value]) => (
                       <RadioCard
                         key={value}
+                        id={`notification-type-${value}`}
                         value={value}
                         title={key}
                         description={
@@ -223,6 +225,7 @@ const Options = () => {
                     {["Simple", "Piano", "Vibraphone", "SteelDrums"].map((value) => (
                       <RadioCard
                         key={value}
+                        id={`alarm-sound-${value}`}
                         value={value}
                         title={value}
                         icon={Volume2}
