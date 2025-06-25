@@ -1,4 +1,4 @@
-import { Coffee, Volume2 } from "lucide-react";
+import { Coffee, Volume2, Palette, Bell, Settings2, Sparkles, Moon, Sun, Monitor } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import { NotificationType } from "@/types/enums/NotificationType";
 import { ExtensionSettings, Settings, AlarmSound } from "@/domain/settings/models/settings";
@@ -89,7 +89,9 @@ const Options = () => {
 
   useEffect(() => {
     Settings.set({ colorScheme });
+  }, [colorScheme]);
 
+  useEffect(() => {
     if (applyThemeToSettings) {
       Object.values(ColorScheme).forEach((scheme) => {
         document.documentElement.classList.remove(scheme);
@@ -101,6 +103,12 @@ const Options = () => {
       } else {
         document.documentElement.classList.add(colorScheme);
       }
+    } else {
+      // Reset to light theme when disabled
+      Object.values(ColorScheme).forEach((scheme) => {
+        document.documentElement.classList.remove(scheme);
+      });
+      document.documentElement.classList.add("light");
     }
   }, [colorScheme, applyThemeToSettings]);
 
@@ -112,128 +120,249 @@ const Options = () => {
     Settings.set({ applyThemeToSettings });
   }, [applyThemeToSettings]);
 
+  const getColorSchemeIcon = (scheme: ColorScheme) => {
+    switch (scheme) {
+      case ColorScheme.Light:
+        return <Sun className="h-4 w-4" />;
+      case ColorScheme.Dark:
+        return <Moon className="h-4 w-4" />;
+      case ColorScheme.System:
+        return <Monitor className="h-4 w-4" />;
+      default:
+        return <Sparkles className="h-4 w-4" />;
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="w-full h-14 bg-primary/80 text-primary-foreground px-3 flex items-center">
-        <div className="flex items-center gap-2">
-          <Coffee className="h-8 w-8" />
-          <span className="text-lg font-semibold">Snack Time</span>
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted/20">
+      <div className="w-full h-16 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground px-6 flex items-center shadow-lg">
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <Coffee className="h-9 w-9" />
+            <div className="absolute -bottom-1 -right-1 h-3 w-3 bg-accent rounded-full animate-pulse" />
+          </div>
+          <div>
+            <h1 className="text-xl font-bold">Snack Time</h1>
+            <p className="text-xs opacity-90">Timer Extension Settings</p>
+          </div>
         </div>
       </div>
 
-      <div className="container mx-auto mt-8">
-        <div className="space-y-12">
-          <section>
-            <h2 className="text-2xl font-bold text-foreground">General</h2>
-            <Separator className="my-4" />
-            <div>
-              <h3 className="text-lg font-semibold text-foreground">Coming soon...</h3>
-            </div>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-bold text-foreground">Appearance</h2>
-            <Separator className="my-4" />
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-foreground">Color Scheme</h3>
-              <RadioGroup
-                value={colorScheme}
-                onValueChange={(value) => setColorScheme(value as ColorScheme)}
-                className="flex gap-8"
+      <div className="container mx-auto mt-8 pb-12">
+        <div className="grid gap-6 lg:grid-cols-4">
+          <aside className="lg:col-span-1">
+            <nav className="sticky top-8 space-y-1 rounded-lg border bg-card p-4 shadow-sm">
+              <a
+                href="#general"
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
               >
-                {Object.values(ColorScheme).map((value) => (
-                  <div key={value} className="flex items-center space-x-2">
-                    <RadioGroupItem value={value} id={`color-scheme-${value}`} />
-                    <Label htmlFor={`color-scheme-${value}`} className="text-foreground">
-                      {Object.keys(ColorScheme)[Object.values(ColorScheme).indexOf(value)]}
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
-            </div>
-            <div className="mt-8">
-              <TimerCardPreview colorScheme={colorScheme} />
-            </div>
-            <div className="mt-6 flex items-center justify-between">
-              <Label htmlFor="apply-theme-to-settings" className="text-foreground cursor-pointer">
-                Apply theme to settings page
-              </Label>
-              <Switch
-                id="apply-theme-to-settings"
-                checked={applyThemeToSettings}
-                onCheckedChange={setApplyThemeToSettings}
-              />
-            </div>
-          </section>
+                <Settings2 className="h-4 w-4" />
+                General
+              </a>
+              <a
+                href="#appearance"
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
+              >
+                <Palette className="h-4 w-4" />
+                Appearance
+              </a>
+              <a
+                href="#notification"
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
+              >
+                <Bell className="h-4 w-4" />
+                Notification
+              </a>
+            </nav>
+          </aside>
 
-          <section>
-            <h2 className="text-2xl font-bold text-foreground">Notification</h2>
-            <Separator className="my-4" />
-            <div className="space-y-8">
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-foreground">Notification Type</h3>
-                <RadioGroup
-                  value={notificationType}
-                  onValueChange={(value) => setNotificationType(value as NotificationType)}
-                  className="flex gap-8"
-                >
-                  {Object.values(NotificationType).map((value) => (
-                    <div key={value} className="flex items-center space-x-2">
-                      <RadioGroupItem value={value} id={`notification-type-${value}`} />
-                      <Label htmlFor={`notification-type-${value}`} className="text-foreground">
-                        {Object.keys(NotificationType)[Object.values(NotificationType).indexOf(value)]}
-                      </Label>
-                    </div>
-                  ))}
-                </RadioGroup>
+          <main className="lg:col-span-3 space-y-6">
+            <section id="general" className="rounded-xl border bg-card p-6 shadow-sm">
+              <div className="flex items-center gap-2 mb-4">
+                <Settings2 className="h-5 w-5 text-primary" />
+                <h2 className="text-xl font-bold text-foreground">General Settings</h2>
               </div>
+              <Separator className="mb-6" />
+              <div className="rounded-lg bg-muted/50 p-4 border border-dashed">
+                <p className="text-sm text-muted-foreground">More settings coming soon...</p>
+              </div>
+            </section>
 
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-foreground">Alarm Sound</h3>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={playSound}
-                    className="rounded-full"
-                    title="Play selected sound"
+            <section id="appearance" className="rounded-xl border bg-card p-6 shadow-sm">
+              <div className="flex items-center gap-2 mb-4">
+                <Palette className="h-5 w-5 text-primary" />
+                <h2 className="text-xl font-bold text-foreground">Appearance</h2>
+              </div>
+              <Separator className="mb-6" />
+
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-base font-semibold text-foreground mb-4">Color Scheme</h3>
+                  <RadioGroup
+                    value={colorScheme}
+                    onValueChange={(value) => setColorScheme(value as ColorScheme)}
+                    className="grid grid-cols-1 sm:grid-cols-3 gap-3"
                   >
-                    <Volume2 className="h-4 w-4" />
-                  </Button>
+                    {Object.entries(ColorScheme).map(([key, value]) => (
+                      <label
+                        key={value}
+                        htmlFor={`color-scheme-${value}`}
+                        className="relative flex cursor-pointer rounded-lg border bg-background p-4 hover:bg-accent/50 transition-all duration-200 hover:shadow-md"
+                      >
+                        <RadioGroupItem value={value} id={`color-scheme-${value}`} className="sr-only" />
+                        <div className="flex items-center gap-3 w-full">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 text-primary">
+                            {getColorSchemeIcon(value)}
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-medium">{key}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {value === ColorScheme.System && "Match system preference"}
+                              {value === ColorScheme.Light && "Always light theme"}
+                              {value === ColorScheme.Dark && "Always dark theme"}
+                              {value === ColorScheme.Lemon && "Bright yellow theme"}
+                              {value === ColorScheme.Mint && "Fresh mint theme"}
+                              {value === ColorScheme.Rose && "Soft rose theme"}
+                            </p>
+                          </div>
+                          {colorScheme === value && (
+                            <div className="absolute right-2 top-2 h-2 w-2 rounded-full bg-primary" />
+                          )}
+                        </div>
+                      </label>
+                    ))}
+                  </RadioGroup>
                 </div>
-                <RadioGroup
-                  value={alarmSound}
-                  onValueChange={(value) => setAlarmSound(value as AlarmSound)}
-                  className="flex gap-8"
-                >
-                  {["Simple", "Piano", "Vibraphone", "SteelDrums"].map((value) => (
-                    <div key={value} className="flex items-center space-x-2">
-                      <RadioGroupItem value={value} id={`alarm-sound-${value}`} />
-                      <Label htmlFor={`alarm-sound-${value}`} className="text-foreground">
-                        {value}
-                      </Label>
-                    </div>
-                  ))}
-                </RadioGroup>
-              </div>
+                <div className="rounded-lg bg-muted/30 p-4">
+                  <h4 className="text-sm font-medium mb-3">Preview</h4>
+                  <TimerCardPreview colorScheme={colorScheme} />
+                </div>
 
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-foreground">Volume</h3>
-                <div className="flex items-center gap-8">
-                  <div className="flex-1">
-                    <Slider
-                      value={[volume * 100]}
-                      onValueChange={(value) => setVolume(value[0] / 100)}
-                      max={100}
-                      step={1}
-                    />
+                <div className="flex items-center justify-between p-4 rounded-lg border bg-muted/10">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="apply-theme-to-settings" className="text-base font-medium cursor-pointer">
+                      Apply to this page
+                    </Label>
+                    <p className="text-xs text-muted-foreground">Use selected theme for the settings page</p>
                   </div>
-                  <div className="w-12 text-right">{Math.round(volume * 100)}%</div>
+                  <Switch
+                    id="apply-theme-to-settings"
+                    checked={applyThemeToSettings}
+                    onCheckedChange={setApplyThemeToSettings}
+                  />
                 </div>
               </div>
-            </div>
-          </section>
+            </section>
+
+            <section id="notification" className="rounded-xl border bg-card p-6 shadow-sm">
+              <div className="flex items-center gap-2 mb-4">
+                <Bell className="h-5 w-5 text-primary" />
+                <h2 className="text-xl font-bold text-foreground">Notification</h2>
+              </div>
+              <Separator className="mb-6" />
+
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-base font-semibold text-foreground mb-4">Notification Type</h3>
+                  <RadioGroup
+                    value={notificationType}
+                    onValueChange={(value) => setNotificationType(value as NotificationType)}
+                    className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+                  >
+                    {Object.entries(NotificationType).map(([key, value]) => (
+                      <label
+                        key={value}
+                        htmlFor={`notification-type-${value}`}
+                        className="relative flex cursor-pointer rounded-lg border bg-background p-4 hover:bg-accent/50 transition-all duration-200 hover:shadow-md"
+                      >
+                        <RadioGroupItem value={value} id={`notification-type-${value}`} className="sr-only" />
+                        <div className="flex items-center gap-3 w-full">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 text-primary">
+                            <Bell className="h-4 w-4" />
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-medium">{key}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {value === NotificationType.Alarm && "Play sound notification"}
+                              {value === NotificationType.None && "Silent mode"}
+                            </p>
+                          </div>
+                          {notificationType === value && (
+                            <div className="absolute right-2 top-2 h-2 w-2 rounded-full bg-primary" />
+                          )}
+                        </div>
+                      </label>
+                    ))}
+                  </RadioGroup>
+                </div>
+
+                <div
+                  className={`space-y-4 transition-opacity duration-300 ${notificationType === NotificationType.None ? "opacity-50 pointer-events-none" : ""}`}
+                >
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-base font-semibold text-foreground">Alarm Sound</h3>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={playSound}
+                      className="gap-2"
+                      title="Play selected sound"
+                      disabled={notificationType === NotificationType.None}
+                    >
+                      <Volume2 className="h-4 w-4" />
+                      <span className="text-xs">Preview</span>
+                    </Button>
+                  </div>
+                  <RadioGroup
+                    value={alarmSound}
+                    onValueChange={(value) => setAlarmSound(value as AlarmSound)}
+                    className="grid grid-cols-2 gap-3"
+                  >
+                    {["Simple", "Piano", "Vibraphone", "SteelDrums"].map((value) => (
+                      <label
+                        key={value}
+                        htmlFor={`alarm-sound-${value}`}
+                        className="relative flex cursor-pointer rounded-lg border bg-background p-3 hover:bg-accent/50 transition-all duration-200 hover:shadow-md"
+                      >
+                        <RadioGroupItem value={value} id={`alarm-sound-${value}`} className="sr-only" />
+                        <div className="flex items-center gap-2 w-full">
+                          <Volume2 className="h-4 w-4 text-muted-foreground" />
+                          <p className="font-medium text-sm">{value}</p>
+                          {alarmSound === value && (
+                            <div className="absolute right-2 top-2 h-2 w-2 rounded-full bg-primary" />
+                          )}
+                        </div>
+                      </label>
+                    ))}
+                  </RadioGroup>
+                </div>
+
+                <div
+                  className={`space-y-4 transition-opacity duration-300 ${notificationType === NotificationType.None ? "opacity-50 pointer-events-none" : ""}`}
+                >
+                  <h3 className="text-base font-semibold text-foreground">Volume</h3>
+                  <div className="rounded-lg bg-muted/10 p-4">
+                    <div className="flex items-center gap-4">
+                      <Volume2 className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                      <div className="flex-1">
+                        <Slider
+                          value={[volume * 100]}
+                          onValueChange={(value) => setVolume(value[0] / 100)}
+                          max={100}
+                          step={1}
+                          disabled={notificationType === NotificationType.None}
+                          className="[&_[role=slider]]:transition-all [&_[role=slider]]:duration-200 [&_[role=slider]:hover]:scale-110"
+                        />
+                      </div>
+                      <div className="min-w-[3rem] text-right font-mono text-sm font-medium">
+                        {Math.round(volume * 100)}%
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </main>
         </div>
       </div>
     </div>
