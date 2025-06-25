@@ -15,8 +15,34 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   contentRoot.id = "snack-time-root";
   contentRoot.style.display = "contents";
   contentRoot.style.position = "fixed";
-  contentRoot.style.top = "10px";
-  contentRoot.style.right = "10px";
+
+  // Apply timer position based on settings
+  switch (settings.timerPosition) {
+    case "top-left":
+      contentRoot.style.top = "10px";
+      contentRoot.style.left = "10px";
+      break;
+    case "top-right":
+      contentRoot.style.top = "10px";
+      contentRoot.style.right = "10px";
+      break;
+    case "bottom-left":
+      contentRoot.style.bottom = "10px";
+      contentRoot.style.left = "10px";
+      break;
+    case "bottom-right":
+      contentRoot.style.bottom = "10px";
+      contentRoot.style.right = "10px";
+      break;
+    case "center":
+      contentRoot.style.top = "50%";
+      contentRoot.style.left = "50%";
+      contentRoot.style.transform = "translate(-50%, -50%)";
+      break;
+    default:
+      contentRoot.style.top = "10px";
+      contentRoot.style.right = "10px";
+  }
   contentRoot.style.zIndex = "calc(infinity)";
   contentRoot.style.backgroundColor = "transparent";
   contentRoot.style.borderRadius = "10px";
@@ -50,8 +76,16 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
       event.preventDefault();
       timerX = event.clientX - offsetX;
       timerY = event.clientY - offsetY;
+
+      // Reset position styles to allow free dragging
+      contentRoot.style.top = "";
+      contentRoot.style.bottom = "";
+      contentRoot.style.left = "";
+      contentRoot.style.right = "";
+      contentRoot.style.transform = "";
+
+      contentRoot.style.left = `${timerX}px`;
       contentRoot.style.top = `${timerY}px`;
-      contentRoot.style.right = `${window.innerWidth - timerX - contentRoot.offsetWidth}px`;
     }
   });
   document.addEventListener("mouseup", (event) => {

@@ -276,6 +276,39 @@ test.describe("Options Page - Notification", () => {
   });
 });
 
+test.describe("Options Page - General", () => {
+  test("should change timer position settings", async ({ extensionId, page }) => {
+    await page.goto(`chrome-extension://${extensionId}/options/index.html`);
+    await page.waitForLoadState("networkidle");
+
+    await expect(page.locator('h2:text("General Settings")')).toBeVisible();
+
+    const positions = [
+      { id: "top-right", label: "Top Right" },
+      { id: "top-left", label: "Top Left" },
+      { id: "bottom-right", label: "Bottom Right" },
+      { id: "bottom-left", label: "Bottom Left" },
+      { id: "center", label: "Center" }
+    ];
+
+    for (const position of positions) {
+      const positionLabel = page.locator(`label[for="position-${position.id}"]`);
+      await expect(positionLabel).toBeVisible();
+      await expect(positionLabel).toContainText(position.label);
+      
+      await positionLabel.click();
+      const positionRadio = page.locator(`#position-${position.id}`);
+      await expect(positionRadio).toBeChecked();
+
+      await page.reload();
+      await page.waitForLoadState("networkidle");
+
+      const positionRadioAfterReload = page.locator(`#position-${position.id}`);
+      await expect(positionRadioAfterReload).toBeChecked();
+    }
+  });
+});
+
 test.describe("Options Page - Navigation", () => {
   test("should navigate with sidebar links", async ({ extensionId, page }) => {
     await page.goto(`chrome-extension://${extensionId}/options/index.html`);

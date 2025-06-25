@@ -1,7 +1,7 @@
-import { Coffee, Volume2, Palette, Bell, Settings2, Sparkles, Moon, Sun, Monitor } from "lucide-react";
+import { Coffee, Volume2, Palette, Bell, Settings2, Sparkles, Moon, Sun, Monitor, MapPin } from "lucide-react";
 import { useEffect, useState } from "react";
 import { NotificationType } from "@/types/enums/NotificationType";
-import { ExtensionSettings, Settings, AlarmSound } from "@/domain/settings/models/settings";
+import { ExtensionSettings, Settings, AlarmSound, TimerPosition } from "@/domain/settings/models/settings";
 import { ColorScheme } from "@/types/enums/ColorScheme";
 import "@/styles/globals.css";
 import { RadioGroup } from "@/components/ui/radio-group";
@@ -23,12 +23,14 @@ const Options = () => {
   const [alarmSound, setAlarmSound] = useState<AlarmSound>("Simple");
   const [volume, setVolume] = useState<number>(0.1);
   const [applyThemeToSettings, setApplyThemeToSettings] = useState<boolean>(false);
+  const [timerPosition, setTimerPosition] = useState<TimerPosition>("top-right");
   const [settings, setSettings] = useState<ExtensionSettings>({
     colorScheme: ColorScheme.System,
     notificationType: NotificationType.Alarm,
     alarmSound: "Simple",
     volume: 0.1,
     applyThemeToSettings: false,
+    timerPosition: "top-right",
   });
 
   const { playSound } = useAudioPlayback(alarmSound, volume);
@@ -53,6 +55,7 @@ const Options = () => {
       setAlarmSound(settings.alarmSound);
       setVolume(settings.volume);
       setApplyThemeToSettings(settings.applyThemeToSettings);
+      setTimerPosition(settings.timerPosition);
     });
   }, []);
 
@@ -62,6 +65,7 @@ const Options = () => {
   useSettingsSync("colorScheme", colorScheme);
   useSettingsSync("volume", volume);
   useSettingsSync("applyThemeToSettings", applyThemeToSettings);
+  useSettingsSync("timerPosition", timerPosition);
 
   useEffect(() => {
     if (applyThemeToSettings) {
@@ -109,8 +113,33 @@ const Options = () => {
 
           <main className="lg:col-span-3 space-y-6">
             <SettingsSection id="general" icon={Settings2} title="General Settings">
-              <div className="rounded-lg bg-muted/50 p-4 border border-dashed">
-                <p className="text-sm text-muted-foreground">More settings coming soon...</p>
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-base font-semibold text-foreground mb-4">Timer Position</h3>
+                  <RadioGroup
+                    value={timerPosition}
+                    onValueChange={(value) => setTimerPosition(value as TimerPosition)}
+                    className="grid grid-cols-2 sm:grid-cols-3 gap-3"
+                  >
+                    {[
+                      { label: "Top Right", value: "top-right" },
+                      { label: "Top Left", value: "top-left" },
+                      { label: "Bottom Right", value: "bottom-right" },
+                      { label: "Bottom Left", value: "bottom-left" },
+                      { label: "Center", value: "center" },
+                    ].map(({ label, value }) => (
+                      <RadioCard
+                        key={value}
+                        id={`position-${value}`}
+                        value={value}
+                        title={label}
+                        icon={MapPin}
+                        isSelected={timerPosition === value}
+                        className="p-3"
+                      />
+                    ))}
+                  </RadioGroup>
+                </div>
               </div>
             </SettingsSection>
 

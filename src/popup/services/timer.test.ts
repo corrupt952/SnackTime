@@ -35,6 +35,7 @@ describe("timerService", () => {
       alarmSound: "Simple",
       volume: 0.1,
       applyThemeToSettings: false,
+      timerPosition: "top-right",
     });
 
     // Mock Chrome API

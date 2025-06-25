@@ -19,6 +19,7 @@ describe("Settings", () => {
         alarmSound: "Simple",
         volume: 0.1,
         applyThemeToSettings: false,
+        timerPosition: "top-right",
       });
     });
 
@@ -39,6 +40,7 @@ describe("Settings", () => {
         alarmSound: "Simple",
         volume: 0.5,
         applyThemeToSettings: false,
+        timerPosition: "top-right",
       });
     });
 
@@ -49,6 +51,7 @@ describe("Settings", () => {
         alarmSound: "Piano" as const,
         volume: 0.8,
         applyThemeToSettings: true,
+        timerPosition: "bottom-left" as const,
       };
       vi.spyOn(chrome.storage.sync, "get").mockImplementation(() =>
         Promise.resolve({
@@ -69,6 +72,7 @@ describe("Settings", () => {
         alarmSound: "Simple",
         volume: 0.1,
         applyThemeToSettings: false,
+        timerPosition: "top-right",
       });
     });
   });
@@ -81,6 +85,7 @@ describe("Settings", () => {
         alarmSound: "Simple",
         volume: 0.1,
         applyThemeToSettings: false,
+        timerPosition: "top-right",
       });
       const setStorage = vi.spyOn(chrome.storage.sync, "set");
 
@@ -94,6 +99,7 @@ describe("Settings", () => {
           alarmSound: "Simple",
           volume: 0.8,
           applyThemeToSettings: false,
+          timerPosition: "top-right",
         },
       });
     });
@@ -105,6 +111,7 @@ describe("Settings", () => {
         alarmSound: "Simple",
         volume: 0.1,
         applyThemeToSettings: false,
+        timerPosition: "top-right",
       });
       const setStorage = vi.spyOn(chrome.storage.sync, "set");
 
@@ -118,6 +125,7 @@ describe("Settings", () => {
           alarmSound: "Simple",
           volume: 0.1,
           applyThemeToSettings: false,
+          timerPosition: "top-right",
         },
       });
     });
@@ -129,6 +137,7 @@ describe("Settings", () => {
         alarmSound: "Simple",
         volume: 0.1,
         applyThemeToSettings: false,
+        timerPosition: "top-right",
       });
       const setStorage = vi.spyOn(chrome.storage.sync, "set");
 
@@ -138,6 +147,7 @@ describe("Settings", () => {
         alarmSound: "Piano",
         volume: 0.8,
         applyThemeToSettings: true,
+        timerPosition: "center",
       };
       await Settings.set(newSettings);
 
@@ -154,6 +164,7 @@ describe("Settings", () => {
         alarmSound: "Simple",
         volume: 0.1,
         applyThemeToSettings: false,
+        timerPosition: "top-right",
       });
       const setStorage = vi.spyOn(chrome.storage.sync, "set");
 
@@ -175,6 +186,7 @@ describe("Settings", () => {
         alarmSound: "Simple",
         volume: 0.1,
         applyThemeToSettings: false,
+        timerPosition: "top-right",
       });
       const setStorage = vi.spyOn(chrome.storage.sync, "set");
 
@@ -191,6 +203,7 @@ describe("Settings", () => {
         alarmSound: "Simple",
         volume: 0.1,
         applyThemeToSettings: false,
+        timerPosition: "top-right",
       });
       vi.spyOn(chrome.storage.sync, "set").mockRejectedValue(new Error("Storage error"));
 
