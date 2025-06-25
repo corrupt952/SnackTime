@@ -34,6 +34,7 @@ describe("timerService", () => {
       notificationType: NotificationType.Alarm,
       alarmSound: "Simple",
       volume: 0.1,
+      applyThemeToSettings: false,
     });
 
     // Mock Chrome API
