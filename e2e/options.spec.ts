@@ -292,19 +292,22 @@ test.describe("Options Page - General", () => {
     ];
 
     for (const position of positions) {
-      const positionLabel = page.locator(`label[for="position-${position.id}"]`);
-      await expect(positionLabel).toBeVisible();
-      await expect(positionLabel).toContainText(position.label);
+      // Click position button in the visual selector
+      const positionButton = page.locator(`#position-${position.id}`);
+      await expect(positionButton).toBeVisible();
+      await positionButton.click();
       
-      await positionLabel.click();
-      const positionRadio = page.locator(`#position-${position.id}`);
-      await expect(positionRadio).toBeChecked();
+      // Verify the position is selected (check for primary style)
+      const selectedIndicator = positionButton.locator('.bg-primary');
+      await expect(selectedIndicator).toBeVisible();
 
       await page.reload();
       await page.waitForLoadState("networkidle");
 
-      const positionRadioAfterReload = page.locator(`#position-${position.id}`);
-      await expect(positionRadioAfterReload).toBeChecked();
+      // Verify position is still selected after reload
+      const positionButtonAfterReload = page.locator(`#position-${position.id}`);
+      const selectedIndicatorAfterReload = positionButtonAfterReload.locator('.bg-primary');
+      await expect(selectedIndicatorAfterReload).toBeVisible();
     }
   });
 });

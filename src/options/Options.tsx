@@ -1,4 +1,4 @@
-import { Coffee, Volume2, Palette, Bell, Settings2, Sparkles, Moon, Sun, Monitor, MapPin } from "lucide-react";
+import { Coffee, Volume2, Palette, Bell, Settings2, Sparkles, Moon, Sun, Monitor } from "lucide-react";
 import { useEffect, useState } from "react";
 import { NotificationType } from "@/types/enums/NotificationType";
 import { ExtensionSettings, Settings, AlarmSound, TimerPosition } from "@/domain/settings/models/settings";
@@ -16,6 +16,7 @@ import { VolumeControl } from "@/components/ui/volume-control";
 import { useSettingsSync } from "@/lib/hooks/use-settings-sync";
 import { useAudioPlayback } from "@/lib/hooks/use-audio-playback";
 import TimerCardPreview from "./components/TimerCardPreview";
+import { TimerPositionSelector } from "./components/TimerPositionSelector";
 
 const Options = () => {
   const [notificationType, setNotificationType] = useState<NotificationType>(NotificationType.Alarm);
@@ -115,30 +116,11 @@ const Options = () => {
             <SettingsSection id="general" icon={Settings2} title="General Settings">
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-base font-semibold text-foreground mb-4">Timer Position</h3>
-                  <RadioGroup
-                    value={timerPosition}
-                    onValueChange={(value) => setTimerPosition(value as TimerPosition)}
-                    className="grid grid-cols-2 sm:grid-cols-3 gap-3"
-                  >
-                    {[
-                      { label: "Top Right", value: "top-right" },
-                      { label: "Top Left", value: "top-left" },
-                      { label: "Bottom Right", value: "bottom-right" },
-                      { label: "Bottom Left", value: "bottom-left" },
-                      { label: "Center", value: "center" },
-                    ].map(({ label, value }) => (
-                      <RadioCard
-                        key={value}
-                        id={`position-${value}`}
-                        value={value}
-                        title={label}
-                        icon={MapPin}
-                        isSelected={timerPosition === value}
-                        className="p-3"
-                      />
-                    ))}
-                  </RadioGroup>
+                  <h3 className="text-base font-semibold text-foreground mb-2">Timer Position</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Choose where the timer appears on web pages. You can still drag it to any position after it appears.
+                  </p>
+                  <TimerPositionSelector value={timerPosition} onChange={(value) => setTimerPosition(value)} />
                 </div>
               </div>
             </SettingsSection>

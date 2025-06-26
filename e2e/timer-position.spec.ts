@@ -35,9 +35,11 @@ test.describe("Timer Position", () => {
         await optionsPage.goto(`chrome-extension://${extensionId}/options/index.html`);
         await optionsPage.waitForLoadState("networkidle");
         
-        const positionLabel = optionsPage.locator(`label[for="position-${position.id}"]`);
-        await positionLabel.click();
-        await expect(optionsPage.locator(`#position-${position.id}`)).toBeChecked();
+        const positionButton = optionsPage.locator(`#position-${position.id}`);
+        await positionButton.click();
+        // Verify the position is selected
+        const selectedIndicator = positionButton.locator('.bg-primary');
+        await expect(selectedIndicator).toBeVisible();
         await optionsPage.close();
 
         // Start timer from popup
@@ -55,6 +57,7 @@ test.describe("Timer Position", () => {
 
         // Check timer position on content page
         await page.bringToFront();
+        await page.waitForSelector("#snack-time-root", { state: "visible", timeout: 10000 });
         const timer = page.locator("#snack-time-root");
         await expect(timer).toBeVisible();
 
@@ -94,9 +97,11 @@ test.describe("Timer Position", () => {
     await optionsPage.goto(`chrome-extension://${extensionId}/options/index.html`);
     await optionsPage.waitForLoadState("networkidle");
     
-    const centerLabel = optionsPage.locator('label[for="position-center"]');
-    await centerLabel.click();
-    await expect(optionsPage.locator('#position-center')).toBeChecked();
+    const centerButton = optionsPage.locator('#position-center');
+    await centerButton.click();
+    // Verify the position is selected
+    const selectedIndicator = centerButton.locator('.bg-primary');
+    await expect(selectedIndicator).toBeVisible();
     await optionsPage.close();
 
     // Start timer
