@@ -13,7 +13,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 
   const contentRoot = document.createElement("div");
   contentRoot.id = "snack-time-root";
-  contentRoot.style.display = "contents";
+  contentRoot.style.display = "block";
   contentRoot.style.position = "fixed";
 
   // Apply timer position based on settings
@@ -44,14 +44,6 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
       contentRoot.style.right = "10px";
   }
   contentRoot.style.zIndex = "calc(infinity)";
-  contentRoot.style.backgroundColor = "transparent";
-  contentRoot.style.borderRadius = "10px";
-  contentRoot.style.boxShadow = "0 0 5px rgba(0, 0, 0, 0.8)";
-  contentRoot.style.fontSize = "2rem";
-  contentRoot.style.display = "grid";
-  contentRoot.style.gridTemplateRows = "1fr auto";
-  contentRoot.style.color = "black";
-  contentRoot.style.fontFamily = "Arial, sans-serif";
   contentRoot.style.pointerEvents = "auto";
   document.body.append(contentRoot);
 
