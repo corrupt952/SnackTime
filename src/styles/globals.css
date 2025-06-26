@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+/**
+ * Theme Layer - Default CSS Custom Properties
+ * 
+ * These color variables serve as defaults for regular DOM usage.
+ * They reference base color values (e.g., --background) that are defined
+ * in :root/:host and can be overridden by theme classes.
+ * 
+ * IMPORTANT: For Shadow DOM compatibility, these --color-* variables
+ * must also be redefined within each theme class (.light, .dark, etc.)
+ * to ensure proper CSS variable resolution within the shadow boundary.
+ * 
+ * Without theme-specific redefinition, Shadow DOM elements will always
+ * use the :host values, ignoring theme class overrides.
+ */
 @theme {
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
@@ -89,6 +103,17 @@
 }
 
 @layer base {
+  /**
+   * Base Color Definitions
+   * 
+   * These HSL values serve as the foundation for all color calculations.
+   * - :root applies to regular DOM elements
+   * - :host applies to Shadow DOM root elements
+   * 
+   * Values are defined in HSL format without the hsl() wrapper to allow
+   * flexible usage in various contexts (e.g., with opacity modifiers).
+   * These can be overridden by theme classes (.light, .dark, .mint, etc.)
+   */
   :root,
   :host {
     --background: 0 0% 100%;
@@ -143,6 +168,38 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    
+    /**
+     * Shadow DOM Color Variable Overrides
+     * 
+     * These --color-* definitions are crucial for Shadow DOM compatibility.
+     * Without them, elements inside Shadow DOM will use the :host values
+     * instead of the theme-specific values, causing colors to remain static
+     * regardless of the applied theme class.
+     * 
+     * This duplication is necessary because CSS variable resolution in
+     * Shadow DOM doesn't inherit --color-* values from parent scopes
+     * when they reference other variables (e.g., var(--background)).
+     */
+    --color-background: hsl(var(--background));
+    --color-foreground: hsl(var(--foreground));
+    --color-card: hsl(var(--card));
+    --color-card-foreground: hsl(var(--card-foreground));
+    --color-popover: hsl(var(--popover));
+    --color-popover-foreground: hsl(var(--popover-foreground));
+    --color-primary: hsl(var(--primary));
+    --color-primary-foreground: hsl(var(--primary-foreground));
+    --color-secondary: hsl(var(--secondary));
+    --color-secondary-foreground: hsl(var(--secondary-foreground));
+    --color-destructive: hsl(var(--destructive));
+    --color-destructive-foreground: hsl(var(--destructive-foreground));
+    --color-muted: hsl(var(--muted));
+    --color-muted-foreground: hsl(var(--muted-foreground));
+    --color-accent: hsl(var(--accent));
+    --color-accent-foreground: hsl(var(--accent-foreground));
+    --color-border: hsl(var(--border));
+    --color-input: hsl(var(--input));
+    --color-ring: hsl(var(--ring));
   }
 
   .dark {
@@ -170,6 +227,38 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    
+    /**
+     * Shadow DOM Color Variable Overrides
+     * 
+     * These --color-* definitions are crucial for Shadow DOM compatibility.
+     * Without them, elements inside Shadow DOM will use the :host values
+     * instead of the theme-specific values, causing colors to remain static
+     * regardless of the applied theme class.
+     * 
+     * This duplication is necessary because CSS variable resolution in
+     * Shadow DOM doesn't inherit --color-* values from parent scopes
+     * when they reference other variables (e.g., var(--background)).
+     */
+    --color-background: hsl(var(--background));
+    --color-foreground: hsl(var(--foreground));
+    --color-card: hsl(var(--card));
+    --color-card-foreground: hsl(var(--card-foreground));
+    --color-popover: hsl(var(--popover));
+    --color-popover-foreground: hsl(var(--popover-foreground));
+    --color-primary: hsl(var(--primary));
+    --color-primary-foreground: hsl(var(--primary-foreground));
+    --color-secondary: hsl(var(--secondary));
+    --color-secondary-foreground: hsl(var(--secondary-foreground));
+    --color-destructive: hsl(var(--destructive));
+    --color-destructive-foreground: hsl(var(--destructive-foreground));
+    --color-muted: hsl(var(--muted));
+    --color-muted-foreground: hsl(var(--muted-foreground));
+    --color-accent: hsl(var(--accent));
+    --color-accent-foreground: hsl(var(--accent-foreground));
+    --color-border: hsl(var(--border));
+    --color-input: hsl(var(--input));
+    --color-ring: hsl(var(--ring));
   }
 
   .lemon {
@@ -197,6 +286,38 @@
     --chart-3: 45 50% 45%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    
+    /**
+     * Shadow DOM Color Variable Overrides
+     * 
+     * These --color-* definitions are crucial for Shadow DOM compatibility.
+     * Without them, elements inside Shadow DOM will use the :host values
+     * instead of the theme-specific values, causing colors to remain static
+     * regardless of the applied theme class.
+     * 
+     * This duplication is necessary because CSS variable resolution in
+     * Shadow DOM doesn't inherit --color-* values from parent scopes
+     * when they reference other variables (e.g., var(--background)).
+     */
+    --color-background: hsl(var(--background));
+    --color-foreground: hsl(var(--foreground));
+    --color-card: hsl(var(--card));
+    --color-card-foreground: hsl(var(--card-foreground));
+    --color-popover: hsl(var(--popover));
+    --color-popover-foreground: hsl(var(--popover-foreground));
+    --color-primary: hsl(var(--primary));
+    --color-primary-foreground: hsl(var(--primary-foreground));
+    --color-secondary: hsl(var(--secondary));
+    --color-secondary-foreground: hsl(var(--secondary-foreground));
+    --color-destructive: hsl(var(--destructive));
+    --color-destructive-foreground: hsl(var(--destructive-foreground));
+    --color-muted: hsl(var(--muted));
+    --color-muted-foreground: hsl(var(--muted-foreground));
+    --color-accent: hsl(var(--accent));
+    --color-accent-foreground: hsl(var(--accent-foreground));
+    --color-border: hsl(var(--border));
+    --color-input: hsl(var(--input));
+    --color-ring: hsl(var(--ring));
   }
 
   .mint {
@@ -224,6 +345,38 @@
     --chart-3: 165 40% 45%;
     --chart-4: 170 65% 60%;
     --chart-5: 155 75% 55%;
+    
+    /**
+     * Shadow DOM Color Variable Overrides
+     * 
+     * These --color-* definitions are crucial for Shadow DOM compatibility.
+     * Without them, elements inside Shadow DOM will use the :host values
+     * instead of the theme-specific values, causing colors to remain static
+     * regardless of the applied theme class.
+     * 
+     * This duplication is necessary because CSS variable resolution in
+     * Shadow DOM doesn't inherit --color-* values from parent scopes
+     * when they reference other variables (e.g., var(--background)).
+     */
+    --color-background: hsl(var(--background));
+    --color-foreground: hsl(var(--foreground));
+    --color-card: hsl(var(--card));
+    --color-card-foreground: hsl(var(--card-foreground));
+    --color-popover: hsl(var(--popover));
+    --color-popover-foreground: hsl(var(--popover-foreground));
+    --color-primary: hsl(var(--primary));
+    --color-primary-foreground: hsl(var(--primary-foreground));
+    --color-secondary: hsl(var(--secondary));
+    --color-secondary-foreground: hsl(var(--secondary-foreground));
+    --color-destructive: hsl(var(--destructive));
+    --color-destructive-foreground: hsl(var(--destructive-foreground));
+    --color-muted: hsl(var(--muted));
+    --color-muted-foreground: hsl(var(--muted-foreground));
+    --color-accent: hsl(var(--accent));
+    --color-accent-foreground: hsl(var(--accent-foreground));
+    --color-border: hsl(var(--border));
+    --color-input: hsl(var(--input));
+    --color-ring: hsl(var(--ring));
   }
 
   .rose {
@@ -251,6 +404,38 @@
     --chart-3: 345 40% 45%;
     --chart-4: 340 65% 60%;
     --chart-5: 355 75% 55%;
+    
+    /**
+     * Shadow DOM Color Variable Overrides
+     * 
+     * These --color-* definitions are crucial for Shadow DOM compatibility.
+     * Without them, elements inside Shadow DOM will use the :host values
+     * instead of the theme-specific values, causing colors to remain static
+     * regardless of the applied theme class.
+     * 
+     * This duplication is necessary because CSS variable resolution in
+     * Shadow DOM doesn't inherit --color-* values from parent scopes
+     * when they reference other variables (e.g., var(--background)).
+     */
+    --color-background: hsl(var(--background));
+    --color-foreground: hsl(var(--foreground));
+    --color-card: hsl(var(--card));
+    --color-card-foreground: hsl(var(--card-foreground));
+    --color-popover: hsl(var(--popover));
+    --color-popover-foreground: hsl(var(--popover-foreground));
+    --color-primary: hsl(var(--primary));
+    --color-primary-foreground: hsl(var(--primary-foreground));
+    --color-secondary: hsl(var(--secondary));
+    --color-secondary-foreground: hsl(var(--secondary-foreground));
+    --color-destructive: hsl(var(--destructive));
+    --color-destructive-foreground: hsl(var(--destructive-foreground));
+    --color-muted: hsl(var(--muted));
+    --color-muted-foreground: hsl(var(--muted-foreground));
+    --color-accent: hsl(var(--accent));
+    --color-accent-foreground: hsl(var(--accent-foreground));
+    --color-border: hsl(var(--border));
+    --color-input: hsl(var(--input));
+    --color-ring: hsl(var(--ring));
   }
 }
 
