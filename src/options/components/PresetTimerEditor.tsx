@@ -14,7 +14,6 @@ interface QuickTemplate {
   icon: LucideIcon;
   description: string;
   presets: PresetTimer[];
-  color: string;
 }
 
 const quickTemplates: QuickTemplate[] = [
@@ -23,42 +22,36 @@ const quickTemplates: QuickTemplate[] = [
     icon: Timer,
     description: "25, 5, 15, 30 min",
     presets: [{ minutes: 25 }, { minutes: 5 }, { minutes: 15 }, { minutes: 30 }],
-    color: "red",
   },
   {
     name: "Study",
     icon: BookOpen,
     description: "45, 10, 60, 90 min",
     presets: [{ minutes: 45 }, { minutes: 10 }, { minutes: 60 }, { minutes: 90 }],
-    color: "green",
   },
   {
     name: "Exercise",
     icon: Dumbbell,
     description: "1, 3, 5, 10 min",
     presets: [{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }],
-    color: "purple",
   },
   {
     name: "Breaks",
     icon: Coffee,
     description: "1, 3, 5, 10 min",
     presets: [{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }],
-    color: "yellow",
   },
   {
     name: "Meditation",
     icon: Brain,
     description: "2, 5, 10, 20 min",
     presets: [{ minutes: 2 }, { minutes: 5 }, { minutes: 10 }, { minutes: 20 }],
-    color: "pink",
   },
   {
     name: "Meetings",
     icon: Briefcase,
     description: "15, 30, 45, 60 min",
     presets: [{ minutes: 15 }, { minutes: 30 }, { minutes: 45 }, { minutes: 60 }],
-    color: "orange",
   },
 ];
 
@@ -80,15 +73,6 @@ export function PresetTimerEditor({ presets, onChange }: PresetTimerEditorProps)
     onChange([{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }]);
   };
 
-  const colorClasses = {
-    red: "hover:bg-red-50 hover:border-red-300",
-    green: "hover:bg-green-50 hover:border-green-300",
-    purple: "hover:bg-purple-50 hover:border-purple-300",
-    yellow: "hover:bg-yellow-50 hover:border-yellow-300",
-    pink: "hover:bg-pink-50 hover:border-pink-300",
-    orange: "hover:bg-orange-50 hover:border-orange-300",
-  };
-
   return (
     <div className="space-y-6">
       {/* Quick Templates */}
@@ -100,13 +84,17 @@ export function PresetTimerEditor({ presets, onChange }: PresetTimerEditorProps)
             <button
               key={template.name}
               onClick={() => applyTemplate(template)}
-              className={`p-3 border rounded-lg transition-colors ${colorClasses[template.color as keyof typeof colorClasses]}`}
+              className="relative flex cursor-pointer rounded-lg border bg-background p-4 transition-all duration-200 hover:bg-accent/50 hover:shadow-md"
             >
-              <div className="font-medium mb-1 flex items-center gap-2">
-                <template.icon className="h-4 w-4" />
-                <span>{template.name}</span>
+              <div className="flex w-full items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 text-primary">
+                  <template.icon className="h-4 w-4" />
+                </div>
+                <div className="flex-1 text-left">
+                  <p className="font-medium">{template.name}</p>
+                  <p className="text-xs text-muted-foreground">{template.description}</p>
+                </div>
               </div>
-              <div className="text-xs text-muted-foreground">{template.description}</div>
             </button>
           ))}
         </div>
