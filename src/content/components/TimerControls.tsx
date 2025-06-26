@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Maximize, Minimize, Pause, Play, RotateCw, Settings as SettingsIcon, Volume2, VolumeX, X } from "lucide-react";
+import { Maximize, Minimize, Pause, Play, RotateCw, Volume2, VolumeX, X } from "lucide-react";
 import { memo } from "react";
 
 interface TimerControlsProps {
@@ -11,7 +11,6 @@ interface TimerControlsProps {
   onPause: () => void;
   onReset: () => void;
   onToggleSound: () => void;
-  onShowSettings: () => void;
   onToggleFullscreen: () => void;
   onClose: () => void;
 }
@@ -25,7 +24,6 @@ const TimerControls = memo(
     onPause,
     onReset,
     onToggleSound,
-    onShowSettings,
     onToggleFullscreen,
     onClose,
   }: TimerControlsProps) => {
@@ -58,14 +56,6 @@ const TimerControls = memo(
           className={cn("rounded-full", soundEnabled ? "" : "text-destructive", isFullscreen && "scale-150")}
         >
           {soundEnabled ? <Volume2 className="h-12 w-12" /> : <VolumeX className="h-12 w-12" />}
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onShowSettings}
-          className={cn("rounded-full", isFullscreen && "scale-150")}
-        >
-          <SettingsIcon className="h-12 w-12" />
         </Button>
         <Button
           variant="ghost"
