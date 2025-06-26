@@ -18,7 +18,32 @@ We use Calendar Versioning (CalVer) with the format: **vYYYY.MM.VER**
 
 ## Release Steps
 
-### 1. Update package.json version
+### 1. Update CHANGELOG.md
+
+Update the CHANGELOG.md file with the changes for the new release:
+
+1. Move items from `[Unreleased]` section to the new version section
+2. Add the version number and release date
+3. Categorize changes using Keep a Changelog format:
+   - **Added** for new features
+   - **Changed** for changes in existing functionality
+   - **Deprecated** for soon-to-be removed features
+   - **Removed** for now removed features
+   - **Fixed** for bug fixes
+   - **Security** for vulnerability fixes
+
+Example:
+```markdown
+## [2025.01.1] - 2025-01-15
+
+### Added
+- New timer sound options
+
+### Fixed
+- Timer display issue on certain websites
+```
+
+### 2. Update package.json version
 
 Update the version field in `package.json` to the new CalVer format.
 
@@ -30,25 +55,25 @@ Update the version field in `package.json` to the new CalVer format.
 
 ※ Notice: The version in `package.json` must match the git tag (without the 'v' prefix).
 
-### 2. Commit version update
+### 3. Commit version update
 
 Have the user run the following command (required for GPG signing):
 
 ```bash
-git add package.json && git commit -m "chore: bump version to 2025.01.1"
+git add package.json CHANGELOG.md && git commit -m "chore: bump version to 2025.01.1"
 ```
 
-### 3. Create and push tag
+### 4. Create and push tag
 
 The tag should have a `v` prefix.
 
 ```bash
 git push origin main
-git tag v2025.01.1
+git tag v2025.01.1 -m ''
 git push origin v2025.01.1
 ```
 
-### 4. Wait for GitHub Actions
+### 5. Wait for GitHub Actions
 
 The GitHub Actions workflow will automatically:
 
@@ -58,11 +83,11 @@ The GitHub Actions workflow will automatically:
 
 Monitor the build progress at the [Actions tab](../../actions).
 
-### 5. Download extension from GitHub Releases
+### 6. Download extension from GitHub Releases
 
 Once the build completes, download `snack-time-vYYYY.MM.VER.zip` from the created release.
 
-### 6. Upload to Chrome Web Store
+### 7. Upload to Chrome Web Store
 
 1. Go to [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/developer/dashboard)
 2. Find the Snack Time extension
