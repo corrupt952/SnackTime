@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-@custom-variant dark (&.dark, .dark &);
-
 @theme {
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
@@ -91,7 +89,8 @@
 }
 
 @layer base {
-  :root {
+  :root,
+  :host {
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
