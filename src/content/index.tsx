@@ -4,7 +4,7 @@ import { ColorScheme } from "@/types/enums/ColorScheme";
 import { NotificationType } from "@/types/enums/NotificationType";
 import React from "react";
 import { createRoot } from "react-dom/client";
-import Content from "./Content";
+import Timer from "./Timer";
 
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   sendResponse("Received");
@@ -118,7 +118,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   createRoot(shadowContainer).render(
     <React.StrictMode>
       <style>{styles}</style>
-      <Content
+      <Timer
         initialTime={duration}
         close={deleteRoot}
         soundEnabled={settings.notificationType === NotificationType.Alarm}
