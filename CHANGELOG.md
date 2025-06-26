@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [2025.06.4] - 2025-06-28
+
+### Fixed
+
+- Restored essential styles to prevent host page inheritance, ensuring consistent timer display across different websites
+
 ## [2025.06.3] - 2025-06-27
 
 ### Changed
