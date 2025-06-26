@@ -29,6 +29,13 @@ const Popup = () => {
   }, []);
 
   useEffect(() => {
+    // Remove all existing theme classes first
+    document.documentElement.classList.remove("dark", "light");
+    Object.values(ColorScheme).forEach((scheme) => {
+      document.documentElement.classList.remove(scheme);
+    });
+
+    // Then apply the appropriate theme
     if (colorScheme === ColorScheme.System || !colorScheme) {
       const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
       document.documentElement.classList.add(isDarkMode ? "dark" : "light");
