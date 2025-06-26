@@ -205,7 +205,7 @@ const Timer = ({
     <Card
       ref={cardRef}
       className={cn(
-        "flex items-center relative overflow-hidden px-8 py-6 rounded-none bg-background",
+        "flex items-center relative overflow-hidden px-8 py-6 border-2 bg-background",
         isFullscreen && "w-screen h-screen justify-center",
       )}
     >
