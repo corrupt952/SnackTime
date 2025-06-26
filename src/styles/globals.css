@@ -1,5 +1,21 @@
 @import "tailwindcss";
 
+/* Tailwind v4 custom utility for destructive color */
+@layer utilities {
+  .text-destructive {
+    color: var(--color-destructive);
+  }
+  .text-destructive-foreground {
+    color: var(--color-destructive-foreground);
+  }
+  .bg-destructive {
+    background-color: var(--color-destructive);
+  }
+  .bg-destructive\/90 {
+    background-color: color-mix(in srgb, var(--color-destructive) 90%, transparent);
+  }
+}
+
 /**
  * Theme Layer - Default CSS Custom Properties
  *

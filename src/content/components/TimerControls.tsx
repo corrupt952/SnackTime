@@ -36,8 +36,8 @@ const TimerControls = memo(
           size="icon"
           onClick={isRunning ? onPause : onStart}
           className={cn(
-            "text-white rounded-full",
-            isRunning ? "bg-yellow-500 hover:bg-yellow-600" : "bg-green-500 hover:bg-green-600",
+            "rounded-full",
+            isRunning ? "bg-accent hover:bg-accent/90 text-accent-foreground" : "bg-primary hover:bg-primary/90 text-primary-foreground",
             isFullscreen && "scale-150",
           )}
         >
@@ -55,7 +55,7 @@ const TimerControls = memo(
           variant="ghost"
           size="icon"
           onClick={onToggleSound}
-          className={cn("rounded-full", soundEnabled ? "" : "text-red-500", isFullscreen && "scale-150")}
+          className={cn("rounded-full", soundEnabled ? "" : "text-destructive", isFullscreen && "scale-150")}
         >
           {soundEnabled ? <Volume2 className="h-12 w-12" /> : <VolumeX className="h-12 w-12" />}
         </Button>
@@ -79,7 +79,7 @@ const TimerControls = memo(
           variant="ghost"
           size="icon"
           onClick={onClose}
-          className={cn("text-red-500 rounded-full", isFullscreen && "scale-150")}
+          className={cn("text-destructive rounded-full", isFullscreen && "scale-150")}
         >
           <X size={64} />
         </Button>
