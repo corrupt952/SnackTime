@@ -1,26 +1,26 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { Slider } from './slider';
-import { Label } from './label';
+import type { Meta, StoryObj } from "@storybook/react";
+import { Slider } from "./slider";
+import { Label } from "./label";
 
 const meta: Meta<typeof Slider> = {
-  title: 'UI/Slider',
+  title: "UI/Slider",
   component: Slider,
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
     defaultValue: {
-      control: { type: 'array' },
+      control: { type: "array" },
     },
     max: {
-      control: { type: 'number' },
+      control: { type: "number" },
     },
     step: {
-      control: { type: 'number' },
+      control: { type: "number" },
     },
     disabled: {
-      control: { type: 'boolean' },
+      control: { type: "boolean" },
     },
   },
   decorators: [
@@ -41,13 +41,7 @@ export const VolumeSlider: Story = {
       <Label htmlFor="volume" className="text-sm font-medium">
         Volume
       </Label>
-      <Slider 
-        id="volume"
-        defaultValue={[10]} 
-        max={100} 
-        step={1}
-        className="w-full"
-      />
+      <Slider id="volume" defaultValue={[10]} max={100} step={1} className="w-full" />
     </div>
   ),
 };
@@ -58,13 +52,7 @@ export const VolumeAt50: Story = {
       <Label htmlFor="volume" className="text-sm font-medium">
         Volume
       </Label>
-      <Slider 
-        id="volume"
-        defaultValue={[50]} 
-        max={100} 
-        step={1}
-        className="w-full"
-      />
+      <Slider id="volume" defaultValue={[50]} max={100} step={1} className="w-full" />
     </div>
   ),
 };
@@ -75,13 +63,7 @@ export const VolumeMuted: Story = {
       <Label htmlFor="volume" className="text-sm font-medium">
         Volume
       </Label>
-      <Slider 
-        id="volume"
-        defaultValue={[0]} 
-        max={100} 
-        step={1}
-        className="w-full"
-      />
+      <Slider id="volume" defaultValue={[0]} max={100} step={1} className="w-full" />
     </div>
   ),
 };

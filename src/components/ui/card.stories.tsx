@@ -1,14 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from './card';
-import { Button } from './button';
+import type { Meta, StoryObj } from "@storybook/react";
+import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from "./card";
+import { Button } from "./button";
 
 const meta: Meta<typeof Card> = {
-  title: 'UI/Card',
+  title: "UI/Card",
   component: Card,
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   decorators: [
     (Story) => (
       <div className="w-[350px]">
@@ -46,7 +46,11 @@ export const ModalStyle: Story = {
       </CardHeader>
       <CardContent>
         <div className="grid gap-4">
-          <input type="text" placeholder="5:00" className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs" />
+          <input
+            type="text"
+            placeholder="5:00"
+            className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs"
+          />
         </div>
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
@@ -64,8 +68,12 @@ export const TimerContainer: Story = {
         <div className="text-center">
           <div className="text-6xl font-bold font-mono">5:00</div>
           <div className="mt-4 flex gap-2 justify-center">
-            <Button variant="ghost" size="icon">▶️</Button>
-            <Button variant="outline" size="icon">↻</Button>
+            <Button variant="ghost" size="icon">
+              ▶️
+            </Button>
+            <Button variant="outline" size="icon">
+              ↻
+            </Button>
           </div>
         </div>
       </CardContent>

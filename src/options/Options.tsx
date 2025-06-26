@@ -1,67 +1,61 @@
-import { Coffee, Volume2 } from "lucide-react";
-import { useEffect, useState, useRef } from "react";
+import { Coffee, Volume2, Palette, Bell, Settings2, Sparkles, Moon, Sun, Monitor, Timer } from "lucide-react";
+import { useEffect, useState } from "react";
 import { NotificationType } from "@/types/enums/NotificationType";
-import { ExtensionSettings, Settings, AlarmSound } from "@/domain/settings/models/settings";
+import { ExtensionSettings, Settings, AlarmSound, TimerPosition, PresetTimer } from "@/domain/settings/models/settings";
 import { ColorScheme } from "@/types/enums/ColorScheme";
 import "@/styles/globals.css";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { RadioGroup } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { PageHeader } from "@/components/ui/page-header";
+import { SidebarNavigation, type SidebarNavigationItem } from "@/components/ui/sidebar-navigation";
+import { SettingsSection } from "@/components/ui/settings-section";
+import { RadioCard } from "@/components/ui/radio-card";
+import { VolumeControl } from "@/components/ui/volume-control";
+import { useSettingsSync } from "@/lib/hooks/use-settings-sync";
+import { useAudioPlayback } from "@/lib/hooks/use-audio-playback";
+import TimerCardPreview from "./components/TimerCardPreview";
+import { TimerPositionSelector } from "./components/TimerPositionSelector";
+import { PresetTimerEditor } from "./components/PresetTimerEditor";
 
 const Options = () => {
   const [notificationType, setNotificationType] = useState<NotificationType>(NotificationType.Alarm);
   const [colorScheme, setColorScheme] = useState<ColorScheme>(ColorScheme.System);
   const [alarmSound, setAlarmSound] = useState<AlarmSound>("Simple");
   const [volume, setVolume] = useState<number>(0.1);
+  const [applyThemeToSettings, setApplyThemeToSettings] = useState<boolean>(false);
+  const [timerPosition, setTimerPosition] = useState<TimerPosition>("top-right");
+  const [presetTimers, setPresetTimers] = useState<PresetTimer[]>([
+    { minutes: 1 },
+    { minutes: 3 },
+    { minutes: 5 },
+    { minutes: 10 },
+  ]);
   const [settings, setSettings] = useState<ExtensionSettings>({
     colorScheme: ColorScheme.System,
     notificationType: NotificationType.Alarm,
     alarmSound: "Simple",
     volume: 0.1,
+    applyThemeToSettings: false,
+    timerPosition: "top-right",
+    presetTimers: [{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }],
   });
 
-  const audioContext = useRef<AudioContext | null>(null);
-  const audioBuffer = useRef<AudioBuffer | null>(null);
-  const gainNode = useRef<GainNode | null>(null);
+  const { playSound } = useAudioPlayback(alarmSound, volume);
 
-  const playSound = async () => {
-    try {
-      if (!audioContext.current) {
-        audioContext.current = new (window.AudioContext || (window as any).webkitAudioContext)();
-        gainNode.current = audioContext.current.createGain();
-        gainNode.current.connect(audioContext.current.destination);
-      }
-
-      if (!audioBuffer.current) {
-        const response = await fetch(chrome.runtime.getURL(`sounds/${alarmSound}.wav`));
-        const arrayBuffer = await response.arrayBuffer();
-        audioBuffer.current = await audioContext.current.decodeAudioData(arrayBuffer);
-      }
-
-      await audioContext.current.resume();
-      const source = audioContext.current.createBufferSource();
-      source.buffer = audioBuffer.current;
-      if (gainNode.current) {
-        gainNode.current.gain.value = volume;
-        source.connect(gainNode.current);
-      }
-      source.start();
-    } catch (error) {
-      console.error("Error playing sound:", error);
-    }
-  };
-
-  // Reset audio buffer when alarm sound changes
-  useEffect(() => {
-    audioBuffer.current = null;
-  }, [alarmSound]);
+  const navigationItems: SidebarNavigationItem[] = [
+    { href: "#general", label: "General", icon: Settings2 },
+    { href: "#appearance", label: "Appearance", icon: Palette },
+    { href: "#notification", label: "Notification", icon: Bell },
+  ];
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      document.documentElement.classList.add("dark");
-    }
+    document.documentElement.classList.remove("dark");
+    Object.values(ColorScheme).forEach((scheme) => {
+      document.documentElement.classList.remove(scheme);
+    });
+    document.documentElement.classList.add("light");
 
     Settings.get().then((settings) => {
       setSettings(settings);
@@ -69,147 +63,218 @@ const Options = () => {
       setColorScheme(settings.colorScheme);
       setAlarmSound(settings.alarmSound);
       setVolume(settings.volume);
+      setApplyThemeToSettings(settings.applyThemeToSettings);
+      setTimerPosition(settings.timerPosition);
+      setPresetTimers(settings.presetTimers);
     });
   }, []);
 
-  useEffect(() => {
-    Settings.set({ notificationType });
-  }, [notificationType]);
+  // Use custom hooks for settings synchronization
+  useSettingsSync("notificationType", notificationType);
+  useSettingsSync("alarmSound", alarmSound);
+  useSettingsSync("colorScheme", colorScheme);
+  useSettingsSync("volume", volume);
+  useSettingsSync("applyThemeToSettings", applyThemeToSettings);
+  useSettingsSync("timerPosition", timerPosition);
+  useSettingsSync("presetTimers", presetTimers);
 
   useEffect(() => {
-    Settings.set({ alarmSound });
-  }, [alarmSound]);
+    if (applyThemeToSettings) {
+      Object.values(ColorScheme).forEach((scheme) => {
+        document.documentElement.classList.remove(scheme);
+      });
 
-  useEffect(() => {
-    Settings.set({ colorScheme });
-
-    // 全てのカラースキームのクラスを一旦削除
-    Object.values(ColorScheme).forEach((scheme) => {
-      document.documentElement.classList.remove(scheme);
-    });
-
-    if (colorScheme === ColorScheme.System) {
-      // システムの設定に従う
-      const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      document.documentElement.classList.add(isDarkMode ? ColorScheme.Dark : ColorScheme.Light);
+      if (colorScheme === ColorScheme.System) {
+        const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.classList.add(isDarkMode ? ColorScheme.Dark : ColorScheme.Light);
+      } else {
+        document.documentElement.classList.add(colorScheme);
+      }
     } else {
-      // 選択されたカラースキームを適用
-      document.documentElement.classList.add(colorScheme);
+      // Reset to light theme when disabled
+      Object.values(ColorScheme).forEach((scheme) => {
+        document.documentElement.classList.remove(scheme);
+      });
+      document.documentElement.classList.add("light");
     }
-  }, [colorScheme]);
+  }, [colorScheme, applyThemeToSettings]);
 
-  useEffect(() => {
-    Settings.set({ volume });
-  }, [volume]);
+  const getColorSchemeIcon = (scheme: ColorScheme) => {
+    switch (scheme) {
+      case ColorScheme.Light:
+        return Sun;
+      case ColorScheme.Dark:
+        return Moon;
+      case ColorScheme.System:
+        return Monitor;
+      default:
+        return Sparkles;
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="w-full h-14 bg-primary/80 text-primary-foreground px-3 flex items-center">
-        <div className="flex items-center gap-2">
-          <Coffee className="h-8 w-8" />
-          <span className="text-lg font-semibold">Snack Time</span>
-        </div>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted/20">
+      <PageHeader icon={Coffee} title="Snack Time" subtitle="Timer Extension Settings" showPulse />
 
-      <div className="container mx-auto mt-8">
-        <div className="space-y-12">
-          <section>
-            <h2 className="text-2xl font-bold text-foreground">General</h2>
-            <Separator className="my-4" />
-            <div>
-              <h3 className="text-lg font-semibold text-foreground">Coming soon...</h3>
-            </div>
-          </section>
+      <div className="container mx-auto mt-8 pb-12">
+        <div className="grid gap-6 lg:grid-cols-4">
+          <aside className="lg:col-span-1">
+            <SidebarNavigation items={navigationItems} />
+          </aside>
 
-          <section>
-            <h2 className="text-2xl font-bold text-foreground">Appearance</h2>
-            <Separator className="my-4" />
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-foreground">Color Scheme</h3>
-              <RadioGroup
-                value={colorScheme}
-                onValueChange={(value) => setColorScheme(value as ColorScheme)}
-                className="flex gap-8"
-              >
-                {Object.values(ColorScheme).map((value) => (
-                  <div key={value} className="flex items-center space-x-2">
-                    <RadioGroupItem value={value} id={`color-scheme-${value}`} />
-                    <Label htmlFor={`color-scheme-${value}`} className="text-foreground">
-                      {Object.keys(ColorScheme)[Object.values(ColorScheme).indexOf(value)]}
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
-            </div>
-          </section>
+          <main className="lg:col-span-3 space-y-6">
+            <SettingsSection id="general" icon={Settings2} title="General Settings">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-base font-semibold text-foreground mb-2">Timer Position</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Choose where the timer appears on web pages. You can still drag it to any position after it appears.
+                  </p>
+                  <TimerPositionSelector value={timerPosition} onChange={(value) => setTimerPosition(value)} />
+                </div>
 
-          <section>
-            <h2 className="text-2xl font-bold text-foreground">Notification</h2>
-            <Separator className="my-4" />
-            <div className="space-y-8">
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-foreground">Notification Type</h3>
-                <RadioGroup
-                  value={notificationType}
-                  onValueChange={(value) => setNotificationType(value as NotificationType)}
-                  className="flex gap-8"
-                >
-                  {Object.values(NotificationType).map((value) => (
-                    <div key={value} className="flex items-center space-x-2">
-                      <RadioGroupItem value={value} id={`notification-type-${value}`} />
-                      <Label htmlFor={`notification-type-${value}`} className="text-foreground">
-                        {Object.keys(NotificationType)[Object.values(NotificationType).indexOf(value)]}
-                      </Label>
-                    </div>
-                  ))}
-                </RadioGroup>
+                <div>
+                  <h3 className="text-base font-semibold text-foreground mb-2">Preset Timers</h3>
+                  <PresetTimerEditor presets={presetTimers} onChange={setPresetTimers} />
+                </div>
               </div>
+            </SettingsSection>
 
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-foreground">Alarm Sound</h3>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={playSound}
-                    className="rounded-full"
-                    title="Play selected sound"
+            <SettingsSection id="appearance" icon={Palette} title="Appearance">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-base font-semibold text-foreground mb-4">Color Scheme</h3>
+                  <RadioGroup
+                    value={colorScheme}
+                    onValueChange={(value) => setColorScheme(value as ColorScheme)}
+                    className="grid grid-cols-1 sm:grid-cols-3 gap-3"
                   >
-                    <Volume2 className="h-4 w-4" />
-                  </Button>
+                    {Object.entries(ColorScheme).map(([key, value]) => (
+                      <RadioCard
+                        key={value}
+                        id={`color-scheme-${value}`}
+                        value={value}
+                        title={key}
+                        description={
+                          value === ColorScheme.System
+                            ? "Match system preference"
+                            : value === ColorScheme.Light
+                              ? "Always light theme"
+                              : value === ColorScheme.Dark
+                                ? "Always dark theme"
+                                : value === ColorScheme.Lemon
+                                  ? "Bright yellow theme"
+                                  : value === ColorScheme.Mint
+                                    ? "Fresh mint theme"
+                                    : value === ColorScheme.Rose
+                                      ? "Soft rose theme"
+                                      : ""
+                        }
+                        icon={getColorSchemeIcon(value)}
+                        isSelected={colorScheme === value}
+                      />
+                    ))}
+                  </RadioGroup>
                 </div>
-                <RadioGroup
-                  value={alarmSound}
-                  onValueChange={(value) => setAlarmSound(value as AlarmSound)}
-                  className="flex gap-8"
-                >
-                  {["Simple", "Piano", "Vibraphone", "SteelDrums"].map((value) => (
-                    <div key={value} className="flex items-center space-x-2">
-                      <RadioGroupItem value={value} id={`alarm-sound-${value}`} />
-                      <Label htmlFor={`alarm-sound-${value}`} className="text-foreground">
-                        {value}
-                      </Label>
-                    </div>
-                  ))}
-                </RadioGroup>
-              </div>
+                <div className="rounded-lg bg-muted/30 p-4">
+                  <h4 className="text-sm font-medium mb-3">Preview</h4>
+                  <TimerCardPreview colorScheme={colorScheme} />
+                </div>
 
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-foreground">Volume</h3>
-                <div className="flex items-center gap-8">
-                  <div className="flex-1">
-                    <Slider
-                      value={[volume * 100]}
-                      onValueChange={(value) => setVolume(value[0] / 100)}
-                      max={100}
-                      step={1}
-                    />
+                <div className="flex items-center justify-between p-4 rounded-lg border bg-muted/10">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="apply-theme-to-settings" className="text-base font-medium cursor-pointer">
+                      Apply to this page
+                    </Label>
+                    <p className="text-xs text-muted-foreground">Use selected theme for the settings page</p>
                   </div>
-                  <div className="w-12 text-right">{Math.round(volume * 100)}%</div>
+                  <Switch
+                    id="apply-theme-to-settings"
+                    checked={applyThemeToSettings}
+                    onCheckedChange={setApplyThemeToSettings}
+                  />
                 </div>
               </div>
-            </div>
-          </section>
+            </SettingsSection>
+
+            <SettingsSection id="notification" icon={Bell} title="Notification">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-base font-semibold text-foreground mb-4">Notification Type</h3>
+                  <RadioGroup
+                    value={notificationType}
+                    onValueChange={(value) => setNotificationType(value as NotificationType)}
+                    className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+                  >
+                    {Object.entries(NotificationType).map(([key, value]) => (
+                      <RadioCard
+                        key={value}
+                        id={`notification-type-${value}`}
+                        value={value}
+                        title={key}
+                        description={
+                          value === NotificationType.Alarm
+                            ? "Play sound notification"
+                            : value === NotificationType.None
+                              ? "Silent mode"
+                              : ""
+                        }
+                        icon={Bell}
+                        isSelected={notificationType === value}
+                      />
+                    ))}
+                  </RadioGroup>
+                </div>
+
+                <div
+                  className={`space-y-4 transition-opacity duration-300 ${notificationType === NotificationType.None ? "opacity-50 pointer-events-none" : ""}`}
+                >
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-base font-semibold text-foreground">Alarm Sound</h3>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={playSound}
+                      className="gap-2"
+                      title="Play selected sound"
+                      disabled={notificationType === NotificationType.None}
+                    >
+                      <Volume2 className="h-4 w-4" />
+                      <span className="text-xs">Preview</span>
+                    </Button>
+                  </div>
+                  <RadioGroup
+                    value={alarmSound}
+                    onValueChange={(value) => setAlarmSound(value as AlarmSound)}
+                    className="grid grid-cols-2 gap-3"
+                  >
+                    {["Simple", "Piano", "Vibraphone", "SteelDrums"].map((value) => (
+                      <RadioCard
+                        key={value}
+                        id={`alarm-sound-${value}`}
+                        value={value}
+                        title={value}
+                        icon={Volume2}
+                        isSelected={alarmSound === value}
+                        className="p-3"
+                      />
+                    ))}
+                  </RadioGroup>
+                </div>
+
+                <div
+                  className={`space-y-4 transition-opacity duration-300 ${notificationType === NotificationType.None ? "opacity-50 pointer-events-none" : ""}`}
+                >
+                  <h3 className="text-base font-semibold text-foreground">Volume</h3>
+                  <VolumeControl
+                    value={volume}
+                    onValueChange={setVolume}
+                    disabled={notificationType === NotificationType.None}
+                  />
+                </div>
+              </div>
+            </SettingsSection>
+          </main>
         </div>
       </div>
     </div>

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import "@/styles/globals.css";
-import { Settings } from "@/domain/settings/models/settings";
+import { Settings, PresetTimer } from "@/domain/settings/models/settings";
 import { ColorScheme } from "@/types/enums/ColorScheme";
 import { timerService } from "./services/timer";
 import { TimeInputModal } from "./components/TimeInputModal";
@@ -13,7 +13,7 @@ import { CustomDurationModal } from "./components/CustomDurationModal";
 import { TimerListItem } from "./components/TimerListItem";
 
 const Popup = () => {
-  const presets = [new Duration(60), new Duration(180), new Duration(300), new Duration(600)];
+  const [presets, setPresets] = useState<PresetTimer[]>([]);
   const [histories, setHistories] = useState<History[]>([]);
   const [colorScheme, setColorScheme] = useState<ColorScheme | null>(null);
   const [showTimeInput, setShowTimeInput] = useState(false);
@@ -24,10 +24,18 @@ const Popup = () => {
 
     Settings.get().then((settings) => {
       setColorScheme(settings.colorScheme);
+      setPresets(settings.presetTimers);
     });
   }, []);
 
   useEffect(() => {
+    // Remove all existing theme classes first
+    document.documentElement.classList.remove("dark", "light");
+    Object.values(ColorScheme).forEach((scheme) => {
+      document.documentElement.classList.remove(scheme);
+    });
+
+    // Then apply the appropriate theme
     if (colorScheme === ColorScheme.System || !colorScheme) {
       const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
       document.documentElement.classList.add(isDarkMode ? "dark" : "light");
@@ -64,9 +72,10 @@ const Popup = () => {
         <Card className="flex-1 rounded-none border-0">
           <div className="text-center py-2 font-medium text-sm text-muted-foreground">Presets</div>
           <div className="space-y-1">
-            {presets.map((duration, index) => (
-              <TimerListItem key={index} duration={duration} onStart={() => timerService.start(duration)} />
-            ))}
+            {presets.map((preset, index) => {
+              const duration = new Duration(preset.minutes * 60);
+              return <TimerListItem key={index} duration={duration} onStart={() => timerService.start(duration)} />;
+            })}
             <Button variant="ghost" className="w-full justify-end" onClick={() => setShowCustomDuration(true)}>
               ⚡Custom
             </Button>

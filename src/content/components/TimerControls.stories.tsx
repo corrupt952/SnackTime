@@ -1,18 +1,18 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { action } from 'storybook/actions';
-import TimerControls from './TimerControls';
+import type { Meta, StoryObj } from "@storybook/react";
+import { action } from "storybook/actions";
+import TimerControls from "./TimerControls";
 
 const meta: Meta<typeof TimerControls> = {
-  title: 'Timer/TimerControls',
+  title: "Timer/TimerControls",
   component: TimerControls,
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
-    isRunning: { control: 'boolean' },
-    isFullscreen: { control: 'boolean' },
-    soundEnabled: { control: 'boolean' },
+    isRunning: { control: "boolean" },
+    isFullscreen: { control: "boolean" },
+    soundEnabled: { control: "boolean" },
   },
 };
 
@@ -20,13 +20,13 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const defaultArgs = {
-  onStart: action('onStart'),
-  onPause: action('onPause'),
-  onReset: action('onReset'),
-  onToggleSound: action('onToggleSound'),
-  onShowSettings: action('onShowSettings'),
-  onToggleFullscreen: action('onToggleFullscreen'),
-  onClose: action('onClose'),
+  onStart: action("onStart"),
+  onPause: action("onPause"),
+  onReset: action("onReset"),
+  onToggleSound: action("onToggleSound"),
+  onShowSettings: action("onShowSettings"),
+  onToggleFullscreen: action("onToggleFullscreen"),
+  onClose: action("onClose"),
 };
 
 export const Default: Story = {
@@ -73,7 +73,7 @@ export const Fullscreen: Story = {
     soundEnabled: true,
   },
   parameters: {
-    layout: 'fullscreen',
+    layout: "fullscreen",
   },
 };
 
@@ -85,7 +85,7 @@ export const FullscreenPaused: Story = {
     soundEnabled: true,
   },
   parameters: {
-    layout: 'fullscreen',
+    layout: "fullscreen",
   },
 };
 
@@ -97,6 +97,6 @@ export const FullscreenSoundDisabled: Story = {
     soundEnabled: false,
   },
   parameters: {
-    layout: 'fullscreen',
+    layout: "fullscreen",
   },
 };

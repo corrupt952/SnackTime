@@ -3,6 +3,7 @@ import { resolve } from "path";
 import { crx, defineManifest } from "@crxjs/vite-plugin";
 import react from "@vitejs/plugin-react";
 import { version } from "./package.json";
+import tailwindcss from "@tailwindcss/vite";
 
 const OUTPUT_DIR = process.env.OUTPUT_DIR || "dist";
 
@@ -41,10 +42,17 @@ const manifest = defineManifest(async (env) => ({
 // - CRX plugin must be disabled as it conflicts with Storybook's build process
 // - root/publicDir settings must be undefined to use Vite's defaults
 // This is controlled by the STORYBOOK_BUILD environment variable set in package.json
-const isStorybook = process.env.STORYBOOK_BUILD === 'true';
+const isStorybook = process.env.STORYBOOK_BUILD === "true";
 
 export default defineConfig({
-  plugins: isStorybook ? [react()] : [react(), crx({ manifest })],
+  plugins: [
+    // Vite plugin for React
+    react(),
+    // Conditionally include CRX plugin for Chrome extension support
+    ...(isStorybook ? [] : [crx({ manifest })]),
+    // Tailwind CSS plugin for styling
+    tailwindcss(),
+  ],
   // @see https://github.com/crxjs/chrome-extension-tools/issues/696
   server: {
     port: 5173,
