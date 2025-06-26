@@ -44,6 +44,14 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
       contentRoot.style.right = "10px";
   }
   contentRoot.style.zIndex = "calc(infinity)";
+  // NOTE: These styles are essential to prevent inheritance from host page styles
+  // fontSize ensures consistent timer size regardless of host page's font-size
+  contentRoot.style.fontSize = "2rem";
+  // Grid layout is required for proper timer structure
+  contentRoot.style.display = "grid";
+  contentRoot.style.gridTemplateRows = "1fr auto";
+  // Explicit font-family prevents unexpected font inheritance
+  contentRoot.style.fontFamily = "Arial, sans-serif";
   contentRoot.style.pointerEvents = "auto";
   document.body.append(contentRoot);
 
