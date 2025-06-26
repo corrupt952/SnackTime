@@ -36,7 +36,7 @@ const TimerCardPreview = memo(({ className, colorScheme }: TimerCardPreviewProps
 
           {/* Timer card with shadow to simulate floating */}
           <div className={cn("relative z-10", effectiveTheme)}>
-            <Card className="flex items-center relative overflow-hidden px-8 py-6 rounded-none shadow-2xl border-2">
+            <Card className="flex items-center relative overflow-hidden px-8 py-6 shadow-2xl border-2 bg-background">
               <div className="flex flex-col items-center justify-center w-full space-y-4">
                 <div className="font-bold font-mono text-center text-6xl">15:00</div>
 
@@ -49,7 +49,6 @@ const TimerCardPreview = memo(({ className, colorScheme }: TimerCardPreviewProps
                     onPause={() => {}}
                     onReset={() => {}}
                     onToggleSound={() => {}}
-                    onShowSettings={() => {}}
                     onToggleFullscreen={() => {}}
                     onClose={() => {}}
                   />

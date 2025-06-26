@@ -4,7 +4,6 @@ import { cn } from "@/lib/utils";
 import { useCallback, useEffect, useRef, useState } from "react";
 import TimerControls from "./components/TimerControls";
 import TimerDisplay from "./components/TimerDisplay";
-import TimerSettings from "./components/TimerSettings";
 
 class Alarm {
   private readonly audioContext: AudioContext;
@@ -82,7 +81,6 @@ const Timer = ({
 }) => {
   const [totalSeconds, setTotalSeconds] = useState(initialTime);
   const [isRunning, setIsRunning] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(initialSoundEnabled);
 
@@ -205,12 +203,11 @@ const Timer = ({
     <Card
       ref={cardRef}
       className={cn(
-        "flex items-center relative overflow-hidden px-8 py-6 rounded-none",
+        "flex items-center relative overflow-hidden px-8 py-6 border-2 bg-background",
         isFullscreen && "w-screen h-screen justify-center",
       )}
     >
-      <div className={cn(!showSettings ? "block" : "hidden", "transition-all duration-500 ease-in-out")}>
-        <div className="flex flex-col items-center justify-center w-full space-y-4">
+      <div className="flex flex-col items-center justify-center w-full space-y-4">
           <TimerDisplay totalSeconds={totalSeconds} isFullscreen={isFullscreen} />
           <TimerControls
             isRunning={isRunning}
@@ -220,19 +217,9 @@ const Timer = ({
             onPause={pauseTimer}
             onReset={resetTimer}
             onToggleSound={() => setSoundEnabled((prev) => !prev)}
-            onShowSettings={() => setShowSettings(true)}
             onToggleFullscreen={toggleFullscreen}
             onClose={closeTimer}
           />
-        </div>
-      </div>
-
-      <div className={cn(showSettings ? "block" : "hidden", "transition-all duration-500 ease-in-out")}>
-        <TimerSettings
-          soundEnabled={soundEnabled}
-          onToggleSound={setSoundEnabled}
-          onBack={() => setShowSettings(false)}
-        />
       </div>
     </Card>
   );

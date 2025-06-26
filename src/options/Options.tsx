@@ -1,4 +1,4 @@
-import { Coffee, Volume2, Palette, Bell, Settings2, Sparkles, Moon, Sun, Monitor, Timer } from "lucide-react";
+import { Coffee, Volume2, Palette, Bell, Settings2, Sparkles, Moon, Sun, Monitor, Timer, Citrus, Leaf, Flower } from "lucide-react";
 import { useEffect, useState } from "react";
 import { NotificationType } from "@/types/enums/NotificationType";
 import { ExtensionSettings, Settings, AlarmSound, TimerPosition, PresetTimer } from "@/domain/settings/models/settings";
@@ -107,6 +107,12 @@ const Options = () => {
         return Moon;
       case ColorScheme.System:
         return Monitor;
+      case ColorScheme.Lemon:
+        return Citrus;
+      case ColorScheme.Mint:
+        return Leaf;
+      case ColorScheme.Rose:
+        return Flower;
       default:
         return Sparkles;
     }
