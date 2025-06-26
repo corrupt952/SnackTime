@@ -1,7 +1,7 @@
 import { PresetTimer } from "@/domain/settings/models/settings";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Timer, BookOpen, Dumbbell, Coffee, Brain, Briefcase } from "lucide-react";
+import { Timer, BookOpen, Coffee, Brain, Briefcase, Settings } from "lucide-react";
 import { LucideIcon } from "lucide-react";
 
 interface PresetTimerEditorProps {
@@ -18,6 +18,12 @@ interface QuickTemplate {
 
 const quickTemplates: QuickTemplate[] = [
   {
+    name: "Breaks",
+    icon: Coffee,
+    description: "1, 3, 5, 10 min",
+    presets: [{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }],
+  },
+  {
     name: "Pomodoro",
     icon: Timer,
     description: "25, 5, 15, 30 min",
@@ -28,18 +34,6 @@ const quickTemplates: QuickTemplate[] = [
     icon: BookOpen,
     description: "45, 10, 60, 90 min",
     presets: [{ minutes: 45 }, { minutes: 10 }, { minutes: 60 }, { minutes: 90 }],
-  },
-  {
-    name: "Exercise",
-    icon: Dumbbell,
-    description: "1, 3, 5, 10 min",
-    presets: [{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }],
-  },
-  {
-    name: "Breaks",
-    icon: Coffee,
-    description: "1, 3, 5, 10 min",
-    presets: [{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }],
   },
   {
     name: "Meditation",
@@ -73,6 +67,22 @@ export function PresetTimerEditor({ presets, onChange }: PresetTimerEditorProps)
     onChange([{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }]);
   };
 
+  // Check if current presets match any template
+  const getSelectedTemplate = () => {
+    for (const template of quickTemplates) {
+      if (template.presets.length !== presets.length) continue;
+
+      const matches = template.presets.every(
+        (templatePreset, index) => presets[index]?.minutes === templatePreset.minutes,
+      );
+
+      if (matches) return template.name;
+    }
+    return "Custom";
+  };
+
+  const selectedTemplate = getSelectedTemplate();
+
   return (
     <div className="space-y-6">
       {/* Quick Templates */}
@@ -80,23 +90,42 @@ export function PresetTimerEditor({ presets, onChange }: PresetTimerEditorProps)
         <h3 className="text-base font-semibold mb-2">Quick Templates</h3>
         <p className="text-sm text-muted-foreground mb-4">Click a template to apply preset times instantly</p>
         <div className="grid grid-cols-3 gap-3">
-          {quickTemplates.map((template) => (
-            <button
-              key={template.name}
-              onClick={() => applyTemplate(template)}
-              className="relative flex cursor-pointer rounded-lg border bg-background p-4 transition-all duration-200 hover:bg-accent/50 hover:shadow-md"
-            >
-              <div className="flex w-full items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 text-primary">
-                  <template.icon className="h-4 w-4" />
+          {quickTemplates.map((template) => {
+            const isSelected = selectedTemplate === template.name;
+            return (
+              <button
+                key={template.name}
+                onClick={() => applyTemplate(template)}
+                className="relative flex cursor-pointer rounded-lg border bg-background p-4 transition-all duration-200 hover:bg-accent/50 hover:shadow-md"
+              >
+                <div className="flex w-full items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 text-primary">
+                    <template.icon className="h-4 w-4" />
+                  </div>
+                  <div className="flex-1 text-left">
+                    <p className="font-medium">{template.name}</p>
+                    <p className="text-xs text-muted-foreground">{template.description}</p>
+                  </div>
                 </div>
-                <div className="flex-1 text-left">
-                  <p className="font-medium">{template.name}</p>
-                  <p className="text-xs text-muted-foreground">{template.description}</p>
-                </div>
+                {isSelected && <div className="absolute right-2 top-2 h-2 w-2 rounded-full bg-primary" />}
+              </button>
+            );
+          })}
+          {/* Custom template card */}
+          <div className="relative flex rounded-lg border bg-background p-4 transition-all duration-200 opacity-75 cursor-not-allowed">
+            <div className="flex w-full items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-md bg-muted text-muted-foreground">
+                <Settings className="h-4 w-4" />
               </div>
-            </button>
-          ))}
+              <div className="flex-1 text-left">
+                <p className="font-medium text-muted-foreground">Custom</p>
+                <p className="text-xs text-muted-foreground">User defined</p>
+              </div>
+            </div>
+            {selectedTemplate === "Custom" && (
+              <div className="absolute right-2 top-2 h-2 w-2 rounded-full bg-primary" />
+            )}
+          </div>
         </div>
       </div>
 

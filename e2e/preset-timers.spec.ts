@@ -98,7 +98,6 @@ test.describe("Options Page - Preset Timers", () => {
     await page.waitForLoadState("networkidle");
 
     const templates = [
-      { name: "Exercise", values: [1, 3, 5, 10] },
       { name: "Breaks", values: [1, 3, 5, 10] },
       { name: "Meditation", values: [2, 5, 10, 20] },
       { name: "Meetings", values: [15, 30, 45, 60] }
@@ -207,5 +206,82 @@ test.describe("Options Page - Preset Timers", () => {
     }
 
     await popupPage.close();
+  });
+
+  test("should show selected template indicator for default values", async ({ extensionId, page }) => {
+    await page.goto(`chrome-extension://${extensionId}/options/index.html`);
+    await page.waitForLoadState("networkidle");
+
+    // Default values match Breaks template
+    const breaksButton = page.locator('button:has-text("Breaks")');
+    await expect(breaksButton).toBeVisible();
+    
+    // Check for selected indicator (blue dot)
+    const selectedIndicator = breaksButton.locator('.absolute.right-2.top-2.h-2.w-2.rounded-full.bg-primary');
+    await expect(selectedIndicator).toBeVisible();
+    
+    // Other templates should not have the indicator
+    const pomodoroButton = page.locator('button:has-text("Pomodoro")');
+    const pomodoroIndicator = pomodoroButton.locator('.absolute.right-2.top-2.h-2.w-2.rounded-full.bg-primary');
+    await expect(pomodoroIndicator).not.toBeVisible();
+  });
+
+  test("should show Custom as selected when values don't match any template", async ({ extensionId, page }) => {
+    await page.goto(`chrome-extension://${extensionId}/options/index.html`);
+    await page.waitForLoadState("networkidle");
+
+    // Set custom values that don't match any template
+    const customValues = [7, 14, 21, 28];
+    for (let i = 0; i < 4; i++) {
+      const presetInput = page.locator(`input[type="number"]`).nth(i);
+      await presetInput.fill(customValues[i].toString());
+    }
+
+    // Wait for update
+    await page.waitForTimeout(500);
+
+    // Check Custom card has selected indicator
+    // Use more specific selector to target the Custom preset card
+    const presetsSection = page.locator('h3:text("Quick Templates")').locator('..');
+    const customCard = presetsSection.locator('div.relative.flex.rounded-lg').filter({ hasText: 'Custom' }).filter({ hasText: 'User defined' });
+    const customIndicator = customCard.locator('.absolute.right-2.top-2.h-2.w-2.rounded-full.bg-primary');
+    await expect(customIndicator).toBeVisible();
+
+    // All template buttons should not have indicator
+    const templates = ["Breaks", "Pomodoro", "Study", "Meditation", "Meetings"];
+    for (const templateName of templates) {
+      const button = page.locator(`button:has-text("${templateName}")`);
+      const indicator = button.locator('.absolute.right-2.top-2.h-2.w-2.rounded-full.bg-primary');
+      await expect(indicator).not.toBeVisible();
+    }
+  });
+
+  test("should update selected indicator when switching templates", async ({ extensionId, page }) => {
+    await page.goto(`chrome-extension://${extensionId}/options/index.html`);
+    await page.waitForLoadState("networkidle");
+
+    // Initially Breaks should be selected
+    const breaksButton = page.locator('button:has-text("Breaks")');
+    const breaksIndicator = breaksButton.locator('.absolute.right-2.top-2.h-2.w-2.rounded-full.bg-primary');
+    await expect(breaksIndicator).toBeVisible();
+
+    // Click Pomodoro template
+    const pomodoroButton = page.locator('button:has-text("Pomodoro")');
+    await pomodoroButton.click();
+    
+    // Wait for update
+    await page.waitForTimeout(500);
+
+    // Pomodoro should now have the indicator
+    const pomodoroIndicator = pomodoroButton.locator('.absolute.right-2.top-2.h-2.w-2.rounded-full.bg-primary');
+    await expect(pomodoroIndicator).toBeVisible();
+
+    // Breaks should not have the indicator anymore
+    await expect(breaksIndicator).not.toBeVisible();
+
+    // Verify Custom card is not selectable (cursor-not-allowed)
+    const presetsSection = page.locator('h3:text("Quick Templates")').locator('..');
+    const customCard = presetsSection.locator('div.relative.flex.rounded-lg').filter({ hasText: 'Custom' }).filter({ hasText: 'User defined' });
+    await expect(customCard).toHaveClass(/cursor-not-allowed/);
   });
 });
