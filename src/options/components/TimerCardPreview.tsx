@@ -49,7 +49,6 @@ const TimerCardPreview = memo(({ className, colorScheme }: TimerCardPreviewProps
                     onPause={() => {}}
                     onReset={() => {}}
                     onToggleSound={() => {}}
-                    onShowSettings={() => {}}
                     onToggleFullscreen={() => {}}
                     onClose={() => {}}
                   />
