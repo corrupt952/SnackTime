@@ -36,6 +36,7 @@ describe("timerService", () => {
       volume: 0.1,
       applyThemeToSettings: false,
       timerPosition: "top-right",
+      presetTimers: [{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }],
     });
 
     // Mock Chrome API

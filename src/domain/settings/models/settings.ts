@@ -5,6 +5,10 @@ export type AlarmSound = "Simple" | "Piano" | "Vibraphone" | "SteelDrums";
 
 export type TimerPosition = "top-right" | "top-left" | "bottom-right" | "bottom-left" | "center";
 
+export interface PresetTimer {
+  minutes: number;
+}
+
 export interface ExtensionSettings {
   colorScheme: ColorScheme;
   notificationType: NotificationType;
@@ -12,6 +16,7 @@ export interface ExtensionSettings {
   volume: number;
   applyThemeToSettings: boolean;
   timerPosition: TimerPosition;
+  presetTimers: PresetTimer[];
 }
 
 export class Settings {
@@ -22,6 +27,7 @@ export class Settings {
     volume: 0.1,
     applyThemeToSettings: false,
     timerPosition: "top-right",
+    presetTimers: [{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }],
   };
 
   private static readonly validAlarmSounds: AlarmSound[] = ["Simple", "Piano", "Vibraphone", "SteelDrums"];
@@ -35,6 +41,16 @@ export class Settings {
 
     if (normalized.alarmSound && !this.validAlarmSounds.includes(normalized.alarmSound)) {
       normalized.alarmSound = "Simple";
+    }
+
+    if (normalized.presetTimers) {
+      normalized.presetTimers = normalized.presetTimers
+        .filter((timer) => timer.minutes > 0 && timer.minutes <= 999)
+        .slice(0, 4);
+
+      while (normalized.presetTimers.length < 4) {
+        normalized.presetTimers.push({ minutes: 5 });
+      }
     }
 
     return normalized;

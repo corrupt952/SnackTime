@@ -27,22 +27,19 @@ test.describe("Timer Position", () => {
 
     for (const position of positions) {
       test(`position: ${position.id}`, async ({ page, extensionId, context }) => {
-        await page.goto("https://example.com");
-        const client = await page.context().newCDPSession(page);
-        
-        // Change position in settings
-        const optionsPage = await page.context().newPage();
+        const optionsPage = await context.newPage();
         await optionsPage.goto(`chrome-extension://${extensionId}/options/index.html`);
         await optionsPage.waitForLoadState("networkidle");
         
         const positionButton = optionsPage.locator(`#position-${position.id}`);
         await positionButton.click();
-        // Verify the position is selected
         const selectedIndicator = positionButton.locator('.bg-primary');
         await expect(selectedIndicator).toBeVisible();
         await optionsPage.close();
 
-        // Start timer from popup
+        await page.goto("https://example.com");
+        const client = await page.context().newCDPSession(page);
+        
         await client.send("Page.bringToFront");
         
         const popupPage = await context.newPage();
@@ -50,18 +47,16 @@ test.describe("Timer Position", () => {
         await popupPage.waitForLoadState("networkidle");
         
         await client.send("Page.bringToFront");
-        const preset5min = popupPage.locator('button:has-text("1:00")').first();
-        await expect(preset5min).toBeVisible();
-        await preset5min.click();
+        const preset1min = popupPage.locator('button:has-text("1:00")').first();
+        await expect(preset1min).toBeVisible();
+        await preset1min.click();
         await popupPage.close();
 
-        // Check timer position on content page
         await page.bringToFront();
-        await page.waitForSelector("#snack-time-root", { state: "visible", timeout: 10000 });
+        await page.waitForSelector("#snack-time-root", { state: "visible" });
         const timer = page.locator("#snack-time-root");
         await expect(timer).toBeVisible();
 
-        // Verify position styles
         const styles = await timer.evaluate((el) => {
           const style = window.getComputedStyle(el);
           return {
@@ -92,19 +87,16 @@ test.describe("Timer Position", () => {
   });
 
   test("should maintain drag functionality regardless of initial position", async ({ page, extensionId, context }) => {
-    // Set initial position to center
-    const optionsPage = await page.context().newPage();
+    const optionsPage = await context.newPage();
     await optionsPage.goto(`chrome-extension://${extensionId}/options/index.html`);
     await optionsPage.waitForLoadState("networkidle");
     
     const centerButton = optionsPage.locator('#position-center');
     await centerButton.click();
-    // Verify the position is selected
     const selectedIndicator = centerButton.locator('.bg-primary');
     await expect(selectedIndicator).toBeVisible();
     await optionsPage.close();
 
-    // Start timer
     await page.goto("https://example.com");
     
     const client = await page.context().newCDPSession(page);
@@ -115,26 +107,23 @@ test.describe("Timer Position", () => {
     await popupPage.waitForLoadState("networkidle");
     
     await client.send("Page.bringToFront");
-    const preset5min = popupPage.locator('button:has-text("1:00")').first();
-    await expect(preset5min).toBeVisible();
-    await preset5min.click();
+    const preset1min = popupPage.locator('button:has-text("1:00")').first();
+    await expect(preset1min).toBeVisible();
+    await preset1min.click();
     await popupPage.close();
 
     await page.bringToFront();
     const timer = page.locator("#snack-time-root");
     await expect(timer).toBeVisible();
 
-    // Get initial position
     const initialPosition = await timer.boundingBox();
     expect(initialPosition).not.toBeNull();
 
-    // Drag timer
     await timer.hover();
     await page.mouse.down();
     await page.mouse.move(100, 100);
     await page.mouse.up();
 
-    // Check new position
     const newPosition = await timer.boundingBox();
     expect(newPosition).not.toBeNull();
     expect(newPosition!.x).not.toBe(initialPosition!.x);

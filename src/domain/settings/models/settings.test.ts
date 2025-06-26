@@ -20,6 +20,7 @@ describe("Settings", () => {
         volume: 0.1,
         applyThemeToSettings: false,
         timerPosition: "top-right",
+        presetTimers: [{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }],
       });
     });
 
@@ -41,6 +42,7 @@ describe("Settings", () => {
         volume: 0.5,
         applyThemeToSettings: false,
         timerPosition: "top-right",
+        presetTimers: [{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }],
       });
     });
 
@@ -52,6 +54,7 @@ describe("Settings", () => {
         volume: 0.8,
         applyThemeToSettings: true,
         timerPosition: "bottom-left" as const,
+        presetTimers: [{ minutes: 25 }, { minutes: 5 }, { minutes: 15 }, { minutes: 30 }],
       };
       vi.spyOn(chrome.storage.sync, "get").mockImplementation(() =>
         Promise.resolve({
@@ -73,6 +76,7 @@ describe("Settings", () => {
         volume: 0.1,
         applyThemeToSettings: false,
         timerPosition: "top-right",
+        presetTimers: [{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }],
       });
     });
   });
@@ -86,6 +90,7 @@ describe("Settings", () => {
         volume: 0.1,
         applyThemeToSettings: false,
         timerPosition: "top-right",
+        presetTimers: [{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }],
       });
       const setStorage = vi.spyOn(chrome.storage.sync, "set");
 
@@ -100,6 +105,7 @@ describe("Settings", () => {
           volume: 0.8,
           applyThemeToSettings: false,
           timerPosition: "top-right",
+          presetTimers: [{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }],
         },
       });
     });
@@ -112,6 +118,7 @@ describe("Settings", () => {
         volume: 0.1,
         applyThemeToSettings: false,
         timerPosition: "top-right",
+        presetTimers: [{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }],
       });
       const setStorage = vi.spyOn(chrome.storage.sync, "set");
 
@@ -126,6 +133,7 @@ describe("Settings", () => {
           volume: 0.1,
           applyThemeToSettings: false,
           timerPosition: "top-right",
+          presetTimers: [{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }],
         },
       });
     });
@@ -138,6 +146,7 @@ describe("Settings", () => {
         volume: 0.1,
         applyThemeToSettings: false,
         timerPosition: "top-right",
+        presetTimers: [{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }],
       });
       const setStorage = vi.spyOn(chrome.storage.sync, "set");
 
@@ -148,6 +157,7 @@ describe("Settings", () => {
         volume: 0.8,
         applyThemeToSettings: true,
         timerPosition: "center",
+        presetTimers: [{ minutes: 25 }, { minutes: 5 }, { minutes: 15 }, { minutes: 30 }],
       };
       await Settings.set(newSettings);
 
@@ -165,6 +175,7 @@ describe("Settings", () => {
         volume: 0.1,
         applyThemeToSettings: false,
         timerPosition: "top-right",
+        presetTimers: [{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }],
       });
       const setStorage = vi.spyOn(chrome.storage.sync, "set");
 
@@ -187,6 +198,7 @@ describe("Settings", () => {
         volume: 0.1,
         applyThemeToSettings: false,
         timerPosition: "top-right",
+        presetTimers: [{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }],
       });
       const setStorage = vi.spyOn(chrome.storage.sync, "set");
 
@@ -204,6 +216,7 @@ describe("Settings", () => {
         volume: 0.1,
         applyThemeToSettings: false,
         timerPosition: "top-right",
+        presetTimers: [{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }],
       });
       vi.spyOn(chrome.storage.sync, "set").mockRejectedValue(new Error("Storage error"));
 

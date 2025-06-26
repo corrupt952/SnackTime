@@ -1,7 +1,7 @@
-import { Coffee, Volume2, Palette, Bell, Settings2, Sparkles, Moon, Sun, Monitor } from "lucide-react";
+import { Coffee, Volume2, Palette, Bell, Settings2, Sparkles, Moon, Sun, Monitor, Timer } from "lucide-react";
 import { useEffect, useState } from "react";
 import { NotificationType } from "@/types/enums/NotificationType";
-import { ExtensionSettings, Settings, AlarmSound, TimerPosition } from "@/domain/settings/models/settings";
+import { ExtensionSettings, Settings, AlarmSound, TimerPosition, PresetTimer } from "@/domain/settings/models/settings";
 import { ColorScheme } from "@/types/enums/ColorScheme";
 import "@/styles/globals.css";
 import { RadioGroup } from "@/components/ui/radio-group";
@@ -17,6 +17,7 @@ import { useSettingsSync } from "@/lib/hooks/use-settings-sync";
 import { useAudioPlayback } from "@/lib/hooks/use-audio-playback";
 import TimerCardPreview from "./components/TimerCardPreview";
 import { TimerPositionSelector } from "./components/TimerPositionSelector";
+import { PresetTimerEditor } from "./components/PresetTimerEditor";
 
 const Options = () => {
   const [notificationType, setNotificationType] = useState<NotificationType>(NotificationType.Alarm);
@@ -25,6 +26,12 @@ const Options = () => {
   const [volume, setVolume] = useState<number>(0.1);
   const [applyThemeToSettings, setApplyThemeToSettings] = useState<boolean>(false);
   const [timerPosition, setTimerPosition] = useState<TimerPosition>("top-right");
+  const [presetTimers, setPresetTimers] = useState<PresetTimer[]>([
+    { minutes: 1 },
+    { minutes: 3 },
+    { minutes: 5 },
+    { minutes: 10 },
+  ]);
   const [settings, setSettings] = useState<ExtensionSettings>({
     colorScheme: ColorScheme.System,
     notificationType: NotificationType.Alarm,
@@ -32,6 +39,7 @@ const Options = () => {
     volume: 0.1,
     applyThemeToSettings: false,
     timerPosition: "top-right",
+    presetTimers: [{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }],
   });
 
   const { playSound } = useAudioPlayback(alarmSound, volume);
@@ -57,6 +65,7 @@ const Options = () => {
       setVolume(settings.volume);
       setApplyThemeToSettings(settings.applyThemeToSettings);
       setTimerPosition(settings.timerPosition);
+      setPresetTimers(settings.presetTimers);
     });
   }, []);
 
@@ -67,6 +76,7 @@ const Options = () => {
   useSettingsSync("volume", volume);
   useSettingsSync("applyThemeToSettings", applyThemeToSettings);
   useSettingsSync("timerPosition", timerPosition);
+  useSettingsSync("presetTimers", presetTimers);
 
   useEffect(() => {
     if (applyThemeToSettings) {
@@ -121,6 +131,11 @@ const Options = () => {
                     Choose where the timer appears on web pages. You can still drag it to any position after it appears.
                   </p>
                   <TimerPositionSelector value={timerPosition} onChange={(value) => setTimerPosition(value)} />
+                </div>
+
+                <div>
+                  <h3 className="text-base font-semibold text-foreground mb-2">Preset Timers</h3>
+                  <PresetTimerEditor presets={presetTimers} onChange={setPresetTimers} />
                 </div>
               </div>
             </SettingsSection>
