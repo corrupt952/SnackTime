@@ -86,4 +86,43 @@ export class PopupPage extends BasePage {
   async verifyModalNotVisible(): Promise<void> {
     await expect(this.modal).not.toBeVisible();
   }
+
+  // History section
+  get recentSection(): Locator {
+    return this.page.locator('text="Recent"').locator('..');
+  }
+
+  getHistoryItems(): Locator {
+    return this.recentSection.locator('.space-y-1').locator('button');
+  }
+
+  async getHistoryCount(): Promise<number> {
+    return await this.getHistoryItems().count();
+  }
+
+  async clickHistoryItem(index: number): Promise<void> {
+    await this.getHistoryItems().nth(index).click();
+  }
+
+  async getHistoryItemText(index: number): Promise<string> {
+    const item = this.getHistoryItems().nth(index);
+    return await item.textContent() || '';
+  }
+
+  async verifyHistoryEmpty(): Promise<void> {
+    const count = await this.getHistoryCount();
+    expect(count).toBe(0);
+  }
+
+  async verifyHistoryCount(expectedCount: number): Promise<void> {
+    const count = await this.getHistoryCount();
+    expect(count).toBe(expectedCount);
+  }
+
+  async waitForHistoryUpdate(expectedCount: number): Promise<void> {
+    await expect(async () => {
+      const count = await this.getHistoryCount();
+      expect(count).toBe(expectedCount);
+    }).toPass({ timeout: 5000 });
+  }
 }
