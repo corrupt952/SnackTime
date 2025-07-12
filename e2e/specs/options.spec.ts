@@ -1,5 +1,5 @@
-import { test, expect } from "./fixtures/extension";
-import { OptionsPage } from "./page-objects/options.page";
+import { test, expect } from "../fixtures/extension";
+import { OptionsPage } from "../page-objects/options.page";
 
 test.describe("Options Page - Appearance (Page Object Pattern)", () => {
   test("should change theme", async ({ extensionId, page }) => {

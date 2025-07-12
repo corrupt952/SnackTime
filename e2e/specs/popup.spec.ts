@@ -1,6 +1,6 @@
-import { test, expect } from "./fixtures/extension";
-import { PopupPage } from "./page-objects/popup.page";
-import { ContentTimerPage } from "./page-objects/content-timer.page";
+import { test, expect } from "../fixtures/extension";
+import { PopupPage } from "../page-objects/popup.page";
+import { ContentTimerPage } from "../page-objects/content-timer.page";
 
 test.describe("Popup - Preset Buttons (Page Object Pattern)", () => {
   test("should show all preset buttons", async ({ extensionId, context }) => {
