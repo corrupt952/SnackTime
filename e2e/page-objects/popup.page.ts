@@ -34,4 +34,56 @@ export class PopupPage extends BasePage {
       await expect(button).toBeVisible();
     }
   }
+
+  get customButton(): Locator {
+    return this.page.locator("button").filter({ hasText: "⚡Custom" });
+  }
+
+  get endTimeButton(): Locator {
+    return this.page.locator('button:has-text("Set end time")');
+  }
+
+  get modal(): Locator {
+    return this.page.locator(".absolute.inset-0").first();
+  }
+
+  get timeInput(): Locator {
+    return this.page.locator('input[type="time"]');
+  }
+
+  get cancelButton(): Locator {
+    return this.page.getByRole("button", { name: "Cancel" });
+  }
+
+  get setButton(): Locator {
+    return this.page.getByRole("button", { name: "Set", exact: true });
+  }
+
+  async openCustomDurationModal(): Promise<void> {
+    await this.customButton.click();
+  }
+
+  async openEndTimeModal(): Promise<void> {
+    await this.endTimeButton.click();
+  }
+
+  async closeModal(): Promise<void> {
+    await this.cancelButton.click();
+  }
+
+  async fillTime(time: string): Promise<void> {
+    await this.timeInput.fill(time);
+  }
+
+  async clickSetButton(): Promise<void> {
+    await this.setButton.click();
+  }
+
+  async verifyModalVisible(): Promise<void> {
+    await expect(this.modal).toBeVisible();
+  }
+
+  async verifyModalNotVisible(): Promise<void> {
+    await expect(this.modal).not.toBeVisible();
+  }
 }
