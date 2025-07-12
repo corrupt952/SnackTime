@@ -137,6 +137,53 @@ export class OptionsPage extends BasePage {
     await expect(selectedIndicator).toBeVisible();
   }
 
+  // Preset timer settings
+  getPresetLabel(index: number): Locator {
+    return this.page.locator(`text="Preset ${index}"`);
+  }
+
+  getPresetInput(index: number): Locator {
+    return this.page.locator(`input[type="number"]`).nth(index - 1);
+  }
+
+  async setPresetValue(index: number, value: number): Promise<void> {
+    await this.getPresetInput(index).fill(value.toString());
+  }
+
+  async verifyPresetValue(index: number, value: number): Promise<void> {
+    await expect(this.getPresetInput(index)).toHaveValue(value.toString());
+  }
+
+  getTemplateButton(templateName: string): Locator {
+    return this.page.locator(`button:has-text("${templateName}")`);
+  }
+
+  async applyTemplate(templateName: string): Promise<void> {
+    await this.getTemplateButton(templateName).click();
+  }
+
+  get resetButton(): Locator {
+    return this.page.locator('button:has-text("Reset to Defaults")');
+  }
+
+  async resetToDefaults(): Promise<void> {
+    await this.resetButton.click();
+  }
+
+  getTemplateIndicator(templateName: string): Locator {
+    const button = this.getTemplateButton(templateName);
+    return button.locator('.absolute.right-2.top-2.h-2.w-2.rounded-full.bg-primary');
+  }
+
+  get customCard(): Locator {
+    const presetsSection = this.page.locator('h3:text("Quick Templates")').locator('..');
+    return presetsSection.locator('div.relative.flex.rounded-lg').filter({ hasText: 'Custom' }).filter({ hasText: 'User defined' });
+  }
+
+  get customIndicator(): Locator {
+    return this.customCard.locator('.absolute.right-2.top-2.h-2.w-2.rounded-full.bg-primary');
+  }
+
   // Utilities
   async reloadAndWaitForPage(): Promise<void> {
     await this.page.reload();
@@ -146,5 +193,9 @@ export class OptionsPage extends BasePage {
   async scrollToSection(sectionName: string): Promise<void> {
     const section = this.getSectionHeader(sectionName);
     await section.scrollIntoViewIfNeeded();
+  }
+
+  async waitForUpdate(ms: number = 500): Promise<void> {
+    await this.page.waitForTimeout(ms);
   }
 }

@@ -22,4 +22,34 @@ export class ContentTimerPage extends BasePage {
     const client = await this.page.context().newCDPSession(this.page);
     await client.send("Page.bringToFront");
   }
+
+  async getTimerStyles(): Promise<{
+    top?: string;
+    left?: string;
+    bottom?: string;
+    right?: string;
+    transform?: string;
+  }> {
+    return await this.timerRoot.evaluate((el) => {
+      const style = window.getComputedStyle(el);
+      return {
+        top: el.style.top || undefined,
+        left: el.style.left || undefined,
+        bottom: el.style.bottom || undefined,
+        right: el.style.right || undefined,
+        transform: el.style.transform || undefined
+      };
+    });
+  }
+
+  async dragTimer(deltaX: number, deltaY: number): Promise<void> {
+    await this.timerRoot.hover();
+    await this.page.mouse.down();
+    await this.page.mouse.move(deltaX, deltaY);
+    await this.page.mouse.up();
+  }
+
+  async getTimerBoundingBox() {
+    return await this.timerRoot.boundingBox();
+  }
 }
