@@ -1,4 +1,16 @@
-import { Monitor, Sun, Moon, Citrus, Leaf, Flower, MoonStar, Flower2, Sparkles, type LucideIcon } from "lucide-react";
+import {
+  Monitor,
+  Sun,
+  Moon,
+  Citrus,
+  Leaf,
+  Flower,
+  MoonStar,
+  Flower2,
+  Sparkles,
+  Circle,
+  type LucideIcon,
+} from "lucide-react";
 
 export enum ColorScheme {
   System = "system",
@@ -11,20 +23,79 @@ export enum ColorScheme {
   Lavender = "lavender",
 }
 
+export type ThemeCategory = "basic" | "seijaku";
+
+export interface ThemeCategoryMetadata {
+  labelKey: string;
+  icon: LucideIcon;
+}
+
+export const themeCategories: Record<ThemeCategory, ThemeCategoryMetadata> = {
+  basic: { labelKey: "themeCategory.basic", icon: Circle },
+  seijaku: { labelKey: "themeCategory.seijaku", icon: MoonStar },
+};
+
+export const themeCategoryOrder: ThemeCategory[] = ["basic", "seijaku"];
+
+interface PreviewColors {
+  background: string;
+  primary: string;
+  accent: string;
+}
+
 interface ColorSchemeMetadata {
   icon: LucideIcon;
-  description: string;
+  category: ThemeCategory;
+  previewColors: PreviewColors;
 }
 
 export const colorSchemeMetadata: Record<ColorScheme, ColorSchemeMetadata> = {
-  [ColorScheme.System]: { icon: Monitor, description: "Match system preference" },
-  [ColorScheme.Light]: { icon: Sun, description: "Always light theme" },
-  [ColorScheme.Dark]: { icon: Moon, description: "Always dark theme" },
-  [ColorScheme.Lemon]: { icon: Citrus, description: "Bright yellow theme" },
-  [ColorScheme.Mint]: { icon: Leaf, description: "Fresh mint theme" },
-  [ColorScheme.Rose]: { icon: Flower, description: "Soft rose theme" },
-  [ColorScheme.Yorusora]: { icon: MoonStar, description: "Night sky indigo theme" },
-  [ColorScheme.Lavender]: { icon: Flower2, description: "Soft purple theme" },
+  [ColorScheme.System]: {
+    icon: Monitor,
+    category: "basic",
+    previewColors: { background: "hsl(0 0% 98%)", primary: "hsl(0 0% 9%)", accent: "hsl(217 91% 60%)" },
+  },
+  [ColorScheme.Light]: {
+    icon: Sun,
+    category: "basic",
+    previewColors: { background: "hsl(0 0% 98%)", primary: "hsl(0 0% 9%)", accent: "hsl(217 91% 60%)" },
+  },
+  [ColorScheme.Dark]: {
+    icon: Moon,
+    category: "basic",
+    previewColors: { background: "hsl(0 0% 10%)", primary: "hsl(0 0% 6%)", accent: "hsl(217 91% 60%)" },
+  },
+  [ColorScheme.Lemon]: {
+    icon: Citrus,
+    category: "basic",
+    previewColors: { background: "hsl(54 60% 96%)", primary: "hsl(45 80% 35%)", accent: "hsl(42 100% 50%)" },
+  },
+  [ColorScheme.Mint]: {
+    icon: Leaf,
+    category: "basic",
+    previewColors: { background: "hsl(160 35% 97%)", primary: "hsl(165 60% 35%)", accent: "hsl(165 70% 45%)" },
+  },
+  [ColorScheme.Rose]: {
+    icon: Flower,
+    category: "basic",
+    previewColors: { background: "hsl(350 30% 97%)", primary: "hsl(345 60% 35%)", accent: "hsl(340 70% 50%)" },
+  },
+  [ColorScheme.Yorusora]: {
+    icon: MoonStar,
+    category: "seijaku",
+    previewColors: { background: "hsl(244 47% 20%)", primary: "hsl(239 84% 67%)", accent: "hsl(239 84% 67%)" },
+  },
+  [ColorScheme.Lavender]: {
+    icon: Flower2,
+    category: "basic",
+    previewColors: { background: "hsl(251 91% 95%)", primary: "hsl(263 70% 50%)", accent: "hsl(263 90% 66%)" },
+  },
+};
+
+export const getThemesByCategory = (category: ThemeCategory): ColorScheme[] => {
+  return Object.entries(colorSchemeMetadata)
+    .filter(([_, meta]) => meta.category === category)
+    .map(([scheme]) => scheme as ColorScheme);
 };
 
 export const getColorSchemeIcon = (scheme: ColorScheme): LucideIcon => {

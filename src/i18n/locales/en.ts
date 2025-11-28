@@ -136,4 +136,8 @@ export const en = {
     ja: "Japanese",
     systemDescription: "Use browser/OS language setting",
   },
+  themeCategory: {
+    basic: "Basic",
+    seijaku: "Seijaku",
+  },
 } as const;

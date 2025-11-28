@@ -135,4 +135,8 @@ export const ja = {
     ja: "日本語",
     systemDescription: "ブラウザ/OSの言語設定を使用",
   },
+  themeCategory: {
+    basic: "基本",
+    seijaku: "静寂",
+  },
 } as const;

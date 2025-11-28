@@ -10,7 +10,7 @@ import {
   PresetTimer,
   Language,
 } from "@/domain/settings/models/settings";
-import { ColorScheme, colorSchemeMetadata, getColorSchemeIcon, applyColorSchemeClass } from "@/lib/color-scheme";
+import { ColorScheme, applyColorSchemeClass } from "@/lib/color-scheme";
 import { changeLanguage, supportedLanguages } from "@/i18n/config";
 import "@/styles/globals.css";
 import { RadioGroup } from "@/components/ui/radio-group";
@@ -24,9 +24,9 @@ import { RadioCard } from "@/components/ui/radio-card";
 import { VolumeControl } from "@/components/ui/volume-control";
 import { useSettingsSync } from "@/lib/hooks/use-settings-sync";
 import { useAudioPlayback } from "@/lib/hooks/use-audio-playback";
-import TimerCardPreview from "./components/TimerCardPreview";
 import { TimerPositionSelector } from "./components/TimerPositionSelector";
 import { PresetTimerEditor } from "./components/PresetTimerEditor";
+import { ThemeSelector } from "./components/ThemeSelector";
 
 const Options = () => {
   const { t } = useTranslation();
@@ -162,27 +162,7 @@ const Options = () => {
                   <h3 className="text-base font-semibold text-foreground mb-4">
                     {t("options.appearance.colorScheme")}
                   </h3>
-                  <RadioGroup
-                    value={colorScheme}
-                    onValueChange={(value) => setColorScheme(value as ColorScheme)}
-                    className="grid grid-cols-1 sm:grid-cols-3 gap-3"
-                  >
-                    {Object.entries(ColorScheme).map(([key, value]) => (
-                      <RadioCard
-                        key={value}
-                        id={`color-scheme-${value}`}
-                        value={value}
-                        title={t(`colorScheme.${value}` as const)}
-                        description={t(`colorScheme.${value}Description` as const)}
-                        icon={getColorSchemeIcon(value)}
-                        isSelected={colorScheme === value}
-                      />
-                    ))}
-                  </RadioGroup>
-                </div>
-                <div className="rounded-lg bg-muted/30 p-4">
-                  <h4 className="text-sm font-medium mb-3">{t("options.appearance.preview")}</h4>
-                  <TimerCardPreview colorScheme={colorScheme} />
+                  <ThemeSelector value={colorScheme} onChange={setColorScheme} />
                 </div>
 
                 <div className="flex items-center justify-between p-4 rounded-lg border bg-muted/10">
