@@ -1,7 +1,7 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { ExtensionSettings, Settings } from "./settings";
 import { NotificationType } from "@/types/enums/NotificationType";
-import { ColorScheme } from "@/types/enums/ColorScheme";
+import { ColorScheme } from "@/lib/color-scheme";
 
 describe("Settings", () => {
   beforeEach(() => {

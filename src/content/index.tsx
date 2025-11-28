@@ -1,6 +1,6 @@
 import { Settings } from "@/domain/settings/models/settings";
 import styles from "@/styles/globals.css?inline";
-import { ColorScheme } from "@/types/enums/ColorScheme";
+import { getEffectiveColorScheme } from "@/lib/color-scheme";
 import { NotificationType } from "@/types/enums/NotificationType";
 import React from "react";
 import { createRoot } from "react-dom/client";
@@ -102,12 +102,8 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   shadowContainer.style.display = "contents";
   shadowRoot.appendChild(shadowContainer);
 
-  if (settings.colorScheme === ColorScheme.System || !settings.colorScheme) {
-    const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    shadowContainer.classList.add(isDarkMode ? "dark" : "light");
-  } else {
-    shadowContainer.classList.add(settings.colorScheme);
-  }
+  const effectiveScheme = getEffectiveColorScheme(settings.colorScheme);
+  shadowContainer.classList.add(effectiveScheme);
 
   const deleteRoot = () => {
     if (contentRoot) {

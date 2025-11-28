@@ -208,18 +208,18 @@ const Timer = ({
       )}
     >
       <div className="flex flex-col items-center justify-center w-full space-y-4">
-          <TimerDisplay totalSeconds={totalSeconds} isFullscreen={isFullscreen} />
-          <TimerControls
-            isRunning={isRunning}
-            isFullscreen={isFullscreen}
-            soundEnabled={soundEnabled}
-            onStart={startTimer}
-            onPause={pauseTimer}
-            onReset={resetTimer}
-            onToggleSound={() => setSoundEnabled((prev) => !prev)}
-            onToggleFullscreen={toggleFullscreen}
-            onClose={closeTimer}
-          />
+        <TimerDisplay totalSeconds={totalSeconds} isFullscreen={isFullscreen} />
+        <TimerControls
+          isRunning={isRunning}
+          isFullscreen={isFullscreen}
+          soundEnabled={soundEnabled}
+          onStart={startTimer}
+          onPause={pauseTimer}
+          onReset={resetTimer}
+          onToggleSound={() => setSoundEnabled((prev) => !prev)}
+          onToggleFullscreen={toggleFullscreen}
+          onClose={closeTimer}
+        />
       </div>
     </Card>
   );

@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { memo } from "react";
-import { ColorScheme } from "@/types/enums/ColorScheme";
+import { ColorScheme, getEffectiveColorScheme } from "@/lib/color-scheme";
 import TimerControls from "@/content/components/TimerControls";
 
 interface TimerCardPreviewProps {
@@ -10,12 +10,7 @@ interface TimerCardPreviewProps {
 }
 
 const TimerCardPreview = memo(({ className, colorScheme }: TimerCardPreviewProps) => {
-  const effectiveTheme =
-    colorScheme === ColorScheme.System
-      ? window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? ColorScheme.Dark
-        : ColorScheme.Light
-      : colorScheme;
+  const effectiveTheme = getEffectiveColorScheme(colorScheme);
 
   return (
     <div className={cn("w-full max-w-md mx-auto", className)}>

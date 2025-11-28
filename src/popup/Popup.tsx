@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import "@/styles/globals.css";
 import { Settings, PresetTimer } from "@/domain/settings/models/settings";
-import { ColorScheme } from "@/types/enums/ColorScheme";
+import { ColorScheme, applyColorSchemeClass } from "@/lib/color-scheme";
 import { timerService } from "./services/timer";
 import { TimeInputModal } from "./components/TimeInputModal";
 import { CustomDurationModal } from "./components/CustomDurationModal";
@@ -29,19 +29,7 @@ const Popup = () => {
   }, []);
 
   useEffect(() => {
-    // Remove all existing theme classes first
-    document.documentElement.classList.remove("dark", "light");
-    Object.values(ColorScheme).forEach((scheme) => {
-      document.documentElement.classList.remove(scheme);
-    });
-
-    // Then apply the appropriate theme
-    if (colorScheme === ColorScheme.System || !colorScheme) {
-      const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      document.documentElement.classList.add(isDarkMode ? "dark" : "light");
-    } else {
-      document.documentElement.classList.add(colorScheme);
-    }
+    applyColorSchemeClass(document.documentElement, colorScheme);
   }, [colorScheme]);
 
   return (

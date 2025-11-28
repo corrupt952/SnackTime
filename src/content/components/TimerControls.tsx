@@ -35,7 +35,9 @@ const TimerControls = memo(
           onClick={isRunning ? onPause : onStart}
           className={cn(
             "rounded-full",
-            isRunning ? "bg-accent hover:bg-accent/90 text-accent-foreground" : "bg-primary hover:bg-primary/90 text-primary-foreground",
+            isRunning
+              ? "bg-accent hover:bg-accent/90 text-accent-foreground"
+              : "bg-primary hover:bg-primary/90 text-primary-foreground",
             isFullscreen && "scale-150",
           )}
         >

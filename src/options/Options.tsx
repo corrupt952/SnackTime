@@ -1,8 +1,8 @@
-import { Coffee, Volume2, Palette, Bell, Settings2, Sparkles, Moon, Sun, Monitor, Timer, Citrus, Leaf, Flower, MoonStar, Flower2 } from "lucide-react";
+import { Coffee, Volume2, Palette, Bell, Settings2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { NotificationType } from "@/types/enums/NotificationType";
 import { ExtensionSettings, Settings, AlarmSound, TimerPosition, PresetTimer } from "@/domain/settings/models/settings";
-import { ColorScheme } from "@/types/enums/ColorScheme";
+import { ColorScheme, colorSchemeMetadata, getColorSchemeIcon, applyColorSchemeClass } from "@/lib/color-scheme";
 import "@/styles/globals.css";
 import { RadioGroup } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -51,11 +51,7 @@ const Options = () => {
   ];
 
   useEffect(() => {
-    document.documentElement.classList.remove("dark");
-    Object.values(ColorScheme).forEach((scheme) => {
-      document.documentElement.classList.remove(scheme);
-    });
-    document.documentElement.classList.add("light");
+    applyColorSchemeClass(document.documentElement, ColorScheme.Light);
 
     Settings.get().then((settings) => {
       setSettings(settings);
@@ -80,47 +76,11 @@ const Options = () => {
 
   useEffect(() => {
     if (applyThemeToSettings) {
-      Object.values(ColorScheme).forEach((scheme) => {
-        document.documentElement.classList.remove(scheme);
-      });
-
-      if (colorScheme === ColorScheme.System) {
-        const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        document.documentElement.classList.add(isDarkMode ? ColorScheme.Dark : ColorScheme.Light);
-      } else {
-        document.documentElement.classList.add(colorScheme);
-      }
+      applyColorSchemeClass(document.documentElement, colorScheme);
     } else {
-      // Reset to light theme when disabled
-      Object.values(ColorScheme).forEach((scheme) => {
-        document.documentElement.classList.remove(scheme);
-      });
-      document.documentElement.classList.add("light");
+      applyColorSchemeClass(document.documentElement, ColorScheme.Light);
     }
   }, [colorScheme, applyThemeToSettings]);
-
-  const getColorSchemeIcon = (scheme: ColorScheme) => {
-    switch (scheme) {
-      case ColorScheme.Light:
-        return Sun;
-      case ColorScheme.Dark:
-        return Moon;
-      case ColorScheme.System:
-        return Monitor;
-      case ColorScheme.Lemon:
-        return Citrus;
-      case ColorScheme.Mint:
-        return Leaf;
-      case ColorScheme.Rose:
-        return Flower;
-      case ColorScheme.Yorusora:
-        return MoonStar;
-      case ColorScheme.Lavender:
-        return Flower2;
-      default:
-        return Sparkles;
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/20">
@@ -165,25 +125,7 @@ const Options = () => {
                         id={`color-scheme-${value}`}
                         value={value}
                         title={key}
-                        description={
-                          value === ColorScheme.System
-                            ? "Match system preference"
-                            : value === ColorScheme.Light
-                              ? "Always light theme"
-                              : value === ColorScheme.Dark
-                                ? "Always dark theme"
-                                : value === ColorScheme.Lemon
-                                  ? "Bright yellow theme"
-                                  : value === ColorScheme.Mint
-                                    ? "Fresh mint theme"
-                                    : value === ColorScheme.Rose
-                                      ? "Soft rose theme"
-                                      : value === ColorScheme.Yorusora
-                                        ? "Night sky indigo theme"
-                                        : value === ColorScheme.Lavender
-                                          ? "Soft purple theme"
-                                          : ""
-                        }
+                        description={colorSchemeMetadata[value]?.description ?? ""}
                         icon={getColorSchemeIcon(value)}
                         isSelected={colorScheme === value}
                       />

@@ -3,7 +3,7 @@ import { timerService } from "./timer";
 import { Duration } from "@/domain/timer/value/duration";
 import { History } from "@/domain/timer/model/history";
 import { Settings } from "@/domain/settings/models/settings";
-import { ColorScheme } from "@/types/enums/ColorScheme";
+import { ColorScheme } from "@/lib/color-scheme";
 import { NotificationType } from "@/types/enums/NotificationType";
 
 vi.mock("@/domain/timer/model/history");

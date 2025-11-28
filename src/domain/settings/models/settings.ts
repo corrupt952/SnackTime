@@ -1,5 +1,5 @@
 import { NotificationType } from "@/types/enums/NotificationType";
-import { ColorScheme } from "@/types/enums/ColorScheme";
+import { ColorScheme } from "@/lib/color-scheme";
 
 export type AlarmSound = "Simple" | "Piano" | "Vibraphone" | "SteelDrums";
 

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import TimerCardPreview from "./TimerCardPreview";
-import { ColorScheme } from "@/types/enums/ColorScheme";
+import { ColorScheme } from "@/lib/color-scheme";
 
 const meta: Meta<typeof TimerCardPreview> = {
   title: "Options/TimerCardPreview",
