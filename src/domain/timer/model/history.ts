@@ -13,7 +13,8 @@ export class History {
 
   static async all(): Promise<History[]> {
     try {
-      const stored = (await chrome.storage.sync.get(History.key))[History.key];
+      const result = await chrome.storage.sync.get<{ [K in typeof History.key]?: string }>(History.key);
+      const stored = result[History.key];
       if (!stored) {
         return [];
       }

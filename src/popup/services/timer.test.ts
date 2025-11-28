@@ -5,11 +5,12 @@ import { History } from "@/domain/timer/model/history";
 import { Settings } from "@/domain/settings/models/settings";
 import { ColorScheme } from "@/lib/color-scheme";
 import { NotificationType } from "@/types/enums/NotificationType";
+import { mockedChrome } from "@/test/setup";
 
 vi.mock("@/domain/timer/model/history");
 vi.mock("@/domain/settings/models/settings");
 
-const mockTab = {
+const mockTab: chrome.tabs.Tab = {
   id: 1,
   index: 0,
   pinned: false,
@@ -23,6 +24,7 @@ const mockTab = {
   groupId: -1,
   url: "about:blank",
   title: "Test Tab",
+  frozen: false,
 };
 
 describe("timerService", () => {
@@ -41,7 +43,7 @@ describe("timerService", () => {
     });
 
     // Mock Chrome API
-    vi.mocked(chrome.tabs.query).mockResolvedValue([mockTab]);
+    mockedChrome.tabs.query.mockResolvedValue([mockTab]);
   });
 
   describe("start", () => {
@@ -82,7 +84,7 @@ describe("timerService", () => {
     });
 
     it("should not start timer when no tab is found", async () => {
-      vi.mocked(chrome.tabs.query).mockResolvedValueOnce([]);
+      mockedChrome.tabs.query.mockResolvedValueOnce([]);
       const duration = new Duration(300);
 
       await timerService.start(duration);
