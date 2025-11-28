@@ -15,7 +15,7 @@ export class OptionsPage extends BasePage {
     return this.page.locator(`nav a:has-text("${text}")`);
   }
 
-  async navigateTo(section: "General" | "Appearance" | "Notification"): Promise<void> {
+  async navigateTo(section: "General" | "Appearance" | "Notification" | "About"): Promise<void> {
     await this.getNavLink(section).click();
     await this.page.waitForURL(new RegExp(`#${section.toLowerCase()}`));
   }
@@ -26,20 +26,33 @@ export class OptionsPage extends BasePage {
   }
 
   // Theme settings
-  getThemeRadio(scheme: string): Locator {
-    return this.page.locator(`#color-scheme-${scheme}`);
+  getThemeCard(scheme: string): Locator {
+    return this.page.locator(`button[data-theme="${scheme}"]`);
   }
 
   getThemeLabel(scheme: string): Locator {
-    return this.page.locator(`label[for="color-scheme-${scheme}"]`);
+    return this.getThemeCard(scheme);
   }
 
   async selectTheme(scheme: string): Promise<void> {
-    await this.getThemeLabel(scheme).click();
+    await this.getThemeCard(scheme).click();
   }
 
   async verifyThemeSelected(scheme: string): Promise<void> {
-    await expect(this.getThemeRadio(scheme)).toBeChecked();
+    await expect(this.getThemeCard(scheme)).toHaveAttribute("data-selected", "true");
+  }
+
+  // Theme category tabs
+  getCategoryTab(category: "Basic" | "Seijaku"): Locator {
+    return this.page.locator(`button:has-text("${category}")`).first();
+  }
+
+  async selectThemeCategory(category: "Basic" | "Seijaku"): Promise<void> {
+    await this.getCategoryTab(category).click();
+  }
+
+  async verifyCategoryTabActive(category: "Basic" | "Seijaku"): Promise<void> {
+    await expect(this.getCategoryTab(category)).toHaveClass(/bg-primary/);
   }
 
   get applyThemeToggle(): Locator {
@@ -182,6 +195,64 @@ export class OptionsPage extends BasePage {
 
   get customIndicator(): Locator {
     return this.customCard.locator('.absolute.right-2.top-2.h-2.w-2.rounded-full.bg-primary');
+  }
+
+  // Language settings
+  getLanguageRadio(language: "system" | "en" | "ja"): Locator {
+    return this.page.locator(`#language-${language}`);
+  }
+
+  getLanguageLabel(language: "system" | "en" | "ja"): Locator {
+    return this.page.locator(`label[for="language-${language}"]`);
+  }
+
+  async selectLanguage(language: "system" | "en" | "ja"): Promise<void> {
+    await this.getLanguageLabel(language).click();
+  }
+
+  async verifyLanguageSelected(language: "system" | "en" | "ja"): Promise<void> {
+    await expect(this.getLanguageRadio(language)).toBeChecked();
+  }
+
+  // About section
+  get aboutSection(): Locator {
+    return this.page.locator("#about");
+  }
+
+  get appNameInAbout(): Locator {
+    return this.aboutSection.locator("h3:has-text('Snack Time')");
+  }
+
+  get versionInAbout(): Locator {
+    return this.aboutSection.locator("text=/Version/");
+  }
+
+  get authorLink(): Locator {
+    return this.aboutSection.locator('a[href="https://zuki.dev"]');
+  }
+
+  get sourceCodeLink(): Locator {
+    return this.aboutSection.locator('a[href="https://github.com/corrupt952/SnackTime"]');
+  }
+
+  get supportLink(): Locator {
+    return this.aboutSection.locator('a[href="https://ko-fi.com/corrupt952"]');
+  }
+
+  get githubIssuesLink(): Locator {
+    return this.aboutSection.locator('a[href="https://github.com/corrupt952/SnackTime/issues"]');
+  }
+
+  get twitterLink(): Locator {
+    return this.aboutSection.locator('a[href="https://x.com/corrupt952"]');
+  }
+
+  get feedbackFormLink(): Locator {
+    return this.aboutSection.locator('a[href="https://relaybase.app/forms/3e45e7b9f03c4d84"]');
+  }
+
+  get licenseSection(): Locator {
+    return this.aboutSection.locator("text=/MIT License/");
   }
 
   // Utilities

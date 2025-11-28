@@ -227,15 +227,229 @@ test.describe("Options Page - Navigation (Page Object Pattern)", () => {
     const navLinks = [
       { text: "General", targetText: "General" },
       { text: "Appearance", targetText: "Appearance" },
-      { text: "Notification", targetText: "Notification" }
+      { text: "Notification", targetText: "Notification" },
+      { text: "About", targetText: "About" }
     ];
 
     for (const link of navLinks) {
       await expect(optionsPage.getNavLink(link.text)).toBeVisible();
-      await optionsPage.navigateTo(link.text as "General" | "Appearance" | "Notification");
+      await optionsPage.navigateTo(link.text as "General" | "Appearance" | "Notification" | "About");
 
       const targetSection = optionsPage.getSectionHeader(link.targetText);
       await expect(targetSection).toBeInViewport();
     }
+  });
+});
+
+test.describe("Options Page - Theme Categories", () => {
+  test("should switch between theme categories", async ({ extensionId, page }) => {
+    const optionsPage = new OptionsPage(page, extensionId);
+    await optionsPage.open();
+
+    await optionsPage.scrollToSection("Appearance");
+
+    // Basic category should be active by default
+    await optionsPage.verifyCategoryTabActive("Basic");
+
+    // Basic themes should be visible
+    await expect(optionsPage.getThemeCard("system")).toBeVisible();
+    await expect(optionsPage.getThemeCard("light")).toBeVisible();
+    await expect(optionsPage.getThemeCard("dark")).toBeVisible();
+
+    // Switch to Seijaku category
+    await optionsPage.selectThemeCategory("Seijaku");
+    await optionsPage.verifyCategoryTabActive("Seijaku");
+
+    // Seijaku themes should be visible
+    await expect(optionsPage.getThemeCard("nightsky")).toBeVisible();
+    await expect(optionsPage.getThemeCard("deepsea")).toBeVisible();
+    await expect(optionsPage.getThemeCard("twilight")).toBeVisible();
+
+    // Basic themes should not be visible
+    await expect(optionsPage.getThemeCard("system")).not.toBeVisible();
+
+    // Switch back to Basic
+    await optionsPage.selectThemeCategory("Basic");
+    await optionsPage.verifyCategoryTabActive("Basic");
+    await expect(optionsPage.getThemeCard("system")).toBeVisible();
+  });
+
+  test("should select and persist lavender theme", async ({ extensionId, page }) => {
+    const optionsPage = new OptionsPage(page, extensionId);
+    await optionsPage.open();
+
+    await optionsPage.scrollToSection("Appearance");
+
+    // Select lavender theme
+    await optionsPage.selectTheme("lavender");
+    await optionsPage.verifyThemeSelected("lavender");
+
+    // Verify persistence
+    await optionsPage.reloadAndWaitForPage();
+    await optionsPage.verifyThemeSelected("lavender");
+  });
+
+  test("should select and persist seijaku themes", async ({ extensionId, page }) => {
+    const optionsPage = new OptionsPage(page, extensionId);
+    await optionsPage.open();
+
+    await optionsPage.scrollToSection("Appearance");
+
+    // Switch to Seijaku category
+    await optionsPage.selectThemeCategory("Seijaku");
+
+    const seijakuThemes = ["nightsky", "deepsea", "twilight", "ink", "sepia", "eveningrain"];
+
+    for (const theme of seijakuThemes) {
+      await optionsPage.selectTheme(theme);
+      await optionsPage.verifyThemeSelected(theme);
+
+      await optionsPage.reloadAndWaitForPage();
+
+      // After reload, need to switch to Seijaku category to see the selected theme
+      await optionsPage.selectThemeCategory("Seijaku");
+      await optionsPage.verifyThemeSelected(theme);
+    }
+  });
+
+  test("should apply seijaku themes to settings page when toggle is on", async ({ extensionId, page }) => {
+    const optionsPage = new OptionsPage(page, extensionId);
+    await optionsPage.open();
+
+    await optionsPage.toggleApplyTheme();
+    await optionsPage.verifyApplyThemeState("checked");
+
+    // Switch to Seijaku category
+    await optionsPage.selectThemeCategory("Seijaku");
+
+    const themes = [
+      { id: "nightsky", expectedClass: "nightsky" },
+      { id: "deepsea", expectedClass: "deepsea" },
+      { id: "twilight", expectedClass: "twilight" },
+      { id: "ink", expectedClass: "ink" },
+      { id: "sepia", expectedClass: "sepia" },
+      { id: "eveningrain", expectedClass: "eveningrain" }
+    ];
+
+    for (const theme of themes) {
+      await optionsPage.selectTheme(theme.id);
+      await optionsPage.verifyThemeSelected(theme.id);
+      await expect(optionsPage.htmlElement).toHaveClass(new RegExp(theme.expectedClass));
+    }
+  });
+});
+
+test.describe("Options Page - About Section", () => {
+  test("should display app information", async ({ extensionId, page }) => {
+    const optionsPage = new OptionsPage(page, extensionId);
+    await optionsPage.open();
+
+    await optionsPage.navigateTo("About");
+
+    await expect(optionsPage.getSectionHeader("About")).toBeVisible();
+    await expect(optionsPage.appNameInAbout).toBeVisible();
+    await expect(optionsPage.versionInAbout).toBeVisible();
+  });
+
+  test("should display author information", async ({ extensionId, page }) => {
+    const optionsPage = new OptionsPage(page, extensionId);
+    await optionsPage.open();
+
+    await optionsPage.navigateTo("About");
+
+    await expect(optionsPage.authorLink).toBeVisible();
+    await expect(optionsPage.authorLink).toHaveText("K@zuki.");
+  });
+
+  test("should display links section", async ({ extensionId, page }) => {
+    const optionsPage = new OptionsPage(page, extensionId);
+    await optionsPage.open();
+
+    await optionsPage.navigateTo("About");
+
+    await expect(optionsPage.sourceCodeLink).toBeVisible();
+    await expect(optionsPage.supportLink).toBeVisible();
+  });
+
+  test("should display feedback section", async ({ extensionId, page }) => {
+    const optionsPage = new OptionsPage(page, extensionId);
+    await optionsPage.open();
+
+    await optionsPage.navigateTo("About");
+
+    await expect(optionsPage.githubIssuesLink).toBeVisible();
+    await expect(optionsPage.twitterLink).toBeVisible();
+    await expect(optionsPage.feedbackFormLink).toBeVisible();
+  });
+
+  test("should display license information", async ({ extensionId, page }) => {
+    const optionsPage = new OptionsPage(page, extensionId);
+    await optionsPage.open();
+
+    await optionsPage.navigateTo("About");
+
+    await expect(optionsPage.licenseSection).toBeVisible();
+  });
+});
+
+test.describe("Options Page - Language Settings", () => {
+  test("should display language options", async ({ extensionId, page }) => {
+    const optionsPage = new OptionsPage(page, extensionId);
+    await optionsPage.open();
+
+    await expect(optionsPage.getLanguageLabel("system")).toBeVisible();
+    await expect(optionsPage.getLanguageLabel("en")).toBeVisible();
+    await expect(optionsPage.getLanguageLabel("ja")).toBeVisible();
+  });
+
+  test("should change language to English", async ({ extensionId, page }) => {
+    const optionsPage = new OptionsPage(page, extensionId);
+    await optionsPage.open();
+
+    await optionsPage.selectLanguage("en");
+    await optionsPage.verifyLanguageSelected("en");
+
+    // Verify English text is displayed
+    await expect(optionsPage.getSectionHeader("General Settings")).toBeVisible();
+    await expect(optionsPage.getSectionHeader("Appearance")).toBeVisible();
+
+    // Verify persistence
+    await optionsPage.reloadAndWaitForPage();
+    await optionsPage.verifyLanguageSelected("en");
+  });
+
+  test("should change language to Japanese", async ({ extensionId, page }) => {
+    const optionsPage = new OptionsPage(page, extensionId);
+    await optionsPage.open();
+
+    await optionsPage.selectLanguage("ja");
+    await optionsPage.verifyLanguageSelected("ja");
+
+    // Verify Japanese text is displayed
+    await expect(optionsPage.getSectionHeader("一般設定")).toBeVisible();
+    await expect(optionsPage.getSectionHeader("外観")).toBeVisible();
+
+    // Verify persistence
+    await optionsPage.reloadAndWaitForPage();
+    await optionsPage.verifyLanguageSelected("ja");
+  });
+
+  test("should switch between languages", async ({ extensionId, page }) => {
+    const optionsPage = new OptionsPage(page, extensionId);
+    await optionsPage.open();
+
+    // Switch to Japanese
+    await optionsPage.selectLanguage("ja");
+    await optionsPage.verifyLanguageSelected("ja");
+    await expect(optionsPage.getSectionHeader("一般設定")).toBeVisible();
+
+    // Switch to English
+    await optionsPage.selectLanguage("en");
+    await optionsPage.verifyLanguageSelected("en");
+    await expect(optionsPage.getSectionHeader("General Settings")).toBeVisible();
+
+    // Switch to System
+    await optionsPage.selectLanguage("system");
+    await optionsPage.verifyLanguageSelected("system");
   });
 });

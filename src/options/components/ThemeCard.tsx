@@ -29,6 +29,8 @@ export function ThemeCard({ scheme, isSelected, onClick }: ThemeCardProps) {
 
   return (
     <button
+      data-theme={scheme}
+      data-selected={isSelected}
       onClick={onClick}
       className={cn(
         "relative flex flex-col items-center gap-2 rounded-lg border p-3 transition-all duration-200",
