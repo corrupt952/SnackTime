@@ -8,10 +8,24 @@ interface ThemeCardProps {
   onClick: () => void;
 }
 
+/**
+ * プレビュー用のCSSクラスを取得
+ * System設定の場合はlight/darkを実際のシステム設定に基づいて返す
+ */
+const getPreviewClass = (scheme: ColorScheme): string => {
+  if (scheme === ColorScheme.System) {
+    // システム設定の場合は実際のprefers-color-schemeを使用
+    const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    return isDarkMode ? ColorScheme.Dark : ColorScheme.Light;
+  }
+  return scheme;
+};
+
 export function ThemeCard({ scheme, isSelected, onClick }: ThemeCardProps) {
   const { t } = useTranslation();
   const metadata = colorSchemeMetadata[scheme];
   const Icon = metadata.icon;
+  const previewClass = getPreviewClass(scheme);
 
   return (
     <button
@@ -22,11 +36,11 @@ export function ThemeCard({ scheme, isSelected, onClick }: ThemeCardProps) {
         isSelected ? "border-primary ring-2 ring-primary/20" : "border-border bg-background",
       )}
     >
-      {/* Color swatches */}
-      <div className="flex h-8 w-full overflow-hidden rounded-md">
-        <div className="flex-1" style={{ backgroundColor: metadata.previewColors.background }} />
-        <div className="flex-1" style={{ backgroundColor: metadata.previewColors.primary }} />
-        <div className="flex-1" style={{ backgroundColor: metadata.previewColors.accent }} />
+      {/* Color swatches - テーマクラスを適用してCSS変数を使用 */}
+      <div className={cn("flex h-8 w-full overflow-hidden rounded-md", previewClass)}>
+        <div className="flex-1" style={{ backgroundColor: "hsl(var(--background))" }} />
+        <div className="flex-1" style={{ backgroundColor: "hsl(var(--primary))" }} />
+        <div className="flex-1" style={{ backgroundColor: "hsl(var(--accent))" }} />
       </div>
 
       {/* Theme name with icon */}

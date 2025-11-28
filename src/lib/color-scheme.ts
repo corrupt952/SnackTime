@@ -19,7 +19,7 @@ export enum ColorScheme {
   Lemon = "lemon",
   Mint = "mint",
   Rose = "rose",
-  Yorusora = "yorusora",
+  NightSky = "nightsky",
   Lavender = "lavender",
 }
 
@@ -37,59 +37,20 @@ export const themeCategories: Record<ThemeCategory, ThemeCategoryMetadata> = {
 
 export const themeCategoryOrder: ThemeCategory[] = ["basic", "seijaku"];
 
-interface PreviewColors {
-  background: string;
-  primary: string;
-  accent: string;
-}
-
 interface ColorSchemeMetadata {
   icon: LucideIcon;
   category: ThemeCategory;
-  previewColors: PreviewColors;
 }
 
 export const colorSchemeMetadata: Record<ColorScheme, ColorSchemeMetadata> = {
-  [ColorScheme.System]: {
-    icon: Monitor,
-    category: "basic",
-    previewColors: { background: "hsl(0 0% 98%)", primary: "hsl(0 0% 9%)", accent: "hsl(217 91% 60%)" },
-  },
-  [ColorScheme.Light]: {
-    icon: Sun,
-    category: "basic",
-    previewColors: { background: "hsl(0 0% 98%)", primary: "hsl(0 0% 9%)", accent: "hsl(217 91% 60%)" },
-  },
-  [ColorScheme.Dark]: {
-    icon: Moon,
-    category: "basic",
-    previewColors: { background: "hsl(0 0% 10%)", primary: "hsl(0 0% 6%)", accent: "hsl(217 91% 60%)" },
-  },
-  [ColorScheme.Lemon]: {
-    icon: Citrus,
-    category: "basic",
-    previewColors: { background: "hsl(54 60% 96%)", primary: "hsl(45 80% 35%)", accent: "hsl(42 100% 50%)" },
-  },
-  [ColorScheme.Mint]: {
-    icon: Leaf,
-    category: "basic",
-    previewColors: { background: "hsl(160 35% 97%)", primary: "hsl(165 60% 35%)", accent: "hsl(165 70% 45%)" },
-  },
-  [ColorScheme.Rose]: {
-    icon: Flower,
-    category: "basic",
-    previewColors: { background: "hsl(350 30% 97%)", primary: "hsl(345 60% 35%)", accent: "hsl(340 70% 50%)" },
-  },
-  [ColorScheme.Yorusora]: {
-    icon: MoonStar,
-    category: "seijaku",
-    previewColors: { background: "hsl(244 47% 20%)", primary: "hsl(239 84% 67%)", accent: "hsl(239 84% 67%)" },
-  },
-  [ColorScheme.Lavender]: {
-    icon: Flower2,
-    category: "basic",
-    previewColors: { background: "hsl(251 91% 95%)", primary: "hsl(263 70% 50%)", accent: "hsl(263 90% 66%)" },
-  },
+  [ColorScheme.System]: { icon: Monitor, category: "basic" },
+  [ColorScheme.Light]: { icon: Sun, category: "basic" },
+  [ColorScheme.Dark]: { icon: Moon, category: "basic" },
+  [ColorScheme.Lemon]: { icon: Citrus, category: "basic" },
+  [ColorScheme.Mint]: { icon: Leaf, category: "basic" },
+  [ColorScheme.Rose]: { icon: Flower, category: "basic" },
+  [ColorScheme.NightSky]: { icon: MoonStar, category: "seijaku" },
+  [ColorScheme.Lavender]: { icon: Flower2, category: "basic" },
 };
 
 export const getThemesByCategory = (category: ThemeCategory): ColorScheme[] => {

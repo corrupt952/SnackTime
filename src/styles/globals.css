@@ -278,30 +278,31 @@
   }
 
   .lemon {
-    --background: 54 60% 96%;
-    --foreground: 45 80% 8%;
-    --card: 54 40% 98%;
-    --card-foreground: 45 80% 8%;
-    --popover: 54 40% 98%;
-    --popover-foreground: 45 80% 8%;
-    --primary: 45 80% 35%;
-    --primary-foreground: 54 60% 98%;
-    --secondary: 54 50% 91%;
-    --secondary-foreground: 45 80% 25%;
-    --muted: 54 40% 93%;
-    --muted-foreground: 45 50% 40%;
-    --accent: 42 100% 50%;
-    --accent-foreground: 54 60% 98%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 54 60% 98%;
-    --border: 54 30% 87%;
-    --input: 54 40% 93%;
-    --ring: 42 100% 50%;
-    --chart-1: 45 93% 47%;
-    --chart-2: 54 96% 90%;
-    --chart-3: 45 50% 45%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    /* セピアの午後 - 1970sの古い写真、暖かい午後の光 */
+    --background: 40 35% 94%;
+    --foreground: 30 20% 20%;
+    --card: 40 30% 96%;
+    --card-foreground: 30 20% 20%;
+    --popover: 40 30% 96%;
+    --popover-foreground: 30 20% 20%;
+    --primary: 42 55% 48%;
+    --primary-foreground: 40 35% 98%;
+    --secondary: 40 25% 88%;
+    --secondary-foreground: 30 20% 25%;
+    --muted: 40 25% 90%;
+    --muted-foreground: 30 15% 45%;
+    --accent: 35 45% 52%;
+    --accent-foreground: 40 35% 98%;
+    --destructive: 0 60% 50%;
+    --destructive-foreground: 40 35% 98%;
+    --border: 40 20% 82%;
+    --input: 40 25% 90%;
+    --ring: 42 55% 48%;
+    --chart-1: 42 55% 48%;
+    --chart-2: 40 35% 85%;
+    --chart-3: 35 45% 52%;
+    --chart-4: 38 40% 58%;
+    --chart-5: 28 50% 55%;
 
     /**
      * Shadow DOM Color Variable Overrides
@@ -337,30 +338,31 @@
   }
 
   .mint {
-    --background: 160 35% 97%;
-    --foreground: 165 60% 8%;
-    --card: 160 25% 99%;
-    --card-foreground: 165 60% 8%;
-    --popover: 160 25% 99%;
-    --popover-foreground: 165 60% 8%;
-    --primary: 165 60% 35%;
-    --primary-foreground: 160 35% 98%;
-    --secondary: 160 30% 92%;
-    --secondary-foreground: 165 60% 25%;
-    --muted: 160 25% 94%;
-    --muted-foreground: 165 30% 40%;
-    --accent: 165 70% 45%;
-    --accent-foreground: 160 35% 98%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 160 35% 98%;
-    --border: 160 20% 88%;
-    --input: 160 25% 94%;
-    --ring: 165 70% 45%;
-    --chart-1: 165 60% 40%;
-    --chart-2: 160 55% 90%;
-    --chart-3: 165 40% 45%;
-    --chart-4: 170 65% 60%;
-    --chart-5: 155 75% 55%;
+    /* レトロな喫茶店 - 1950sのミント、メロンソーダ */
+    --background: 150 25% 94%;
+    --foreground: 155 20% 20%;
+    --card: 150 20% 96%;
+    --card-foreground: 155 20% 20%;
+    --popover: 150 20% 96%;
+    --popover-foreground: 155 20% 20%;
+    --primary: 155 35% 42%;
+    --primary-foreground: 150 25% 98%;
+    --secondary: 150 18% 88%;
+    --secondary-foreground: 155 20% 25%;
+    --muted: 150 18% 90%;
+    --muted-foreground: 155 15% 45%;
+    --accent: 160 30% 48%;
+    --accent-foreground: 150 25% 98%;
+    --destructive: 0 60% 50%;
+    --destructive-foreground: 150 25% 98%;
+    --border: 150 15% 82%;
+    --input: 150 18% 90%;
+    --ring: 155 35% 42%;
+    --chart-1: 155 35% 42%;
+    --chart-2: 150 25% 85%;
+    --chart-3: 160 30% 48%;
+    --chart-4: 152 28% 55%;
+    --chart-5: 145 32% 50%;
 
     /**
      * Shadow DOM Color Variable Overrides
@@ -396,30 +398,31 @@
   }
 
   .rose {
-    --background: 350 30% 97%;
-    --foreground: 345 60% 8%;
-    --card: 350 20% 99%;
-    --card-foreground: 345 60% 8%;
-    --popover: 350 20% 99%;
-    --popover-foreground: 345 60% 8%;
-    --primary: 345 60% 35%;
-    --primary-foreground: 350 30% 98%;
-    --secondary: 350 25% 92%;
-    --secondary-foreground: 345 60% 25%;
-    --muted: 350 20% 94%;
-    --muted-foreground: 345 30% 40%;
-    --accent: 340 70% 50%;
-    --accent-foreground: 350 30% 98%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 350 30% 98%;
-    --border: 350 15% 88%;
-    --input: 350 20% 94%;
-    --ring: 340 70% 50%;
-    --chart-1: 345 60% 45%;
-    --chart-2: 350 55% 90%;
-    --chart-3: 345 40% 45%;
-    --chart-4: 340 65% 60%;
-    --chart-5: 355 75% 55%;
+    /* Dusty Rose - 褪せた桜、古いフィルム写真 */
+    --background: 345 35% 95%;
+    --foreground: 340 20% 22%;
+    --card: 345 30% 97%;
+    --card-foreground: 340 20% 22%;
+    --popover: 345 30% 97%;
+    --popover-foreground: 340 20% 22%;
+    --primary: 343 40% 52%;
+    --primary-foreground: 345 35% 98%;
+    --secondary: 345 25% 89%;
+    --secondary-foreground: 340 20% 28%;
+    --muted: 345 25% 91%;
+    --muted-foreground: 340 18% 48%;
+    --accent: 350 35% 58%;
+    --accent-foreground: 345 35% 98%;
+    --destructive: 0 60% 50%;
+    --destructive-foreground: 345 35% 98%;
+    --border: 345 20% 85%;
+    --input: 345 25% 91%;
+    --ring: 343 40% 52%;
+    --chart-1: 343 40% 52%;
+    --chart-2: 345 35% 86%;
+    --chart-3: 350 35% 58%;
+    --chart-4: 338 32% 62%;
+    --chart-5: 355 38% 55%;
 
     /**
      * Shadow DOM Color Variable Overrides
@@ -454,31 +457,32 @@
     --color-ring: hsl(var(--ring));
   }
 
-  .yorusora {
-    --background: 244 47% 20%;
-    --foreground: 226 100% 94%;
-    --card: 242 47% 28%;
-    --card-foreground: 226 100% 94%;
-    --popover: 244 47% 20%;
-    --popover-foreground: 226 100% 94%;
-    --primary: 239 84% 67%;
-    --primary-foreground: 226 100% 94%;
-    --secondary: 242 40% 25%;
-    --secondary-foreground: 226 90% 85%;
-    --muted: 242 40% 22%;
-    --muted-foreground: 228 50% 70%;
-    --accent: 239 84% 67%;
-    --accent-foreground: 226 100% 94%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 226 100% 94%;
-    --border: 242 40% 30%;
-    --input: 242 40% 25%;
-    --ring: 239 84% 67%;
-    --chart-1: 239 84% 67%;
-    --chart-2: 226 80% 80%;
-    --chart-3: 244 60% 50%;
-    --chart-4: 250 70% 60%;
-    --chart-5: 220 75% 55%;
+  .nightsky {
+    /* 深夜の静寂 - 静かな夜空、星の光 */
+    --background: 232 40% 12%;
+    --foreground: 220 50% 88%;
+    --card: 232 35% 16%;
+    --card-foreground: 220 50% 88%;
+    --popover: 232 40% 12%;
+    --popover-foreground: 220 50% 88%;
+    --primary: 222 50% 55%;
+    --primary-foreground: 220 55% 95%;
+    --secondary: 232 30% 18%;
+    --secondary-foreground: 220 40% 78%;
+    --muted: 232 30% 15%;
+    --muted-foreground: 220 30% 58%;
+    --accent: 215 45% 58%;
+    --accent-foreground: 220 55% 95%;
+    --destructive: 0 65% 50%;
+    --destructive-foreground: 220 55% 95%;
+    --border: 232 28% 20%;
+    --input: 232 30% 18%;
+    --ring: 222 50% 55%;
+    --chart-1: 222 50% 55%;
+    --chart-2: 220 50% 75%;
+    --chart-3: 215 45% 58%;
+    --chart-4: 228 42% 52%;
+    --chart-5: 210 48% 55%;
 
     /**
      * Shadow DOM Color Variable Overrides
@@ -505,30 +509,31 @@
   }
 
   .lavender {
-    --background: 251 91% 95%;
-    --foreground: 263 69% 42%;
-    --card: 250 100% 98%;
-    --card-foreground: 263 69% 42%;
-    --popover: 250 100% 98%;
-    --popover-foreground: 263 69% 42%;
-    --primary: 263 70% 50%;
-    --primary-foreground: 251 91% 98%;
-    --secondary: 251 70% 92%;
-    --secondary-foreground: 263 60% 35%;
-    --muted: 251 60% 94%;
-    --muted-foreground: 263 40% 50%;
-    --accent: 263 90% 66%;
-    --accent-foreground: 251 91% 98%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 251 91% 98%;
-    --border: 251 50% 88%;
-    --input: 251 60% 94%;
-    --ring: 263 90% 66%;
-    --chart-1: 263 70% 55%;
-    --chart-2: 251 80% 90%;
-    --chart-3: 263 50% 50%;
-    --chart-4: 270 65% 60%;
-    --chart-5: 255 75% 55%;
+    /* Lo-Fi Dreams - 夢の中、夕暮れの空 */
+    --background: 275 35% 95%;
+    --foreground: 270 22% 25%;
+    --card: 275 30% 97%;
+    --card-foreground: 270 22% 25%;
+    --popover: 275 30% 97%;
+    --popover-foreground: 270 22% 25%;
+    --primary: 277 40% 50%;
+    --primary-foreground: 275 35% 98%;
+    --secondary: 275 25% 89%;
+    --secondary-foreground: 270 22% 30%;
+    --muted: 275 25% 91%;
+    --muted-foreground: 270 18% 50%;
+    --accent: 285 35% 55%;
+    --accent-foreground: 275 35% 98%;
+    --destructive: 0 60% 50%;
+    --destructive-foreground: 275 35% 98%;
+    --border: 275 20% 85%;
+    --input: 275 25% 91%;
+    --ring: 277 40% 50%;
+    --chart-1: 277 40% 50%;
+    --chart-2: 275 35% 86%;
+    --chart-3: 285 35% 55%;
+    --chart-4: 280 32% 58%;
+    --chart-5: 268 38% 52%;
 
     /**
      * Shadow DOM Color Variable Overrides

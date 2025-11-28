@@ -72,7 +72,7 @@ export const en = {
     lemon: "Lemon",
     mint: "Mint",
     rose: "Rose",
-    yorusora: "よるそら - Yorusora",
+    nightsky: "Night Sky",
     lavender: "Lavender",
     systemDescription: "Match system preference",
     lightDescription: "Always light theme",
@@ -80,7 +80,7 @@ export const en = {
     lemonDescription: "Bright yellow theme",
     mintDescription: "Fresh mint theme",
     roseDescription: "Soft rose theme",
-    yorusoraDescription: "Night sky indigo theme",
+    nightskyDescription: "Night sky indigo theme",
     lavenderDescription: "Soft purple theme",
   },
   presetEditor: {

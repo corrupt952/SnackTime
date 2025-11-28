@@ -71,7 +71,7 @@ export const ja = {
     lemon: "レモン",
     mint: "ミント",
     rose: "ローズ",
-    yorusora: "よるそら",
+    nightsky: "夜空",
     lavender: "ラベンダー",
     systemDescription: "システム設定に従う",
     lightDescription: "常にライトテーマ",
@@ -79,7 +79,7 @@ export const ja = {
     lemonDescription: "明るいイエローテーマ",
     mintDescription: "爽やかなミントテーマ",
     roseDescription: "柔らかなローズテーマ",
-    yorusoraDescription: "夜空のインディゴテーマ",
+    nightskyDescription: "夜空のインディゴテーマ",
     lavenderDescription: "柔らかなパープルテーマ",
   },
   presetEditor: {
