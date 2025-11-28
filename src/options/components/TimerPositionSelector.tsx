@@ -1,6 +1,7 @@
 import { TimerPosition } from "@/domain/settings/models/settings";
 import { cn } from "@/lib/utils";
 import { Coffee } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface TimerPositionSelectorProps {
   value: TimerPosition;
@@ -8,6 +9,16 @@ interface TimerPositionSelectorProps {
 }
 
 export function TimerPositionSelector({ value, onChange }: TimerPositionSelectorProps) {
+  const { t } = useTranslation();
+
+  const positionLabels: Record<TimerPosition, string> = {
+    "top-left": t("position.topLeft"),
+    "top-right": t("position.topRight"),
+    "bottom-left": t("position.bottomLeft"),
+    "bottom-right": t("position.bottomRight"),
+    center: t("position.center"),
+  };
+
   const positions: { id: TimerPosition; className: string }[] = [
     { id: "top-left", className: "top-2 left-2" },
     { id: "top-right", className: "top-2 right-2" },
@@ -56,7 +67,7 @@ export function TimerPositionSelector({ value, onChange }: TimerPositionSelector
                 "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
                 position.className,
               )}
-              aria-label={`Position: ${position.id}`}
+              aria-label={positionLabels[position.id]}
             >
               {/* Mini timer preview */}
               <div
@@ -77,8 +88,8 @@ export function TimerPositionSelector({ value, onChange }: TimerPositionSelector
 
       {/* Position label */}
       <p className="text-center mt-3 text-sm text-muted-foreground">
-        Click to select timer position:{" "}
-        <span className="font-medium text-foreground capitalize">{value.replace("-", " ")}</span>
+        {t("options.general.timerPosition.selectPrompt")}{" "}
+        <span className="font-medium text-foreground">{positionLabels[value]}</span>
       </p>
     </div>
   );

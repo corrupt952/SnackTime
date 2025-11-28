@@ -1,5 +1,6 @@
 import { Clock, X } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { TimeInput } from "./TimeInput";
@@ -10,6 +11,7 @@ interface TimeInputModalProps {
 }
 
 export const TimeInputModal = ({ onClose, onSubmit }: TimeInputModalProps) => {
+  const { t } = useTranslation();
   const getDefaultTime = () => {
     const now = new Date();
     now.setMinutes(now.getMinutes() + 30);
@@ -29,7 +31,7 @@ export const TimeInputModal = ({ onClose, onSubmit }: TimeInputModalProps) => {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Clock className="h-4 w-4 text-muted-foreground" />
-              <span className="font-medium">Set end time</span>
+              <span className="font-medium">{t("modal.setEndTime.title")}</span>
             </div>
             <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8">
               <X className="h-4 w-4" />
@@ -37,17 +39,17 @@ export const TimeInputModal = ({ onClose, onSubmit }: TimeInputModalProps) => {
           </div>
           <div className="space-y-4">
             <div className="text-sm text-muted-foreground">
-              Enter the time you want the timer to end at.
+              {t("modal.setEndTime.description")}
               <br />
-              If the time is earlier than now, it will be set for tomorrow.
+              {t("modal.setEndTime.descriptionTomorrow")}
             </div>
             <TimeInput value={time} onTimeChange={setTime} placeholder="14:30" />
             <div className="flex justify-end gap-2">
               <Button variant="outline" onClick={onClose}>
-                Cancel
+                {t("common.cancel")}
               </Button>
               <Button onClick={() => onSubmit(time)} disabled={!time}>
-                Set
+                {t("common.set")}
               </Button>
             </div>
           </div>

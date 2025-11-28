@@ -3,53 +3,51 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Timer, BookOpen, Coffee, Brain, Briefcase, Settings } from "lucide-react";
 import { LucideIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface PresetTimerEditorProps {
   presets: PresetTimer[];
   onChange: (presets: PresetTimer[]) => void;
 }
 
+type TemplateId = "breaks" | "pomodoro" | "study" | "meditation" | "meetings";
+
 interface QuickTemplate {
-  name: string;
+  id: TemplateId;
   icon: LucideIcon;
-  description: string;
   presets: PresetTimer[];
 }
 
-const quickTemplates: QuickTemplate[] = [
+const quickTemplateData: QuickTemplate[] = [
   {
-    name: "Breaks",
+    id: "breaks",
     icon: Coffee,
-    description: "1, 3, 5, 10 min",
     presets: [{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }],
   },
   {
-    name: "Pomodoro",
+    id: "pomodoro",
     icon: Timer,
-    description: "25, 5, 15, 30 min",
     presets: [{ minutes: 25 }, { minutes: 5 }, { minutes: 15 }, { minutes: 30 }],
   },
   {
-    name: "Study",
+    id: "study",
     icon: BookOpen,
-    description: "45, 10, 60, 90 min",
     presets: [{ minutes: 45 }, { minutes: 10 }, { minutes: 60 }, { minutes: 90 }],
   },
   {
-    name: "Meditation",
+    id: "meditation",
     icon: Brain,
-    description: "2, 5, 10, 20 min",
     presets: [{ minutes: 2 }, { minutes: 5 }, { minutes: 10 }, { minutes: 20 }],
   },
   {
-    name: "Meetings",
+    id: "meetings",
     icon: Briefcase,
-    description: "15, 30, 45, 60 min",
     presets: [{ minutes: 15 }, { minutes: 30 }, { minutes: 45 }, { minutes: 60 }],
   },
 ];
 
 export function PresetTimerEditor({ presets, onChange }: PresetTimerEditorProps) {
+  const { t } = useTranslation();
   const handleMinutesChange = (index: number, value: string) => {
     const minutes = parseInt(value, 10);
     if (isNaN(minutes) || minutes < 0 || minutes > 999) return;
@@ -68,33 +66,33 @@ export function PresetTimerEditor({ presets, onChange }: PresetTimerEditorProps)
   };
 
   // Check if current presets match any template
-  const getSelectedTemplate = () => {
-    for (const template of quickTemplates) {
+  const getSelectedTemplateId = () => {
+    for (const template of quickTemplateData) {
       if (template.presets.length !== presets.length) continue;
 
       const matches = template.presets.every(
         (templatePreset, index) => presets[index]?.minutes === templatePreset.minutes,
       );
 
-      if (matches) return template.name;
+      if (matches) return template.id;
     }
-    return "Custom";
+    return "custom";
   };
 
-  const selectedTemplate = getSelectedTemplate();
+  const selectedTemplateId = getSelectedTemplateId();
 
   return (
     <div className="space-y-6">
       {/* Quick Templates */}
       <div>
-        <h3 className="text-base font-semibold mb-2">Quick Templates</h3>
-        <p className="text-sm text-muted-foreground mb-4">Click a template to apply preset times instantly</p>
+        <h3 className="text-base font-semibold mb-2">{t("presetEditor.quickTemplates.title")}</h3>
+        <p className="text-sm text-muted-foreground mb-4">{t("presetEditor.quickTemplates.description")}</p>
         <div className="grid grid-cols-3 gap-3">
-          {quickTemplates.map((template) => {
-            const isSelected = selectedTemplate === template.name;
+          {quickTemplateData.map((template) => {
+            const isSelected = selectedTemplateId === template.id;
             return (
               <button
-                key={template.name}
+                key={template.id}
                 onClick={() => applyTemplate(template)}
                 className="relative flex cursor-pointer rounded-lg border bg-background p-4 transition-all duration-200 hover:bg-accent/50 hover:shadow-md"
               >
@@ -103,8 +101,8 @@ export function PresetTimerEditor({ presets, onChange }: PresetTimerEditorProps)
                     <template.icon className="h-4 w-4" />
                   </div>
                   <div className="flex-1 text-left">
-                    <p className="font-medium">{template.name}</p>
-                    <p className="text-xs text-muted-foreground">{template.description}</p>
+                    <p className="font-medium">{t(`templates.${template.id}.name`)}</p>
+                    <p className="text-xs text-muted-foreground">{t(`templates.${template.id}.description`)}</p>
                   </div>
                 </div>
                 {isSelected && <div className="absolute right-2 top-2 h-2 w-2 rounded-full bg-primary" />}
@@ -118,11 +116,11 @@ export function PresetTimerEditor({ presets, onChange }: PresetTimerEditorProps)
                 <Settings className="h-4 w-4" />
               </div>
               <div className="flex-1 text-left">
-                <p className="font-medium text-muted-foreground">Custom</p>
-                <p className="text-xs text-muted-foreground">User defined</p>
+                <p className="font-medium text-muted-foreground">{t("presetEditor.custom")}</p>
+                <p className="text-xs text-muted-foreground">{t("presetEditor.userDefined")}</p>
               </div>
             </div>
-            {selectedTemplate === "Custom" && (
+            {selectedTemplateId === "custom" && (
               <div className="absolute right-2 top-2 h-2 w-2 rounded-full bg-primary" />
             )}
           </div>
@@ -131,12 +129,14 @@ export function PresetTimerEditor({ presets, onChange }: PresetTimerEditorProps)
 
       {/* Custom Presets */}
       <div>
-        <h3 className="text-base font-semibold mb-2">Custom Presets</h3>
-        <p className="text-sm text-muted-foreground mb-4">Set your own timer values for each preset button</p>
+        <h3 className="text-base font-semibold mb-2">{t("presetEditor.customPresets.title")}</h3>
+        <p className="text-sm text-muted-foreground mb-4">{t("presetEditor.customPresets.description")}</p>
         <div className="grid grid-cols-4 gap-4">
           {presets.map((preset, index) => (
             <div key={index} className="text-center">
-              <div className="text-sm text-muted-foreground mb-2">Preset {index + 1}</div>
+              <div className="text-sm text-muted-foreground mb-2">
+                {t("presetEditor.preset", { number: index + 1 })}
+              </div>
               <Input
                 type="number"
                 value={preset.minutes}
@@ -145,7 +145,7 @@ export function PresetTimerEditor({ presets, onChange }: PresetTimerEditorProps)
                 max="999"
                 className="w-full px-3 py-2 text-center text-lg font-mono"
               />
-              <div className="text-xs text-muted-foreground mt-1">minutes</div>
+              <div className="text-xs text-muted-foreground mt-1">{t("presetEditor.minutes")}</div>
             </div>
           ))}
         </div>
@@ -154,7 +154,7 @@ export function PresetTimerEditor({ presets, onChange }: PresetTimerEditorProps)
       {/* Reset Button */}
       <div className="flex justify-end">
         <Button variant="outline" size="sm" onClick={resetToDefaults}>
-          Reset to Defaults
+          {t("presetEditor.resetToDefaults")}
         </Button>
       </div>
     </div>

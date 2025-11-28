@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "Snack Time - Online Timer",
+    "description": "Extension name shown in Chrome Web Store and extension management"
+  },
+  "extDescription": {
+    "message": "A timer that appears on websites to help with timekeeping for meetings and tasks",
+    "description": "Extension description shown in Chrome Web Store"
+  }
+}

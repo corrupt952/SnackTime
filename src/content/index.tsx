@@ -1,15 +1,18 @@
 import { Settings } from "@/domain/settings/models/settings";
 import styles from "@/styles/globals.css?inline";
 import { getEffectiveColorScheme } from "@/lib/color-scheme";
+import { changeLanguage } from "@/i18n/config";
 import { NotificationType } from "@/types/enums/NotificationType";
 import React from "react";
 import { createRoot } from "react-dom/client";
+import "@/i18n";
 import Timer from "./Timer";
 
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   sendResponse("Received");
   const { duration } = message;
   const settings = await Settings.get();
+  changeLanguage(settings.language);
 
   const contentRoot = document.createElement("div");
   contentRoot.id = "snack-time-root";

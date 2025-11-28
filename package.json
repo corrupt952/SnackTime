@@ -52,9 +52,11 @@
     "@types/react-dom": "^19.2.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "i18next": "^25.6.3",
     "js-yaml": "^4.1.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-i18next": "^16.3.5",
     "tailwind-merge": "^3.4.0"
   }
 }

@@ -30,6 +30,7 @@ describe("timerService", () => {
     vi.resetAllMocks();
     // Mock Settings
     vi.mocked(Settings.get).mockResolvedValue({
+      language: "system",
       colorScheme: ColorScheme.Light,
       notificationType: NotificationType.Alarm,
       alarmSound: "Simple",

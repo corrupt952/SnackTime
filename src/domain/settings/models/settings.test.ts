@@ -14,6 +14,7 @@ describe("Settings", () => {
 
       const settings = await Settings.get();
       expect(settings).toEqual({
+        language: "system",
         notificationType: NotificationType.Alarm,
         colorScheme: ColorScheme.Dark,
         alarmSound: "Simple",
@@ -36,6 +37,7 @@ describe("Settings", () => {
 
       const settings = await Settings.get();
       expect(settings).toEqual({
+        language: "system",
         notificationType: NotificationType.Alarm,
         colorScheme: ColorScheme.Light,
         alarmSound: "Simple",
@@ -48,6 +50,7 @@ describe("Settings", () => {
 
     it("should return all stored settings when storage is complete", async () => {
       const fullSettings = {
+        language: "ja" as const,
         notificationType: NotificationType.None,
         colorScheme: ColorScheme.Light,
         alarmSound: "Piano" as const,
@@ -70,6 +73,7 @@ describe("Settings", () => {
       vi.spyOn(chrome.storage.sync, "get").mockRejectedValue(new Error("Storage error"));
       const settings = await Settings.get();
       expect(settings).toEqual({
+        language: "system",
         notificationType: NotificationType.Alarm,
         colorScheme: ColorScheme.Dark,
         alarmSound: "Simple",
@@ -84,6 +88,7 @@ describe("Settings", () => {
   describe("set", () => {
     it("should merge and save new settings with existing ones", async () => {
       const getCurrentSettings = vi.spyOn(Settings, "get").mockResolvedValue({
+        language: "system",
         notificationType: NotificationType.None,
         colorScheme: ColorScheme.Dark,
         alarmSound: "Simple",
@@ -99,6 +104,7 @@ describe("Settings", () => {
       expect(getCurrentSettings).toHaveBeenCalled();
       expect(setStorage).toHaveBeenCalledWith({
         settings: {
+          language: "system",
           notificationType: NotificationType.None,
           colorScheme: ColorScheme.Light,
           alarmSound: "Simple",
@@ -112,6 +118,7 @@ describe("Settings", () => {
 
     it("should not modify settings when empty object is provided", async () => {
       const getCurrentSettings = vi.spyOn(Settings, "get").mockResolvedValue({
+        language: "system",
         notificationType: NotificationType.None,
         colorScheme: ColorScheme.Dark,
         alarmSound: "Simple",
@@ -127,6 +134,7 @@ describe("Settings", () => {
       expect(getCurrentSettings).toHaveBeenCalled();
       expect(setStorage).toHaveBeenCalledWith({
         settings: {
+          language: "system",
           notificationType: NotificationType.None,
           colorScheme: ColorScheme.Dark,
           alarmSound: "Simple",
@@ -140,6 +148,7 @@ describe("Settings", () => {
 
     it("should update all settings when full object is provided", async () => {
       const getCurrentSettings = vi.spyOn(Settings, "get").mockResolvedValue({
+        language: "system",
         notificationType: NotificationType.None,
         colorScheme: ColorScheme.Dark,
         alarmSound: "Simple",
@@ -151,6 +160,7 @@ describe("Settings", () => {
       const setStorage = vi.spyOn(chrome.storage.sync, "set");
 
       const newSettings: ExtensionSettings = {
+        language: "ja",
         notificationType: NotificationType.None,
         colorScheme: ColorScheme.Light,
         alarmSound: "Piano",
@@ -169,6 +179,7 @@ describe("Settings", () => {
 
     it("should normalize volume to be between 0 and 1", async () => {
       const getCurrentSettings = vi.spyOn(Settings, "get").mockResolvedValue({
+        language: "system",
         notificationType: NotificationType.None,
         colorScheme: ColorScheme.Dark,
         alarmSound: "Simple",
@@ -192,6 +203,7 @@ describe("Settings", () => {
 
     it("should normalize invalid alarm sound to Simple", async () => {
       const getCurrentSettings = vi.spyOn(Settings, "get").mockResolvedValue({
+        language: "system",
         notificationType: NotificationType.None,
         colorScheme: ColorScheme.Dark,
         alarmSound: "Simple",
@@ -210,6 +222,7 @@ describe("Settings", () => {
 
     it("should handle storage error silently", async () => {
       vi.spyOn(Settings, "get").mockResolvedValue({
+        language: "system",
         notificationType: NotificationType.None,
         colorScheme: ColorScheme.Dark,
         alarmSound: "Simple",

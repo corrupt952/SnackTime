@@ -1,5 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
+import "@/i18n";
 import Options from "./Options";
 
 createRoot(document.getElementById("root") as HTMLElement).render(

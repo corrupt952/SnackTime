@@ -5,11 +5,14 @@ export type AlarmSound = "Simple" | "Piano" | "Vibraphone" | "SteelDrums";
 
 export type TimerPosition = "top-right" | "top-left" | "bottom-right" | "bottom-left" | "center";
 
+export type Language = "system" | "en" | "ja";
+
 export interface PresetTimer {
   minutes: number;
 }
 
 export interface ExtensionSettings {
+  language: Language;
   colorScheme: ColorScheme;
   notificationType: NotificationType;
   alarmSound: AlarmSound;
@@ -21,6 +24,7 @@ export interface ExtensionSettings {
 
 export class Settings {
   private static readonly defaultSettings: ExtensionSettings = {
+    language: "system",
     notificationType: NotificationType.Alarm,
     colorScheme: ColorScheme.Dark,
     alarmSound: "Simple",

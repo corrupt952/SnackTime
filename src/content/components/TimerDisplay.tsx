@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { memo } from "react";
+import { useTranslation } from "react-i18next";
 import { Duration } from "@/domain/timer/value/duration";
 
 interface TimerDisplayProps {
@@ -8,6 +9,8 @@ interface TimerDisplayProps {
 }
 
 const TimerDisplay = memo(({ totalSeconds, isFullscreen }: TimerDisplayProps) => {
+  const { t } = useTranslation();
+
   const formatTime = (time: number) => {
     const duration = new Duration(time);
     return duration.toFormatted();
@@ -15,7 +18,7 @@ const TimerDisplay = memo(({ totalSeconds, isFullscreen }: TimerDisplayProps) =>
 
   return (
     <div className={cn("font-bold font-mono text-center", isFullscreen ? "text-[12rem]" : "text-6xl")}>
-      {totalSeconds <= 0 ? "Time's up!" : formatTime(totalSeconds)}
+      {totalSeconds <= 0 ? t("timer.timesUp") : formatTime(totalSeconds)}
     </div>
   );
 });

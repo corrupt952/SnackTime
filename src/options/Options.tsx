@@ -1,8 +1,17 @@
-import { Coffee, Volume2, Palette, Bell, Settings2 } from "lucide-react";
+import { Coffee, Volume2, Palette, Bell, Settings2, Globe } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { NotificationType } from "@/types/enums/NotificationType";
-import { ExtensionSettings, Settings, AlarmSound, TimerPosition, PresetTimer } from "@/domain/settings/models/settings";
+import {
+  ExtensionSettings,
+  Settings,
+  AlarmSound,
+  TimerPosition,
+  PresetTimer,
+  Language,
+} from "@/domain/settings/models/settings";
 import { ColorScheme, colorSchemeMetadata, getColorSchemeIcon, applyColorSchemeClass } from "@/lib/color-scheme";
+import { changeLanguage, supportedLanguages } from "@/i18n/config";
 import "@/styles/globals.css";
 import { RadioGroup } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -20,6 +29,8 @@ import { TimerPositionSelector } from "./components/TimerPositionSelector";
 import { PresetTimerEditor } from "./components/PresetTimerEditor";
 
 const Options = () => {
+  const { t } = useTranslation();
+  const [language, setLanguage] = useState<Language>("system");
   const [notificationType, setNotificationType] = useState<NotificationType>(NotificationType.Alarm);
   const [colorScheme, setColorScheme] = useState<ColorScheme>(ColorScheme.System);
   const [alarmSound, setAlarmSound] = useState<AlarmSound>("Simple");
@@ -33,6 +44,7 @@ const Options = () => {
     { minutes: 10 },
   ]);
   const [settings, setSettings] = useState<ExtensionSettings>({
+    language: "system",
     colorScheme: ColorScheme.System,
     notificationType: NotificationType.Alarm,
     alarmSound: "Simple",
@@ -45,9 +57,9 @@ const Options = () => {
   const { playSound } = useAudioPlayback(alarmSound, volume);
 
   const navigationItems: SidebarNavigationItem[] = [
-    { href: "#general", label: "General", icon: Settings2 },
-    { href: "#appearance", label: "Appearance", icon: Palette },
-    { href: "#notification", label: "Notification", icon: Bell },
+    { href: "#general", label: t("options.nav.general"), icon: Settings2 },
+    { href: "#appearance", label: t("options.nav.appearance"), icon: Palette },
+    { href: "#notification", label: t("options.nav.notification"), icon: Bell },
   ];
 
   useEffect(() => {
@@ -55,6 +67,7 @@ const Options = () => {
 
     Settings.get().then((settings) => {
       setSettings(settings);
+      setLanguage(settings.language);
       setNotificationType(settings.notificationType);
       setColorScheme(settings.colorScheme);
       setAlarmSound(settings.alarmSound);
@@ -62,10 +75,13 @@ const Options = () => {
       setApplyThemeToSettings(settings.applyThemeToSettings);
       setTimerPosition(settings.timerPosition);
       setPresetTimers(settings.presetTimers);
+      // Apply stored language setting
+      changeLanguage(settings.language);
     });
   }, []);
 
   // Use custom hooks for settings synchronization
+  useSettingsSync("language", language);
   useSettingsSync("notificationType", notificationType);
   useSettingsSync("alarmSound", alarmSound);
   useSettingsSync("colorScheme", colorScheme);
@@ -73,6 +89,12 @@ const Options = () => {
   useSettingsSync("applyThemeToSettings", applyThemeToSettings);
   useSettingsSync("timerPosition", timerPosition);
   useSettingsSync("presetTimers", presetTimers);
+
+  // Handle language change
+  const handleLanguageChange = (newLanguage: Language) => {
+    setLanguage(newLanguage);
+    changeLanguage(newLanguage);
+  };
 
   useEffect(() => {
     if (applyThemeToSettings) {
@@ -84,7 +106,7 @@ const Options = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/20">
-      <PageHeader icon={Coffee} title="Snack Time" subtitle="Timer Extension Settings" showPulse />
+      <PageHeader icon={Coffee} title={t("common.appName")} subtitle={t("options.subtitle")} showPulse />
 
       <div className="container mx-auto mt-8 pb-12">
         <div className="grid gap-6 lg:grid-cols-4">
@@ -93,27 +115,53 @@ const Options = () => {
           </aside>
 
           <main className="lg:col-span-3 space-y-6">
-            <SettingsSection id="general" icon={Settings2} title="General Settings">
+            <SettingsSection id="general" icon={Settings2} title={t("options.general.title")}>
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-base font-semibold text-foreground mb-2">Timer Position</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Choose where the timer appears on web pages. You can still drag it to any position after it appears.
-                  </p>
+                  <h3 className="text-base font-semibold text-foreground mb-2">
+                    {t("options.general.language.label")}
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-4">{t("options.general.language.description")}</p>
+                  <RadioGroup
+                    value={language}
+                    onValueChange={(value) => handleLanguageChange(value as Language)}
+                    className="grid grid-cols-1 sm:grid-cols-3 gap-3"
+                  >
+                    {supportedLanguages.map((lang) => (
+                      <RadioCard
+                        key={lang.code}
+                        id={`language-${lang.code}`}
+                        value={lang.code}
+                        title={t(`language.${lang.code}` as const)}
+                        description={lang.code === "system" ? t("language.systemDescription") : lang.nativeName}
+                        icon={Globe}
+                        isSelected={language === lang.code}
+                      />
+                    ))}
+                  </RadioGroup>
+                </div>
+
+                <div>
+                  <h3 className="text-base font-semibold text-foreground mb-2">
+                    {t("options.general.timerPosition.label")}
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-4">{t("options.general.timerPosition.description")}</p>
                   <TimerPositionSelector value={timerPosition} onChange={(value) => setTimerPosition(value)} />
                 </div>
 
                 <div>
-                  <h3 className="text-base font-semibold text-foreground mb-2">Preset Timers</h3>
+                  <h3 className="text-base font-semibold text-foreground mb-2">{t("options.general.presetTimers")}</h3>
                   <PresetTimerEditor presets={presetTimers} onChange={setPresetTimers} />
                 </div>
               </div>
             </SettingsSection>
 
-            <SettingsSection id="appearance" icon={Palette} title="Appearance">
+            <SettingsSection id="appearance" icon={Palette} title={t("options.appearance.title")}>
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-base font-semibold text-foreground mb-4">Color Scheme</h3>
+                  <h3 className="text-base font-semibold text-foreground mb-4">
+                    {t("options.appearance.colorScheme")}
+                  </h3>
                   <RadioGroup
                     value={colorScheme}
                     onValueChange={(value) => setColorScheme(value as ColorScheme)}
@@ -124,8 +172,8 @@ const Options = () => {
                         key={value}
                         id={`color-scheme-${value}`}
                         value={value}
-                        title={key}
-                        description={colorSchemeMetadata[value]?.description ?? ""}
+                        title={t(`colorScheme.${value}` as const)}
+                        description={t(`colorScheme.${value}Description` as const)}
                         icon={getColorSchemeIcon(value)}
                         isSelected={colorScheme === value}
                       />
@@ -133,16 +181,18 @@ const Options = () => {
                   </RadioGroup>
                 </div>
                 <div className="rounded-lg bg-muted/30 p-4">
-                  <h4 className="text-sm font-medium mb-3">Preview</h4>
+                  <h4 className="text-sm font-medium mb-3">{t("options.appearance.preview")}</h4>
                   <TimerCardPreview colorScheme={colorScheme} />
                 </div>
 
                 <div className="flex items-center justify-between p-4 rounded-lg border bg-muted/10">
                   <div className="space-y-0.5">
                     <Label htmlFor="apply-theme-to-settings" className="text-base font-medium cursor-pointer">
-                      Apply to this page
+                      {t("options.appearance.applyToSettings.label")}
                     </Label>
-                    <p className="text-xs text-muted-foreground">Use selected theme for the settings page</p>
+                    <p className="text-xs text-muted-foreground">
+                      {t("options.appearance.applyToSettings.description")}
+                    </p>
                   </div>
                   <Switch
                     id="apply-theme-to-settings"
@@ -153,10 +203,10 @@ const Options = () => {
               </div>
             </SettingsSection>
 
-            <SettingsSection id="notification" icon={Bell} title="Notification">
+            <SettingsSection id="notification" icon={Bell} title={t("options.notification.title")}>
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-base font-semibold text-foreground mb-4">Notification Type</h3>
+                  <h3 className="text-base font-semibold text-foreground mb-4">{t("options.notification.type")}</h3>
                   <RadioGroup
                     value={notificationType}
                     onValueChange={(value) => setNotificationType(value as NotificationType)}
@@ -167,12 +217,12 @@ const Options = () => {
                         key={value}
                         id={`notification-type-${value}`}
                         value={value}
-                        title={key}
+                        title={t(`notificationType.${value}` as const)}
                         description={
                           value === NotificationType.Alarm
-                            ? "Play sound notification"
+                            ? t("notificationType.alarmDescription")
                             : value === NotificationType.None
-                              ? "Silent mode"
+                              ? t("notificationType.noneDescription")
                               : ""
                         }
                         icon={Bell}
@@ -186,17 +236,17 @@ const Options = () => {
                   className={`space-y-4 transition-opacity duration-300 ${notificationType === NotificationType.None ? "opacity-50 pointer-events-none" : ""}`}
                 >
                   <div className="flex items-center justify-between">
-                    <h3 className="text-base font-semibold text-foreground">Alarm Sound</h3>
+                    <h3 className="text-base font-semibold text-foreground">{t("options.notification.alarmSound")}</h3>
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={playSound}
                       className="gap-2"
-                      title="Play selected sound"
+                      title={t("common.preview")}
                       disabled={notificationType === NotificationType.None}
                     >
                       <Volume2 className="h-4 w-4" />
-                      <span className="text-xs">Preview</span>
+                      <span className="text-xs">{t("common.preview")}</span>
                     </Button>
                   </div>
                   <RadioGroup
@@ -221,7 +271,7 @@ const Options = () => {
                 <div
                   className={`space-y-4 transition-opacity duration-300 ${notificationType === NotificationType.None ? "opacity-50 pointer-events-none" : ""}`}
                 >
-                  <h3 className="text-base font-semibold text-foreground">Volume</h3>
+                  <h3 className="text-base font-semibold text-foreground">{t("options.notification.volume")}</h3>
                   <VolumeControl
                     value={volume}
                     onValueChange={setVolume}
