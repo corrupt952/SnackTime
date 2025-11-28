@@ -1,4 +1,18 @@
-import { Coffee, Volume2, Palette, Bell, Settings2, Globe } from "lucide-react";
+import {
+  Coffee,
+  Volume2,
+  Palette,
+  Bell,
+  Settings2,
+  Globe,
+  Info,
+  Github,
+  ExternalLink,
+  Scale,
+  Heart,
+  AtSign,
+  Mail,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { NotificationType } from "@/types/enums/NotificationType";
@@ -60,6 +74,7 @@ const Options = () => {
     { href: "#general", label: t("options.nav.general"), icon: Settings2 },
     { href: "#appearance", label: t("options.nav.appearance"), icon: Palette },
     { href: "#notification", label: t("options.nav.notification"), icon: Bell },
+    { href: "#about", label: t("options.nav.about"), icon: Info },
   ];
 
   useEffect(() => {
@@ -257,6 +272,105 @@ const Options = () => {
                     onValueChange={setVolume}
                     disabled={notificationType === NotificationType.None}
                   />
+                </div>
+              </div>
+            </SettingsSection>
+
+            <SettingsSection id="about" icon={Info} title={t("options.about.title")}>
+              <div className="space-y-6">
+                <div className="flex items-center gap-4 p-4 rounded-lg border bg-muted/10">
+                  <div className="flex items-center justify-center w-16 h-16 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 border">
+                    <Coffee className="h-8 w-8 text-primary" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-foreground">{t("common.appName")}</h3>
+                    <p className="text-sm text-muted-foreground">{t("options.about.version")} 2025.06.4</p>
+                  </div>
+                </div>
+
+                <p className="text-sm text-muted-foreground leading-relaxed">{t("options.about.description")}</p>
+
+                <div>
+                  <h3 className="text-base font-semibold text-foreground mb-3">{t("options.about.author")}</h3>
+                  <a
+                    href="https://zuki.dev"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-primary hover:underline"
+                  >
+                    K@zuki.
+                  </a>
+                </div>
+
+                <div>
+                  <h3 className="text-base font-semibold text-foreground mb-3">{t("options.about.links")}</h3>
+                  <div className="flex flex-wrap gap-2">
+                    <a
+                      href="https://github.com/corrupt952/SnackTime"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border bg-background hover:bg-muted/50 transition-colors"
+                    >
+                      <Github className="h-4 w-4" />
+                      {t("options.about.sourceCode")}
+                      <ExternalLink className="h-3 w-3 opacity-50" />
+                    </a>
+                    <a
+                      href="https://ko-fi.com/corrupt952"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border bg-background hover:bg-muted/50 transition-colors"
+                    >
+                      <Heart className="h-4 w-4" />
+                      {t("options.about.support")}
+                      <ExternalLink className="h-3 w-3 opacity-50" />
+                    </a>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-base font-semibold text-foreground mb-2">{t("options.about.feedback")}</h3>
+                  <p className="text-sm text-muted-foreground mb-3">{t("options.about.feedbackDescription")}</p>
+                  <div className="flex flex-wrap gap-2">
+                    <a
+                      href="https://github.com/corrupt952/SnackTime/issues"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border bg-background hover:bg-muted/50 transition-colors"
+                    >
+                      <Github className="h-4 w-4" />
+                      {t("options.about.gitHubIssues")}
+                      <ExternalLink className="h-3 w-3 opacity-50" />
+                    </a>
+                    <a
+                      href="https://x.com/corrupt952"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border bg-background hover:bg-muted/50 transition-colors"
+                    >
+                      <AtSign className="h-4 w-4" />
+                      {t("options.about.xTwitter")}
+                      <ExternalLink className="h-3 w-3 opacity-50" />
+                    </a>
+                    <a
+                      href="https://relaybase.app/forms/3e45e7b9f03c4d84"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border bg-background hover:bg-muted/50 transition-colors"
+                    >
+                      <Mail className="h-4 w-4" />
+                      {t("options.about.feedbackForm")}
+                      <ExternalLink className="h-3 w-3 opacity-50" />
+                    </a>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-lg border bg-muted/10">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Scale className="h-4 w-4 text-muted-foreground" />
+                    <h3 className="text-sm font-semibold text-foreground">{t("options.about.license")}</h3>
+                  </div>
+                  <p className="text-xs text-muted-foreground">{t("options.about.openSource")}</p>
                 </div>
               </div>
             </SettingsSection>

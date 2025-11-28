@@ -28,6 +28,7 @@ export const en = {
       general: "General",
       appearance: "Appearance",
       notification: "Notification",
+      about: "About",
     },
     general: {
       title: "General Settings",
@@ -57,6 +58,23 @@ export const en = {
       type: "Notification Type",
       alarmSound: "Alarm Sound",
       volume: "Volume",
+    },
+    about: {
+      title: "About",
+      version: "Version",
+      description:
+        "A simple timer extension for your browser to help with time management during meetings and focus sessions.",
+      author: "Author",
+      links: "Links",
+      sourceCode: "Source Code",
+      support: "Support",
+      feedback: "Feedback",
+      feedbackDescription: "Bug reports, feature requests, or just say hi!",
+      gitHubIssues: "GitHub Issues",
+      xTwitter: "X (@corrupt952)",
+      feedbackForm: "Feedback Form",
+      license: "License",
+      openSource: "This project is open source under the MIT License.",
     },
   },
   notificationType: {
