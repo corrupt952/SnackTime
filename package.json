@@ -28,7 +28,7 @@
     "@tailwindcss/vite": "^4.1.17",
     "@types/chrome": "^0.0.279",
     "@types/js-yaml": "^4.0.9",
-    "@types/node": "^22.19.1",
+    "@types/node": "^24.0.0",
     "@vitejs/plugin-react": "^5.1.1",
     "glob": "^11.1.0",
     "lucide-react": "^0.554.0",
