@@ -1,4 +1,4 @@
-import { Coffee, Volume2, Palette, Bell, Settings2, Sparkles, Moon, Sun, Monitor, Timer, Citrus, Leaf, Flower } from "lucide-react";
+import { Coffee, Volume2, Palette, Bell, Settings2, Sparkles, Moon, Sun, Monitor, Timer, Citrus, Leaf, Flower, MoonStar, Flower2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { NotificationType } from "@/types/enums/NotificationType";
 import { ExtensionSettings, Settings, AlarmSound, TimerPosition, PresetTimer } from "@/domain/settings/models/settings";
@@ -113,6 +113,10 @@ const Options = () => {
         return Leaf;
       case ColorScheme.Rose:
         return Flower;
+      case ColorScheme.Yorusora:
+        return MoonStar;
+      case ColorScheme.Lavender:
+        return Flower2;
       default:
         return Sparkles;
     }
@@ -174,7 +178,11 @@ const Options = () => {
                                     ? "Fresh mint theme"
                                     : value === ColorScheme.Rose
                                       ? "Soft rose theme"
-                                      : ""
+                                      : value === ColorScheme.Yorusora
+                                        ? "Night sky indigo theme"
+                                        : value === ColorScheme.Lavender
+                                          ? "Soft purple theme"
+                                          : ""
                         }
                         icon={getColorSchemeIcon(value)}
                         isSelected={colorScheme === value}

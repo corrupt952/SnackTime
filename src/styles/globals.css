@@ -453,6 +453,106 @@
     --color-input: hsl(var(--input));
     --color-ring: hsl(var(--ring));
   }
+
+  .yorusora {
+    --background: 244 47% 20%;
+    --foreground: 226 100% 94%;
+    --card: 242 47% 28%;
+    --card-foreground: 226 100% 94%;
+    --popover: 244 47% 20%;
+    --popover-foreground: 226 100% 94%;
+    --primary: 239 84% 67%;
+    --primary-foreground: 226 100% 94%;
+    --secondary: 242 40% 25%;
+    --secondary-foreground: 226 90% 85%;
+    --muted: 242 40% 22%;
+    --muted-foreground: 228 50% 70%;
+    --accent: 239 84% 67%;
+    --accent-foreground: 226 100% 94%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 226 100% 94%;
+    --border: 242 40% 30%;
+    --input: 242 40% 25%;
+    --ring: 239 84% 67%;
+    --chart-1: 239 84% 67%;
+    --chart-2: 226 80% 80%;
+    --chart-3: 244 60% 50%;
+    --chart-4: 250 70% 60%;
+    --chart-5: 220 75% 55%;
+
+    /**
+     * Shadow DOM Color Variable Overrides
+     */
+    --color-background: hsl(var(--background));
+    --color-foreground: hsl(var(--foreground));
+    --color-card: hsl(var(--card));
+    --color-card-foreground: hsl(var(--card-foreground));
+    --color-popover: hsl(var(--popover));
+    --color-popover-foreground: hsl(var(--popover-foreground));
+    --color-primary: hsl(var(--primary));
+    --color-primary-foreground: hsl(var(--primary-foreground));
+    --color-secondary: hsl(var(--secondary));
+    --color-secondary-foreground: hsl(var(--secondary-foreground));
+    --color-destructive: hsl(var(--destructive));
+    --color-destructive-foreground: hsl(var(--destructive-foreground));
+    --color-muted: hsl(var(--muted));
+    --color-muted-foreground: hsl(var(--muted-foreground));
+    --color-accent: hsl(var(--accent));
+    --color-accent-foreground: hsl(var(--accent-foreground));
+    --color-border: hsl(var(--border));
+    --color-input: hsl(var(--input));
+    --color-ring: hsl(var(--ring));
+  }
+
+  .lavender {
+    --background: 251 91% 95%;
+    --foreground: 263 69% 42%;
+    --card: 250 100% 98%;
+    --card-foreground: 263 69% 42%;
+    --popover: 250 100% 98%;
+    --popover-foreground: 263 69% 42%;
+    --primary: 263 70% 50%;
+    --primary-foreground: 251 91% 98%;
+    --secondary: 251 70% 92%;
+    --secondary-foreground: 263 60% 35%;
+    --muted: 251 60% 94%;
+    --muted-foreground: 263 40% 50%;
+    --accent: 263 90% 66%;
+    --accent-foreground: 251 91% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 251 91% 98%;
+    --border: 251 50% 88%;
+    --input: 251 60% 94%;
+    --ring: 263 90% 66%;
+    --chart-1: 263 70% 55%;
+    --chart-2: 251 80% 90%;
+    --chart-3: 263 50% 50%;
+    --chart-4: 270 65% 60%;
+    --chart-5: 255 75% 55%;
+
+    /**
+     * Shadow DOM Color Variable Overrides
+     */
+    --color-background: hsl(var(--background));
+    --color-foreground: hsl(var(--foreground));
+    --color-card: hsl(var(--card));
+    --color-card-foreground: hsl(var(--card-foreground));
+    --color-popover: hsl(var(--popover));
+    --color-popover-foreground: hsl(var(--popover-foreground));
+    --color-primary: hsl(var(--primary));
+    --color-primary-foreground: hsl(var(--primary-foreground));
+    --color-secondary: hsl(var(--secondary));
+    --color-secondary-foreground: hsl(var(--secondary-foreground));
+    --color-destructive: hsl(var(--destructive));
+    --color-destructive-foreground: hsl(var(--destructive-foreground));
+    --color-muted: hsl(var(--muted));
+    --color-muted-foreground: hsl(var(--muted-foreground));
+    --color-accent: hsl(var(--accent));
+    --color-accent-foreground: hsl(var(--accent-foreground));
+    --color-border: hsl(var(--border));
+    --color-input: hsl(var(--input));
+    --color-ring: hsl(var(--ring));
+  }
 }
 
 @layer base {
