@@ -9,6 +9,11 @@ import {
   Flower2,
   Sparkles,
   Circle,
+  Fish,
+  Sunset,
+  PenTool,
+  Film,
+  CloudRain,
   type LucideIcon,
 } from "lucide-react";
 
@@ -19,8 +24,14 @@ export enum ColorScheme {
   Lemon = "lemon",
   Mint = "mint",
   Rose = "rose",
-  NightSky = "nightsky",
   Lavender = "lavender",
+  // 静寂 (Seijaku) themes
+  NightSky = "nightsky",
+  DeepSea = "deepsea",
+  Twilight = "twilight",
+  Ink = "ink",
+  Sepia = "sepia",
+  EveningRain = "eveningrain",
 }
 
 export type ThemeCategory = "basic" | "seijaku";
@@ -49,8 +60,14 @@ export const colorSchemeMetadata: Record<ColorScheme, ColorSchemeMetadata> = {
   [ColorScheme.Lemon]: { icon: Citrus, category: "basic" },
   [ColorScheme.Mint]: { icon: Leaf, category: "basic" },
   [ColorScheme.Rose]: { icon: Flower, category: "basic" },
-  [ColorScheme.NightSky]: { icon: MoonStar, category: "seijaku" },
   [ColorScheme.Lavender]: { icon: Flower2, category: "basic" },
+  // 静寂 (Seijaku) themes
+  [ColorScheme.NightSky]: { icon: MoonStar, category: "seijaku" },
+  [ColorScheme.DeepSea]: { icon: Fish, category: "seijaku" },
+  [ColorScheme.Twilight]: { icon: Sunset, category: "seijaku" },
+  [ColorScheme.Ink]: { icon: PenTool, category: "seijaku" },
+  [ColorScheme.Sepia]: { icon: Film, category: "seijaku" },
+  [ColorScheme.EveningRain]: { icon: CloudRain, category: "seijaku" },
 };
 
 export const getThemesByCategory = (category: ThemeCategory): ColorScheme[] => {
