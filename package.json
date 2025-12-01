@@ -2,7 +2,7 @@
   "name": "snack_time",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@10.22.0",
+  "packageManager": "pnpm@10.23.0",
   "version": "2025.11.1",
   "description": "This extension is a timer on the website to help with timekeeping for meetings",
   "scripts": {
