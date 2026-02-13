@@ -17,7 +17,7 @@ const TimerDisplay = memo(({ totalSeconds, isFullscreen }: TimerDisplayProps) =>
   };
 
   return (
-    <div className={cn("font-bold font-mono text-center", isFullscreen ? "text-[12rem]" : "text-6xl")}>
+    <div className={cn("font-bold font-mono text-center", isFullscreen ? "text-[192px]" : "text-6xl")}>
       {totalSeconds <= 0 ? t("timer.timesUp") : formatTime(totalSeconds)}
     </div>
   );

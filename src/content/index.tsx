@@ -48,8 +48,8 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   }
   contentRoot.style.zIndex = "calc(infinity)";
   // NOTE: These styles are essential to prevent inheritance from host page styles
-  // fontSize ensures consistent timer size regardless of host page's font-size
-  contentRoot.style.fontSize = "2rem";
+  // Fixed px value ensures consistent timer size regardless of host page's root font-size
+  contentRoot.style.fontSize = "16px";
   // Grid layout is required for proper timer structure
   contentRoot.style.display = "grid";
   contentRoot.style.gridTemplateRows = "1fr auto";
@@ -114,9 +114,25 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     }
   };
 
+  // Override Tailwind's rem-based CSS variables with fixed px values
+  // to prevent timer size from varying with host page's <html> font-size.
+  // In Tailwind v4, --spacing controls all spacing utilities (h-*, w-*, p-*, gap-*, etc.)
+  // and --text-* controls font sizes. By fixing these to px, the timer renders
+  // consistently regardless of the host page's root font-size setting.
+  const remOverrides = `
+    :host {
+      --spacing: 4px;
+      --text-sm: 14px;
+      --text-sm--line-height: 1.43;
+      --text-6xl: 60px;
+      --text-6xl--line-height: 1;
+    }
+  `;
+
   createRoot(shadowContainer).render(
     <React.StrictMode>
       <style>{styles}</style>
+      <style>{remOverrides}</style>
       <Timer
         initialTime={duration}
         close={deleteRoot}
