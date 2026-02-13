@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [2026.02.1] - 2026-02-13
+
+### Fixed
+
+- Fixed timer size and font-size varying across websites due to Tailwind CSS `rem` units depending on host page's root font-size
+- Overridden Tailwind CSS variables (`--spacing`, `--text-6xl`) with fixed `px` values in Shadow DOM for consistent rendering
+
+### Added
+
+- Storybook stories for verifying timer font-size consistency across different root font-size settings
+
 ## [2025.06.4] - 2025-06-28
 
 ### Fixed
