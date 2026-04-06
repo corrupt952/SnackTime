@@ -6,13 +6,13 @@ import {
   Settings2,
   Globe,
   Info,
-  Github,
   ExternalLink,
   Scale,
   Heart,
   AtSign,
   Mail,
 } from "lucide-react";
+import { GithubIcon } from "@/components/icons/github";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { NotificationType } from "@/types/enums/NotificationType";
@@ -311,7 +311,7 @@ const Options = () => {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border bg-background hover:bg-muted/50 transition-colors"
                     >
-                      <Github className="h-4 w-4" />
+                      <GithubIcon className="h-4 w-4" />
                       {t("options.about.sourceCode")}
                       <ExternalLink className="h-3 w-3 opacity-50" />
                     </a>
@@ -338,7 +338,7 @@ const Options = () => {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border bg-background hover:bg-muted/50 transition-colors"
                     >
-                      <Github className="h-4 w-4" />
+                      <GithubIcon className="h-4 w-4" />
                       {t("options.about.gitHubIssues")}
                       <ExternalLink className="h-3 w-3 opacity-50" />
                     </a>

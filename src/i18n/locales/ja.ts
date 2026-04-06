@@ -118,7 +118,7 @@ export const ja = {
       title: "カスタムプリセット",
       description: "各プリセットボタンの時間を自由に設定",
     },
-    preset: "プリセット {{number}}",
+    preset: "プリセット {{number,number}}",
     minutes: "分",
     resetToDefaults: "デフォルトに戻す",
     custom: "カスタム",

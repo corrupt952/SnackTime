@@ -120,7 +120,7 @@ export const en = {
       title: "Custom Presets",
       description: "Set your own timer values for each preset button",
     },
-    preset: "Preset {{number}}",
+    preset: "Preset {{number,number}}",
     minutes: "minutes",
     resetToDefaults: "Reset to Defaults",
     custom: "Custom",
