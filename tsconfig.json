@@ -10,6 +10,7 @@
     "noEmit": true,
     "isolatedModules": true,
     "sourceMap": true,
+    "types": ["chrome", "node"],
     "typeRoots": ["node_modules/@types"],
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "rootDir": "./src",
