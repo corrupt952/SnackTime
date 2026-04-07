@@ -46,6 +46,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Storybook stories for verifying timer font-size consistency across different root font-size settings
 
+## [2025.11.1] - 2025-11-28
+
+### Added
+
+- Internationalization (i18n) support with English and Japanese
+- Categorized theme selector with preview cards
+- 5 new Seijaku dark themes
+- Yorusora (renamed to NightSky) and Lavender color themes
+- About section to settings page
+- E2E tests for timer history functionality
+
+### Changed
+
+- Migrated E2E tests to page object pattern
+- Reorganized E2E tests into specs directory
+- Consolidated ColorScheme logic into lib/color-scheme module
+- Used CSS variables for theme preview
+
 ## [2025.06.4] - 2025-06-28
 
 ### Fixed
