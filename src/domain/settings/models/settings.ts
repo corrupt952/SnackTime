@@ -28,7 +28,7 @@ export class Settings {
     notificationType: NotificationType.Alarm,
     colorScheme: ColorScheme.Dark,
     alarmSound: "Simple",
-    volume: 0.1,
+    volume: 0.5,
     applyThemeToSettings: false,
     timerPosition: "top-right",
     presetTimers: [{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }],

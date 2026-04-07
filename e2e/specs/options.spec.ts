@@ -188,11 +188,11 @@ test.describe("Options Page - Notification (Page Object Pattern)", () => {
     await expect(optionsPage.volumeControl).toBeVisible();
     await expect(optionsPage.volumeSlider).toBeVisible();
 
-    await optionsPage.adjustVolume(40, "right");
-    await expect(optionsPage.volumePercentage).toContainText(/4[5-9]|5[0-5]%/);
+    await optionsPage.adjustVolume(40, "left");
+    await expect(optionsPage.volumePercentage).toContainText(/10%/);
 
     await optionsPage.reloadAndWaitForPage();
-    await expect(optionsPage.volumePercentage).toContainText(/4[5-9]|5[0-5]%/);
+    await expect(optionsPage.volumePercentage).toContainText(/10%/);
 
     await optionsPage.selectNotificationType("none");
     await optionsPage.verifyNotificationTypeSelected("none");
