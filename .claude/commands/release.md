@@ -80,8 +80,11 @@ The GitHub Actions workflow will automatically:
 - Build the extension
 - Create a zip file
 - Create a GitHub release with the zip attached
+- Generate release notes from merged PRs via `gh release create --generate-notes`
 
 Monitor the build progress at the [Actions tab](../../actions).
+
+> **Note:** Release notes are auto-generated from PRs merged since the last release. Direct commits to main will not appear in the generated notes. Use PR-based workflow for better release notes.
 
 ### 6. Download extension from GitHub Releases
 
@@ -97,6 +100,7 @@ Once the build completes, download `snack-time-vYYYY.MM.VER.zip` from the create
 ## Important Notes
 
 - The version in `package.json` must match the git tag (without the 'v' prefix)
+- The Chrome manifest `version` is derived from `package.json` via `wxt.config.ts` (leading zeros are stripped for Chrome compatibility)
 - The GitHub Actions workflow triggers on tags matching the `v*` pattern
 - Chrome Web Store upload remains a manual step
 - Always test the extension locally before creating a release
