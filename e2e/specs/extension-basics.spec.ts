@@ -3,7 +3,7 @@ import { PopupPage } from "../page-objects/popup.page";
 import { ContentTimerPage } from "../page-objects/content-timer.page";
 
 test("extension should be loaded", async ({ page, extensionId }) => {
-  await page.goto(`chrome-extension://${extensionId}/popup/index.html`);
+  await page.goto(`chrome-extension://${extensionId}/popup.html`);
   await expect(page).toHaveTitle(/Popup/);
 });
 

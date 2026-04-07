@@ -14,7 +14,7 @@ export class PopupPage extends BasePage {
   }
 
   async open(): Promise<void> {
-    await this.goto(`chrome-extension://${this.extensionId}/popup/index.html`);
+    await this.goto(`chrome-extension://${this.extensionId}/popup.html`);
   }
 
   getPresetButton(minutes: "5" | "10" | "15" | "25"): Locator {

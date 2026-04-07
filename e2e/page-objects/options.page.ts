@@ -7,7 +7,7 @@ export class OptionsPage extends BasePage {
   }
 
   async open(): Promise<void> {
-    await this.goto(`chrome-extension://${this.extensionId}/options/index.html`);
+    await this.goto(`chrome-extension://${this.extensionId}/options.html`);
   }
 
   // Navigation
