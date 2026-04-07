@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [2026.04.2] - 2026-04-08
+
+### Changed
+
+- Updated release workflow to use `gh release create` with auto-generated release notes
+
+### Fixed
+
+- Theme persists when apply-to-settings toggle is disabled
+
 ## [2026.04.1] - 2026-04-08
 
 ### Changed
