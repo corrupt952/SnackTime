@@ -52,9 +52,10 @@ test.describe("Options Page - Appearance (Page Object Pattern)", () => {
     await optionsPage.verifyThemeSelected("dark");
     await expect(optionsPage.htmlElement).toHaveClass(/dark/);
 
+    // Theme should remain applied even after toggling applyThemeToSettings off
     await optionsPage.toggleApplyTheme();
     await optionsPage.verifyApplyThemeState("unchecked");
-    await expect(optionsPage.htmlElement).not.toHaveClass(/dark/);
+    await expect(optionsPage.htmlElement).toHaveClass(/dark/);
 
     await optionsPage.toggleApplyTheme();
     await optionsPage.verifyApplyThemeState("checked");
