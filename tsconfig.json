@@ -12,6 +12,7 @@
     "node_modules",
     ".output",
     "e2e",
+    "tests",
     "**/*.stories.tsx",
     "**/*.stories.ts",
     "vitest.config.ts",

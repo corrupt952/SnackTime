@@ -1,60 +1,26 @@
 import { PresetTimer } from "@/domain/settings/models/settings";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Timer, BookOpen, Coffee, Brain, Briefcase, Settings } from "lucide-react";
-import { LucideIcon } from "lucide-react";
+import { Settings } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import {
+  quickTemplateData,
+  getSelectedTemplateId,
+  updatePresetAtIndex,
+  DEFAULT_PRESETS,
+  QuickTemplate,
+} from "./PresetTimerEditor.logic";
 
 interface PresetTimerEditorProps {
   presets: PresetTimer[];
   onChange: (presets: PresetTimer[]) => void;
 }
 
-type TemplateId = "breaks" | "pomodoro" | "study" | "meditation" | "meetings";
-
-interface QuickTemplate {
-  id: TemplateId;
-  icon: LucideIcon;
-  presets: PresetTimer[];
-}
-
-const quickTemplateData: QuickTemplate[] = [
-  {
-    id: "breaks",
-    icon: Coffee,
-    presets: [{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }],
-  },
-  {
-    id: "pomodoro",
-    icon: Timer,
-    presets: [{ minutes: 25 }, { minutes: 5 }, { minutes: 15 }, { minutes: 30 }],
-  },
-  {
-    id: "study",
-    icon: BookOpen,
-    presets: [{ minutes: 45 }, { minutes: 10 }, { minutes: 60 }, { minutes: 90 }],
-  },
-  {
-    id: "meditation",
-    icon: Brain,
-    presets: [{ minutes: 2 }, { minutes: 5 }, { minutes: 10 }, { minutes: 20 }],
-  },
-  {
-    id: "meetings",
-    icon: Briefcase,
-    presets: [{ minutes: 15 }, { minutes: 30 }, { minutes: 45 }, { minutes: 60 }],
-  },
-];
-
 export function PresetTimerEditor({ presets, onChange }: PresetTimerEditorProps) {
   const { t } = useTranslation();
   const handleMinutesChange = (index: number, value: string) => {
-    const minutes = parseInt(value, 10);
-    if (isNaN(minutes) || minutes < 0 || minutes > 999) return;
-
-    const newPresets = [...presets];
-    newPresets[index] = { ...newPresets[index], minutes: minutes || 1 };
-    onChange(newPresets);
+    const newPresets = updatePresetAtIndex(presets, index, value);
+    if (newPresets) onChange(newPresets);
   };
 
   const applyTemplate = (template: QuickTemplate) => {
@@ -62,24 +28,10 @@ export function PresetTimerEditor({ presets, onChange }: PresetTimerEditorProps)
   };
 
   const resetToDefaults = () => {
-    onChange([{ minutes: 1 }, { minutes: 3 }, { minutes: 5 }, { minutes: 10 }]);
+    onChange(DEFAULT_PRESETS);
   };
 
-  // Check if current presets match any template
-  const getSelectedTemplateId = () => {
-    for (const template of quickTemplateData) {
-      if (template.presets.length !== presets.length) continue;
-
-      const matches = template.presets.every(
-        (templatePreset, index) => presets[index]?.minutes === templatePreset.minutes,
-      );
-
-      if (matches) return template.id;
-    }
-    return "custom";
-  };
-
-  const selectedTemplateId = getSelectedTemplateId();
+  const selectedTemplateId = getSelectedTemplateId(presets);
 
   return (
     <div className="space-y-6">

@@ -6,24 +6,24 @@ import { ContentTimerPage } from "../page-objects/content-timer.page";
 test.describe("Timer Position", () => {
   test.describe("should apply timer position from settings", () => {
     const positions = [
-      { 
-        id: "top-left", 
+      {
+        id: "top-left",
         expectedStyles: { top: "10px", left: "10px", bottom: undefined, right: undefined }
       },
-      { 
-        id: "top-right", 
+      {
+        id: "top-right",
         expectedStyles: { top: "10px", right: "10px", bottom: undefined, left: undefined }
       },
-      { 
-        id: "bottom-left", 
+      {
+        id: "bottom-left",
         expectedStyles: { bottom: "10px", left: "10px", top: undefined, right: undefined }
       },
-      { 
-        id: "bottom-right", 
+      {
+        id: "bottom-right",
         expectedStyles: { bottom: "10px", right: "10px", top: undefined, left: undefined }
       },
-      { 
-        id: "center", 
+      {
+        id: "center",
         expectedStyles: { top: "50%", left: "50%", transform: "translate(-50%, -50%)" }
       }
     ];
@@ -34,7 +34,7 @@ test.describe("Timer Position", () => {
         const optionsPageHandle = await context.newPage();
         const optionsPage = new OptionsPage(optionsPageHandle, extensionId);
         await optionsPage.open();
-        
+
         await optionsPage.selectPosition(position.id);
         await optionsPage.verifyPositionSelected(position.id);
         await optionsPage.close();
@@ -43,12 +43,12 @@ test.describe("Timer Position", () => {
         await page.goto("https://example.com");
         const contentPage = new ContentTimerPage(page);
         await contentPage.bringToFront();
-        
+
         // Set timer via popup
         const popupPageHandle = await context.newPage();
         const popupPage = new PopupPage(popupPageHandle, extensionId);
         await popupPage.open();
-        
+
         await contentPage.bringToFront();
         await popupPage.clickPresetButton("5"); // 1:00
         await popupPage.close();
@@ -83,7 +83,7 @@ test.describe("Timer Position", () => {
     const optionsPageHandle = await context.newPage();
     const optionsPage = new OptionsPage(optionsPageHandle, extensionId);
     await optionsPage.open();
-    
+
     await optionsPage.selectPosition("center");
     await optionsPage.verifyPositionSelected("center");
     await optionsPage.close();
@@ -92,12 +92,12 @@ test.describe("Timer Position", () => {
     await page.goto("https://example.com");
     const contentPage = new ContentTimerPage(page);
     await contentPage.bringToFront();
-    
+
     // Set timer via popup
     const popupPageHandle = await context.newPage();
     const popupPage = new PopupPage(popupPageHandle, extensionId);
     await popupPage.open();
-    
+
     await contentPage.bringToFront();
     await popupPage.clickPresetButton("5"); // 1:00
     await popupPage.close();

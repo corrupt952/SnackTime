@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { TimeInput } from "./TimeInput";
 import { Duration } from "@/domain/timer/value/duration";
+import { parseTimeToSeconds, DEFAULT_TIME } from "./CustomDurationModal.logic";
 
 interface CustomDurationModalProps {
   onClose: () => void;
@@ -13,11 +14,10 @@ interface CustomDurationModalProps {
 
 export const CustomDurationModal = ({ onClose, onSubmit }: CustomDurationModalProps) => {
   const { t } = useTranslation();
-  const [time, setTime] = useState<string>("00:05:00");
+  const [time, setTime] = useState<string>(DEFAULT_TIME);
 
   const handleSubmit = () => {
-    const [hours, minutes, seconds] = time.split(":").map(Number);
-    const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+    const totalSeconds = parseTimeToSeconds(time);
     onSubmit(new Duration(totalSeconds));
   };
 

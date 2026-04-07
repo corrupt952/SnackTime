@@ -10,6 +10,24 @@ export class OptionsPage extends BasePage {
     await this.goto(`chrome-extension://${this.extensionId}/options.html`);
   }
 
+  // Page header
+  get pageHeaderTitle(): Locator {
+    return this.page.locator("h1");
+  }
+
+  get pageHeaderIcon(): Locator {
+    return this.page.locator("svg.lucide-coffee.h-9.w-9");
+  }
+
+  // Sound settings container (becomes pointer-events-none when notification is "None")
+  get soundSettingsContainer(): Locator {
+    return this.page.locator('.space-y-4.transition-opacity').first();
+  }
+
+  get volumeSettingsContainer(): Locator {
+    return this.page.locator('.space-y-4.transition-opacity').nth(1);
+  }
+
   // Navigation
   getNavLink(text: string): Locator {
     return this.page.locator(`nav a:has-text("${text}")`);

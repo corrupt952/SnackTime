@@ -1,4 +1,4 @@
-import { expect, Locator, Page } from "@playwright/test";
+import { expect, Locator } from "@playwright/test";
 import { BasePage } from "./base.page";
 
 export class ContentTimerPage extends BasePage {

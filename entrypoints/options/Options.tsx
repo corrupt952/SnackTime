@@ -109,8 +109,12 @@ const Options = () => {
   };
 
   useEffect(() => {
-    applyColorSchemeClass(document.documentElement, colorScheme);
-  }, [colorScheme]);
+    if (applyThemeToSettings) {
+      applyColorSchemeClass(document.documentElement, colorScheme);
+    } else {
+      applyColorSchemeClass(document.documentElement, ColorScheme.Light);
+    }
+  }, [colorScheme, applyThemeToSettings]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/20">

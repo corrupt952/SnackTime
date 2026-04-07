@@ -4,7 +4,7 @@ import { BasePage } from "./base.page";
 export class PopupPage extends BasePage {
   private readonly presetButtonMap = {
     "5": "1:00",
-    "10": "3:00", 
+    "10": "3:00",
     "15": "5:00",
     "25": "10:00",
   };
@@ -15,6 +15,58 @@ export class PopupPage extends BasePage {
 
   async open(): Promise<void> {
     await this.goto(`chrome-extension://${this.extensionId}/popup.html`);
+  }
+
+  get optionsUrl(): string {
+    return `chrome-extension://${this.extensionId}/options.html`;
+  }
+
+  get settingsButton(): Locator {
+    return this.page.locator("button").filter({ has: this.page.locator("svg.lucide-settings") });
+  }
+
+  get headerTitle(): Locator {
+    return this.page.locator(".bg-primary .text-lg.font-semibold");
+  }
+
+  get headerCoffeeIcon(): Locator {
+    return this.page.locator(".bg-primary svg.lucide-coffee");
+  }
+
+  get container(): Locator {
+    return this.page.locator(".w-\\[344px\\]");
+  }
+
+  get htmlElement(): Locator {
+    return this.page.locator("html");
+  }
+
+  get presetsHeading(): Locator {
+    return this.page.locator('.text-center.py-2.font-medium').first();
+  }
+
+  get recentHeading(): Locator {
+    return this.page.locator('.text-center.py-2.font-medium').nth(1);
+  }
+
+  get endTimeButtonLocator(): Locator {
+    return this.page.locator('.p-3.border-b button');
+  }
+
+  getPresetButtonByLabel(label: string): Locator {
+    return this.page.locator(`button:has-text("${label}")`).first();
+  }
+
+  async getAllPresetLabels(): Promise<string[]> {
+    const buttons = this.page.locator('.space-y-1 button.justify-end').first().locator('..');
+    const allButtons = buttons.locator('button.justify-end');
+    const count = await allButtons.count();
+    const labels: string[] = [];
+    for (let i = 0; i < count; i++) {
+      const text = await allButtons.nth(i).textContent();
+      if (text) labels.push(text.trim());
+    }
+    return labels;
   }
 
   getPresetButton(minutes: "5" | "10" | "15" | "25"): Locator {
