@@ -247,10 +247,6 @@ export class OptionsPage extends BasePage {
     return this.aboutSection.locator('a[href="https://x.com/corrupt952"]');
   }
 
-  get feedbackFormLink(): Locator {
-    return this.aboutSection.locator('a[href="https://relaybase.app/forms/3e45e7b9f03c4d84"]');
-  }
-
   get licenseSection(): Locator {
     return this.aboutSection.locator("text=/MIT License/");
   }

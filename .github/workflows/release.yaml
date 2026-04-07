@@ -33,8 +33,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
       - run: >-
-          cd dist && \
-            zip -r ../snack_time.zip ./*
+          cd .output/chrome-mv3-prod && \
+            zip -r ../../snack_time.zip ./*
       - name: Create Release
         id: create_release
         uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e # v1.1.4

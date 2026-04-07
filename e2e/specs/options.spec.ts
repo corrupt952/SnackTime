@@ -379,7 +379,6 @@ test.describe("Options Page - About Section", () => {
 
     await expect(optionsPage.githubIssuesLink).toBeVisible();
     await expect(optionsPage.twitterLink).toBeVisible();
-    await expect(optionsPage.feedbackFormLink).toBeVisible();
   });
 
   test("should display license information", async ({ extensionId, page }) => {

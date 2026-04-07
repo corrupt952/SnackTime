@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { memo } from "react";
 import { ColorScheme, getEffectiveColorScheme } from "@/lib/color-scheme";
-import TimerControls from "@/content/components/TimerControls";
+import TimerControls from "../../content/components/TimerControls";
 
 interface TimerCardPreviewProps {
   className?: string;

@@ -70,7 +70,6 @@ export const ja = {
       feedbackDescription: "バグ報告、機能リクエスト、ご意見などお気軽にどうぞ！",
       gitHubIssues: "GitHub Issues",
       xTwitter: "X (@corrupt952)",
-      feedbackForm: "フィードバックフォーム",
       license: "ライセンス",
       openSource: "このプロジェクトはMITライセンスのもとでオープンソースとして公開されています。",
     },

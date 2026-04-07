@@ -1,25 +1,20 @@
 {
+  "extends": "./.wxt/tsconfig.json",
   "compilerOptions": {
-    "strict": true,
-    "module": "ESNext",
-    "target": "ESNext",
-    "noEmitOnError": true,
-    "esModuleInterop": true,
-    "removeComments": true,
-    "moduleResolution": "bundler",
-    "noEmit": true,
-    "isolatedModules": true,
-    "sourceMap": true,
-    "types": ["chrome", "node"],
-    "typeRoots": ["node_modules/@types"],
-    "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "rootDir": "./src",
+    "allowImportingTsExtensions": true,
     "jsx": "react-jsx",
-    "skipLibCheck": true,
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "types": ["chrome", "node"]
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "./tsconfig.json", "**/*.stories.tsx", "**/*.stories.ts"]
+  "exclude": [
+    "node_modules",
+    ".output",
+    "e2e",
+    "**/*.stories.tsx",
+    "**/*.stories.ts",
+    "vitest.config.ts",
+    "playwright.config.ts"
+  ]
 }

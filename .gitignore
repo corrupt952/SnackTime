@@ -2,6 +2,9 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,node
 
 ### Node ###
+.output
+.wxt
+
 # Logs
 logs
 *.log

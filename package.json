@@ -10,26 +10,29 @@
     "pretest:e2e": "pnpm build",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "clean": "rm -rf dist",
-    "dev": "pnpm run clean && vite",
-    "build": "pnpm run clean && tsc && vite build",
+    "dev": "wxt",
+    "build": "wxt build",
+    "zip": "wxt zip",
+    "compile": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "STORYBOOK_BUILD=true storybook build",
-    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json}\""
+    "build-storybook": "storybook build",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json}\" \"entrypoints/**/*.{ts,tsx,js,jsx,json}\"",
+    "postinstall": "wxt prepare"
   },
   "author": "K@zuki.",
   "license": "MIT",
   "devDependencies": {
-    "@crxjs/vite-plugin": "^2.2.1",
     "@playwright/test": "^1.56.1",
     "@storybook/addon-docs": "^10.0.0",
     "@storybook/addon-onboarding": "^10.0.0",
     "@storybook/react-vite": "^10.0.0",
-    "@tailwindcss/vite": "^4.1.17",
+    "@tailwindcss/postcss": "^4.2.2",
     "@types/chrome": "^0.1.0",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^24.0.0",
     "@vitejs/plugin-react": "^6.0.0",
+    "@wxt-dev/module-react": "^1.2.2",
+    "autoprefixer": "^10.4.27",
     "glob": "^13.0.0",
     "lucide-react": "^1.0.0",
     "playwright": "^1.56.1",
@@ -38,7 +41,8 @@
     "tailwindcss": "^4.1.17",
     "typescript": "^6.0.0",
     "vite": "^8.0.0",
-    "vitest": "^4.0.0"
+    "vitest": "^4.0.0",
+    "wxt": "^0.20.20"
   },
   "pnpm": {
     "overrides": {

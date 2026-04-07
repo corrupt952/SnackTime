@@ -72,7 +72,6 @@ export const en = {
       feedbackDescription: "Bug reports, feature requests, or just say hi!",
       gitHubIssues: "GitHub Issues",
       xTwitter: "X (@corrupt952)",
-      feedbackForm: "Feedback Form",
       license: "License",
       openSource: "This project is open source under the MIT License.",
     },

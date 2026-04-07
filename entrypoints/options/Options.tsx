@@ -10,7 +10,6 @@ import {
   Scale,
   Heart,
   AtSign,
-  Mail,
 } from "lucide-react";
 import { GithubIcon } from "@/components/icons/github";
 import { useEffect, useState } from "react";
@@ -78,8 +77,6 @@ const Options = () => {
   ];
 
   useEffect(() => {
-    applyColorSchemeClass(document.documentElement, ColorScheme.Light);
-
     Settings.get().then((settings) => {
       setSettings(settings);
       setLanguage(settings.language);
@@ -112,12 +109,8 @@ const Options = () => {
   };
 
   useEffect(() => {
-    if (applyThemeToSettings) {
-      applyColorSchemeClass(document.documentElement, colorScheme);
-    } else {
-      applyColorSchemeClass(document.documentElement, ColorScheme.Light);
-    }
-  }, [colorScheme, applyThemeToSettings]);
+    applyColorSchemeClass(document.documentElement, colorScheme);
+  }, [colorScheme]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/20">
@@ -350,16 +343,6 @@ const Options = () => {
                     >
                       <AtSign className="h-4 w-4" />
                       {t("options.about.xTwitter")}
-                      <ExternalLink className="h-3 w-3 opacity-50" />
-                    </a>
-                    <a
-                      href="https://relaybase.app/forms/3e45e7b9f03c4d84"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border bg-background hover:bg-muted/50 transition-colors"
-                    >
-                      <Mail className="h-4 w-4" />
-                      {t("options.about.feedbackForm")}
                       <ExternalLink className="h-3 w-3 opacity-50" />
                     </a>
                   </div>
