@@ -6,6 +6,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [2026.04.1] - 2026-04-08
+
+### Changed
+
+- Migrated build system from @crxjs/vite-plugin to WXT (Web Extension Toolkit)
+- Restructured entrypoints from `src/` to `entrypoints/` directory following WXT conventions
+- Switched Tailwind CSS from Vite plugin to PostCSS pipeline
+- Moved static assets (sounds, icons) to `public/` directory
+
+### Removed
+
+- Feedback Form link from Options page (scheduled for deprecation)
+- Unused dependencies (js-yaml, glob)
+
+### Added
+
+- E2E tests for cross-page settings sync, popup layout, options extras, and sound settings
+- Unit tests for Timer, content script, audio playback hook, PresetTimerEditor, CustomDurationModal, and timer service
+
 ## [2026.02.1] - 2026-02-13
 
 ### Fixed
