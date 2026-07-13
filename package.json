@@ -28,7 +28,7 @@
     "@storybook/react-vite": "10.4.6",
     "@tailwindcss/postcss": "4.3.2",
     "@types/chrome": "0.2.2",
-    "@types/node": "24.13.2",
+    "@types/node": "24.13.3",
     "@vitejs/plugin-react": "6.0.3",
     "@wxt-dev/module-react": "1.2.2",
     "autoprefixer": "10.5.2",
