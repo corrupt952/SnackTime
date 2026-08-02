@@ -22,7 +22,7 @@
   "author": "K@zuki.",
   "license": "MIT",
   "devDependencies": {
-    "@playwright/test": "1.61.1",
+    "@playwright/test": "1.62.1",
     "@storybook/addon-docs": "10.5.5",
     "@storybook/addon-onboarding": "10.5.5",
     "@storybook/react-vite": "10.5.5",
@@ -33,7 +33,7 @@
     "@wxt-dev/module-react": "1.2.2",
     "autoprefixer": "10.5.4",
     "lucide-react": "1.28.0",
-    "playwright": "1.61.1",
+    "playwright": "1.62.1",
     "prettier": "3.9.6",
     "storybook": "10.5.5",
     "tailwindcss": "4.3.3",
