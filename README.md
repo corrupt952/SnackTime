@@ -10,7 +10,7 @@ Install this extension from the [Chrome Web Store](https://chromewebstore.google
 
 ### Prerequisites
 
-- [asdf](https://asdf-vm.com/) or compatible .tool-versions file
+- [asdf](https://asdf-vm.com/) or a compatible tool that reads `.tool-versions`
 
 ### Setup
 
@@ -20,17 +20,30 @@ Install this extension from the [Chrome Web Store](https://chromewebstore.google
     asdf install
     ```
 
-1. Install pnpm
+1. Enable Corepack so the pinned pnpm is used
 
     ```bash
-    npm install -g pnpm
+    corepack enable
+    ```
+
+1. Install dependencies
+
+    ```bash
+    pnpm install
     ```
 
 ### Debugging
 
-This extension is developed using CRXJS.
-So, if you run `pnpm dev` and load the output directory as an extension, the file will be updated in real time.
-`OUTPUT_DIR` is the directory where the output will be placed.
+This extension is built with [WXT](https://wxt.dev/). Running `pnpm dev` starts a
+development build that rebuilds on change and writes to `.output/chrome-mv3`.
+
+1. Run the development server
+
+    ```bash
+    pnpm dev
+    ```
+
+1. Load `.output/chrome-mv3` as an unpacked extension from [chrome://extensions](chrome://extensions/)
 
 > When modifying `Content.tsx` (Timer component), hot reload may not work properly. In this case, you need to restart the extension:
 >
@@ -40,20 +53,15 @@ So, if you run `pnpm dev` and load the output directory as an extension, the fil
 >
 > This is a known limitation of Chrome Extension's content scripts.
 
+### Checks
 
-1. Install dependencies
+These are the same commands CI runs.
 
-    ```bash
-    pnpm install
-    ```
-
-1. Run the development server
-
-    ```bash
-    OUTPUT_DIR=~/Documents/snack-time pnpm dev
-    ```
-
-1. Load the [extension](chrome://extensions/) from the output directory
+- Type check: `pnpm compile`
+- Unit tests: `pnpm test`
+- E2E tests: `pnpm test:e2e` (builds first via `pretest:e2e`)
+- Build: `pnpm build`
+- Storybook: `pnpm build-storybook` (`pnpm storybook` to run it)
 
 ## Production
 
