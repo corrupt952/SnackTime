@@ -42,9 +42,17 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: >-
-          gh release create "${SNACK_TIME_VERSION}"
-          snack_time.zip#"snack-time-${SNACK_TIME_VERSION}.zip"
-          --verify-tag
-          --generate-notes
-          --title "Release ${SNACK_TIME_VERSION}"
+        run: |
+          if [ "${SNACK_TIME_VERSION}" != "${GITHUB_REF_NAME}" ]; then
+            echo "tag ${GITHUB_REF_NAME} does not match package.json version ${SNACK_TIME_VERSION}" >&2
+            exit 1
+          fi
+          asset="snack_time.zip#snack-time-${GITHUB_REF_NAME}.zip"
+          if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
+            gh release upload "${GITHUB_REF_NAME}" "${asset}" --clobber
+          else
+            gh release create "${GITHUB_REF_NAME}" "${asset}" \
+              --verify-tag \
+              --generate-notes \
+              --title "Release ${GITHUB_REF_NAME}"
+          fi
