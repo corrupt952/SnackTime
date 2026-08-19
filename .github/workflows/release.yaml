@@ -48,12 +48,8 @@ jobs:
             echo "tag ${GITHUB_REF_NAME} does not match package.json version ${SNACK_TIME_VERSION}" >&2
             exit 1
           fi
-          asset="snack_time.zip#snack-time-${GITHUB_REF_NAME}.zip"
-          if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
-            gh release upload "${GITHUB_REF_NAME}" "${asset}" --clobber
-          else
-            gh release create "${GITHUB_REF_NAME}" "${asset}" \
-              --verify-tag \
-              --generate-notes \
-              --title "Release ${GITHUB_REF_NAME}"
-          fi
+          gh release create "${GITHUB_REF_NAME}" \
+            "snack_time.zip#snack-time-${GITHUB_REF_NAME}.zip" \
+            --verify-tag \
+            --generate-notes \
+            --title "Release ${GITHUB_REF_NAME}"
