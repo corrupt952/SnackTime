@@ -27,7 +27,7 @@
     "@storybook/addon-onboarding": "10.5.10",
     "@storybook/react-vite": "10.5.10",
     "@tailwindcss/postcss": "4.3.3",
-    "@types/chrome": "0.2.6",
+    "@types/chrome": "0.2.7",
     "@types/node": "24.13.3",
     "@vitejs/plugin-react": "6.1.0",
     "@wxt-dev/module-react": "1.2.2",
