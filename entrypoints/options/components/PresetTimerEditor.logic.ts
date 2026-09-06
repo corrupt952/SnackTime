@@ -1,5 +1,5 @@
-import { PresetTimer } from "@/domain/settings/models/settings";
-import { LucideIcon } from "lucide-react";
+import type { PresetTimer } from "@/domain/settings/models/settings";
+import type { LucideIcon } from "lucide-react";
 import { Timer, BookOpen, Coffee, Brain, Briefcase } from "lucide-react";
 
 export type TemplateId = "breaks" | "pomodoro" | "study" | "meditation" | "meetings";

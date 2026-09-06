@@ -1,4 +1,4 @@
-import { TimerPosition } from "@/domain/settings/models/settings";
+import type { TimerPosition } from "@/domain/settings/models/settings";
 import { cn } from "@/lib/utils";
 import { Coffee } from "lucide-react";
 import { useTranslation } from "react-i18next";

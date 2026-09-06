@@ -16,12 +16,12 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { NotificationType } from "@/types/enums/NotificationType";
 import {
-  ExtensionSettings,
+  type ExtensionSettings,
   Settings,
-  AlarmSound,
-  TimerPosition,
-  PresetTimer,
-  Language,
+  type AlarmSound,
+  type TimerPosition,
+  type PresetTimer,
+  type Language,
 } from "@/domain/settings/models/settings";
 import { ColorScheme, applyColorSchemeClass } from "@/lib/color-scheme";
 import { changeLanguage, supportedLanguages } from "@/i18n/config";

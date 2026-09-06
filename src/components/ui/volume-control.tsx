@@ -20,7 +20,7 @@ const VolumeControl = React.forwardRef<HTMLDivElement, VolumeControlProps>(
           <div className="flex-1">
             <Slider
               value={[value * 100]}
-              onValueChange={(values) => onValueChange(values[0] / 100)}
+              onValueChange={(values) => onValueChange((values[0] ?? 0) / 100)}
               max={100}
               step={1}
               disabled={disabled}

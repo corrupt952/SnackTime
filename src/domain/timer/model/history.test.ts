@@ -30,8 +30,8 @@ describe("History", () => {
 
       const histories = await History.all();
       expect(histories).toHaveLength(2);
-      expect(histories[0].duration.toSeconds()).toBe(300);
-      expect(histories[1].duration.toSeconds()).toBe(600);
+      expect(histories[0]!.duration.toSeconds()).toBe(300);
+      expect(histories[1]!.duration.toSeconds()).toBe(600);
     });
 
     it("should handle storage error and return empty array", async () => {
@@ -66,7 +66,7 @@ describe("History", () => {
 
       const histories = await History.all();
       expect(histories).toHaveLength(1);
-      expect(histories[0].duration.toSeconds()).toBe(300);
+      expect(histories[0]!.duration.toSeconds()).toBe(300);
     });
   });
 
@@ -162,7 +162,7 @@ describe("History", () => {
       vi.setSystemTime(newNow);
       await History.add(new Duration(1800));
 
-      const savedHistories = JSON.parse((setStorage.mock.calls[0][0] as { history: string }).history);
+      const savedHistories = JSON.parse((setStorage.mock.calls[0]![0] as { history: string }).history);
       expect(savedHistories).toHaveLength(5);
       expect(savedHistories[0].duration.value).toBe(1800); // New value added
       expect(savedHistories[4].duration.value).toBe(600); // Oldest value is removed

@@ -1,4 +1,4 @@
-import { PresetTimer } from "@/domain/settings/models/settings";
+import type { PresetTimer } from "@/domain/settings/models/settings";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Settings } from "lucide-react";
@@ -8,7 +8,7 @@ import {
   getSelectedTemplateId,
   updatePresetAtIndex,
   DEFAULT_PRESETS,
-  QuickTemplate,
+  type QuickTemplate,
 } from "./PresetTimerEditor.logic";
 
 interface PresetTimerEditorProps {

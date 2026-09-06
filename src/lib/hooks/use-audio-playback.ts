@@ -1,5 +1,5 @@
 import { useRef, useCallback, useEffect } from "react";
-import { AlarmSound } from "@/domain/settings/models/settings";
+import type { AlarmSound } from "@/domain/settings/models/settings";
 
 export function useAudioPlayback(alarmSound: AlarmSound, volume: number) {
   const audioContextRef = useRef<AudioContext | null>(null);
