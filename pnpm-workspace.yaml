@@ -5,3 +5,6 @@ allowBuilds:
 overrides:
   "@isaacs/brace-expansion": ">=5.0.1"
   undici: ">=7.18.2"
+
+minimumReleaseAge: 1440
+minimumReleaseAgeExcludePrune: true
