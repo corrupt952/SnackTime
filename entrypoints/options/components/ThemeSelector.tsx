@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ColorScheme,
-  ThemeCategory,
+  type ThemeCategory,
   themeCategories,
   themeCategoryOrder,
   getThemesByCategory,

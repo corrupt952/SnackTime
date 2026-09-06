@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import "@/styles/globals.css";
-import { Settings, PresetTimer } from "@/domain/settings/models/settings";
+import { Settings, type PresetTimer } from "@/domain/settings/models/settings";
 import { ColorScheme, applyColorSchemeClass } from "@/lib/color-scheme";
 import { changeLanguage } from "@/i18n/config";
 import { timerService } from "./services/timer";
