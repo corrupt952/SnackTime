@@ -3,4 +3,33 @@
   extends: [
     "github>corrupt952/renovate-config:default.json5",
   ],
+  packageRules: [
+    {
+      // The E2E container ships the browsers for exactly one Playwright
+      // release, so the npm packages and the image must land in the same PR:
+      // updated apart, Playwright cannot find its browser executable
+      // (https://playwright.dev/docs/docker).
+      //
+      // Version bumps only. A tag bump already carries its new digest, and a
+      // digest-only republish of the image grouped in here would collide with
+      // a pending tag bump on the same branch.
+      matchPackageNames: [
+        "playwright",
+        "@playwright/test",
+        "mcr.microsoft.com/playwright",
+      ],
+      matchUpdateTypes: ["major", "minor", "patch"],
+      groupName: "playwright",
+    },
+    {
+      // mcr.microsoft.com provides no release timestamps
+      // (https://docs.renovatebot.com/key-concepts/minimum-release-age/), so
+      // the shared config's minimumReleaseAge would hold the image, and with
+      // it the whole playwright group, pending forever. The npm packages in
+      // the group keep their cooldown.
+      matchDatasources: ["docker"],
+      matchPackageNames: ["mcr.microsoft.com/playwright"],
+      minimumReleaseAgeBehaviour: "timestamp-optional",
+    },
+  ],
 }
