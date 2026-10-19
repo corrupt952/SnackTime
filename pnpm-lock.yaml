@@ -205,7 +205,7 @@ importers:
         version: 2.1.1
       i18next:
         specifier: ^26.0.0
-        version: 26.4.6(typescript@7.0.2)
+        version: 26.4.7(typescript@7.0.2)
       react:
         specifier: ^19.2.0
         version: 19.3.1
@@ -214,7 +214,7 @@ importers:
         version: 19.3.1(react@19.3.1)
       react-i18next:
         specifier: ^17.0.0
-        version: 17.0.18(i18next@26.4.6(typescript@7.0.2))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(typescript@7.0.2)
+        version: 17.0.18(i18next@26.4.7(typescript@7.0.2))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(typescript@7.0.2)
       tailwind-merge:
         specifier: ^3.4.0
         version: 3.7.0
@@ -1997,8 +1997,8 @@ packages:
   htmlparser2@10.1.0:
     resolution: {integrity: sha512-VTZkM9GWRAtEpveh7MSF6SjjrpNVNNVJfFup7xTY3UpFtm67foy9HDVXneLtFVt4pMz5kZtgNcvCniNFb1hlEQ==}
 
-  i18next@26.4.6:
-    resolution: {integrity: sha512-f/QHPNtH3XmBjL3sCRCrp5+jycwgV0W9fr1Vsy5msg1mR5grgaHc8eIbZhU7ASFwiGtF9PHVRQDqQ8Nf6iDTFA==}
+  i18next@26.4.7:
+    resolution: {integrity: sha512-p/3hqy6EcuqRs6wNwBYwGGC1fzBJSMxV9zMuN814ab/7QjdZbXfjXwuPZdQbngX6KDOTxM01uUiZyqmMB8ghZg==}
     peerDependencies:
       typescript: ^5 || ^6 || ^7
     peerDependenciesMeta:
@@ -4234,7 +4234,7 @@ snapshots:
       domutils: 3.2.2
       entities: 7.0.1
 
-  i18next@26.4.6(typescript@7.0.2):
+  i18next@26.4.7(typescript@7.0.2):
     optionalDependencies:
       typescript: 7.0.2
 
@@ -4619,11 +4619,11 @@ snapshots:
       react: 19.3.1
       scheduler: 0.28.0
 
-  react-i18next@17.0.18(i18next@26.4.6(typescript@7.0.2))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(typescript@7.0.2):
+  react-i18next@17.0.18(i18next@26.4.7(typescript@7.0.2))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(typescript@7.0.2):
     dependencies:
       '@babel/runtime': 7.29.7
       html-parse-stringify: 4.0.1
-      i18next: 26.4.6(typescript@7.0.2)
+      i18next: 26.4.7(typescript@7.0.2)
       react: 19.3.1
       use-sync-external-store: 1.7.0(react@19.3.1)
     optionalDependencies:
