@@ -40,7 +40,7 @@
     "typescript": "7.0.2",
     "vite": "8.3.5",
     "vitest": "5.0.5",
-    "wxt": "0.21.4"
+    "wxt": "0.21.5"
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.8",
