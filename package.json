@@ -29,7 +29,7 @@
     "@tailwindcss/postcss": "4.3.4",
     "@types/chrome": "0.3.7",
     "@types/node": "26.6.6",
-    "@vitejs/plugin-react": "6.1.2",
+    "@vitejs/plugin-react": "6.2.1",
     "@wxt-dev/module-react": "1.2.2",
     "autoprefixer": "10.6.2",
     "lucide-react": "1.69.0",
